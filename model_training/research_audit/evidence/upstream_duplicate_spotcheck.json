@@ -1,0 +1,26 @@
+[
+  {
+    "upstream_path": "AtoB_22.5_3/Frames_Average22_Effective34/2025-04-11_15-55-29.830511.jpg",
+    "lfs_oid": "bff82a2abf213764e9c6737f4a81acf107caf07c9d569a9ba43c29d3800787af",
+    "local_sha256": "bff82a2abf213764e9c6737f4a81acf107caf07c9d569a9ba43c29d3800787af",
+    "local_matches_upstream_lfs": true
+  },
+  {
+    "upstream_path": "AtoB_22.5_3/Frames_Average22_Effective34/2025-04-11_15-55-29.882221.jpg",
+    "lfs_oid": "a285e3588370f0f736028fe22dd0132f0ef29ab0a04aa55863f4e99b11eabb21",
+    "local_sha256": "a285e3588370f0f736028fe22dd0132f0ef29ab0a04aa55863f4e99b11eabb21",
+    "local_matches_upstream_lfs": true
+  },
+  {
+    "upstream_path": "AtoB_22.5_4/Frames_Average22_Effective34/2025-04-11_15-55-29.830511.jpg",
+    "lfs_oid": "bff82a2abf213764e9c6737f4a81acf107caf07c9d569a9ba43c29d3800787af",
+    "local_sha256": "bff82a2abf213764e9c6737f4a81acf107caf07c9d569a9ba43c29d3800787af",
+    "local_matches_upstream_lfs": true
+  },
+  {
+    "upstream_path": "AtoB_22.5_4/Frames_Average22_Effective34/2025-04-11_15-55-29.882221.jpg",
+    "lfs_oid": "a285e3588370f0f736028fe22dd0132f0ef29ab0a04aa55863f4e99b11eabb21",
+    "local_sha256": "a285e3588370f0f736028fe22dd0132f0ef29ab0a04aa55863f4e99b11eabb21",
+    "local_matches_upstream_lfs": true
+  }
+]

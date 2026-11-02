@@ -1,0 +1,21 @@
+{
+  "torch": "2.10.0+cpu",
+  "torch_cuda_build": null,
+  "cuda_available": false,
+  "gpu_driver": "NVIDIA GeForce RTX 3050 6GB Laptop GPU, 6144 MiB, 617.42",
+  "raw_cnn_forward": {
+    "device": "cpu",
+    "input_shape": [
+      2,
+      6,
+      1000
+    ],
+    "output_shape": [
+      2,
+      2
+    ],
+    "finite": true,
+    "parameters": 18770
+  },
+  "peak_cuda_allocated_bytes": null
+}

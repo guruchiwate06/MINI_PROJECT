@@ -1,0 +1,290 @@
+[
+  {
+    "model": "Random Forest",
+    "split": "Random_Window (Leaky Control)",
+    "modality": "Vibration_Only",
+    "precision": 0.442,
+    "recall": 0.7531,
+    "f1": 0.5571,
+    "roc_auc": 0.9431,
+    "pr_auc": 0.473,
+    "calibrated_threshold": 0.55,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        2780,
+        231
+      ],
+      [
+        60,
+        183
+      ]
+    ],
+    "max_absolute_metric_difference": 5.551115123125783e-17
+  },
+  {
+    "model": "Random Forest",
+    "split": "Random_Window (Leaky Control)",
+    "modality": "Vibration_Plus_GPS",
+    "precision": 0.4765,
+    "recall": 0.8354,
+    "f1": 0.6069,
+    "roc_auc": 0.9579,
+    "pr_auc": 0.601,
+    "calibrated_threshold": 0.5,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        2788,
+        223
+      ],
+      [
+        40,
+        203
+      ]
+    ],
+    "max_absolute_metric_difference": 1.1102230246251565e-16
+  },
+  {
+    "model": "Random Forest",
+    "split": "Block_Grouped_Window (Overlap-Free)",
+    "modality": "Vibration_Only",
+    "precision": 0.3996,
+    "recall": 0.8242,
+    "f1": 0.5383,
+    "roc_auc": 0.9293,
+    "pr_auc": 0.417,
+    "calibrated_threshold": 0.35,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        2694,
+        317
+      ],
+      [
+        45,
+        211
+      ]
+    ],
+    "max_absolute_metric_difference": 5.551115123125783e-17
+  },
+  {
+    "model": "Random Forest",
+    "split": "Block_Grouped_Window (Overlap-Free)",
+    "modality": "Vibration_Plus_GPS",
+    "precision": 0.4539,
+    "recall": 0.8086,
+    "f1": 0.5815,
+    "roc_auc": 0.9447,
+    "pr_auc": 0.4885,
+    "calibrated_threshold": 0.4,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        2762,
+        249
+      ],
+      [
+        49,
+        207
+      ]
+    ],
+    "max_absolute_metric_difference": 1.1102230246251565e-16
+  },
+  {
+    "model": "Random Forest",
+    "split": "Run_Held_Out",
+    "modality": "Vibration_Only",
+    "precision": 0.3685,
+    "recall": 0.6597,
+    "f1": 0.4729,
+    "roc_auc": 0.9036,
+    "pr_auc": 0.3736,
+    "calibrated_threshold": 0.45,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        2620,
+        269
+      ],
+      [
+        81,
+        157
+      ]
+    ],
+    "max_absolute_metric_difference": 1.1102230246251565e-16
+  },
+  {
+    "model": "Random Forest",
+    "split": "Run_Held_Out",
+    "modality": "Vibration_Plus_GPS",
+    "precision": 0.3547,
+    "recall": 0.7437,
+    "f1": 0.4803,
+    "roc_auc": 0.9244,
+    "pr_auc": 0.5009,
+    "calibrated_threshold": 0.4,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        2567,
+        322
+      ],
+      [
+        61,
+        177
+      ]
+    ],
+    "max_absolute_metric_difference": 0.0
+  },
+  {
+    "model": "Random Forest",
+    "split": "Spatial_Held_Out",
+    "modality": "Vibration_Only",
+    "precision": 0.5954,
+    "recall": 0.4988,
+    "f1": 0.5429,
+    "roc_auc": 0.9191,
+    "pr_auc": 0.5229,
+    "calibrated_threshold": 0.675,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        5667,
+        142
+      ],
+      [
+        210,
+        209
+      ]
+    ],
+    "max_absolute_metric_difference": 0.0
+  },
+  {
+    "model": "Random Forest",
+    "split": "Spatial_Held_Out",
+    "modality": "Vibration_Plus_GPS",
+    "precision": 0.5046,
+    "recall": 0.5251,
+    "f1": 0.5146,
+    "roc_auc": 0.9071,
+    "pr_auc": 0.4793,
+    "calibrated_threshold": 0.25,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        5593,
+        216
+      ],
+      [
+        199,
+        220
+      ]
+    ],
+    "max_absolute_metric_difference": 1.1102230246251565e-16
+  },
+  {
+    "model": "Random Forest",
+    "split": "Combined_Run_Spatial",
+    "modality": "Vibration_Only",
+    "precision": 0.3519,
+    "recall": 0.2346,
+    "f1": 0.2815,
+    "roc_auc": 0.9012,
+    "pr_auc": 0.336,
+    "calibrated_threshold": 0.525,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        1062,
+        35
+      ],
+      [
+        62,
+        19
+      ]
+    ],
+    "max_absolute_metric_difference": 5.551115123125783e-17
+  },
+  {
+    "model": "Random Forest",
+    "split": "Combined_Run_Spatial",
+    "modality": "Vibration_Plus_GPS",
+    "precision": 0.2368,
+    "recall": 0.2222,
+    "f1": 0.2293,
+    "roc_auc": 0.8452,
+    "pr_auc": 0.2254,
+    "calibrated_threshold": 0.2,
+    "threshold_source": "Validation Set (Max F1)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        1039,
+        58
+      ],
+      [
+        63,
+        18
+      ]
+    ],
+    "max_absolute_metric_difference": 1.1102230246251565e-16
+  },
+  {
+    "model": "Isolation Forest",
+    "split": "Combined_Run_Spatial",
+    "modality": "Vibration_Only",
+    "precision": 0.0858,
+    "recall": 0.4938,
+    "f1": 0.1463,
+    "roc_auc": 0.5888,
+    "pr_auc": 0.1227,
+    "calibrated_threshold": 0.0166,
+    "threshold_source": "Validation Set (Tuned)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        671,
+        426
+      ],
+      [
+        41,
+        40
+      ]
+    ],
+    "max_absolute_metric_difference": 0.0
+  },
+  {
+    "model": "Signal Autoencoder",
+    "split": "Combined_Run_Spatial",
+    "modality": "Vibration_Only",
+    "precision": 0.0941,
+    "recall": 0.6914,
+    "f1": 0.1657,
+    "roc_auc": 0.5986,
+    "pr_auc": 0.09,
+    "calibrated_threshold": 1.7605,
+    "threshold_source": "Validation Set (Tuned)",
+    "test_set_peeking": false,
+    "confusion_matrix": [
+      [
+        558,
+        539
+      ],
+      [
+        25,
+        56
+      ]
+    ],
+    "max_absolute_metric_difference": 0.0041999999999999815
+  }
+]

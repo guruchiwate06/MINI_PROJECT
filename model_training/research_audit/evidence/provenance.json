@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-02",
+  "data_root": "D:\\Rail-VIVID",
+  "cache_sha256": "6faceea9599981d9a6f29f618a2ec2a04011c4033d7f1cf9734e0cebf6f86227",
+  "code_commit": "c3dd22dfdb7a0efb164a7b33f319549fdc043df7",
+  "files": {
+    "mini_project_rajguru\\Acquisition.py": "edc7cfa4c062d59c632e704db10d173066a91f6567605cbab19c714076fd6dde",
+    "mini_project_rajguru\\create_notebook.py": "56d1a48d6f5fdf35ce690b66e515b362c78c53dc3507174ef9d3d9662f85e5d5",
+    "mini_project_rajguru\\generate_eda_figures.py": "ca0415c4841c6fbfdf9df6c9348b393d0223f8e9cbf61359badb90fbc44dde9c",
+    "mini_project_rajguru\\run_benchmarks.py": "a5ce3a59b14adce062b8dda2f0edcc8d9c429f49e7b4e89a6fafe25f1cc7c7a2",
+    "mini_project_rajguru\\tests\\test_features.py": "c11bc433d987ad7419c60522e22f107c5d5a473b5a229823d65a0893eea867e2",
+    "mini_project_rajguru\\tests\\test_models.py": "c49cb2aff83d9ec33ae2edc7cad3b7935d1b0b674426ebf9c93444d0dd55ba14",
+    "mini_project_rajguru\\tests\\test_splitters.py": "3babb1c8e650c3d799db6b1ba84a9b32edf2679a5899f1b6a6af29fd0fcb201a",
+    "mini_project_rajguru\\src\\data\\loader.py": "ef563bbcc0109ccf1b1d2916776be343c9cc2cad5da93e849e041e8b95779816",
+    "mini_project_rajguru\\src\\evaluation\\splitters.py": "9c5e49c430551bafdf221d7af7067af360e5585e004d171270f6743a9af3e45e",
+    "mini_project_rajguru\\src\\features\\extractor.py": "29e4f9d9ac947a87f877903c09bfafbd71f359151759427100e4fc21a1821557",
+    "mini_project_rajguru\\src\\models\\autoencoder.py": "f7dfae36e742f2bf96f4a9f8807c1c6227439decbe4c94e89165654af1f8a340",
+    "mini_project_rajguru\\src\\models\\cnn1d.py": "a0c98d79d19a07c3cc786ed95f09bcdb94da5ca9a2698f1253b1f56946b8f24a",
+    "mini_project_rajguru\\src\\models\\statistical_baselines.py": "065e2e731e3839b1a4c3bb4fc6045b7b25d56a7f542f076044e1eee19a555b1c"
+  }
+}

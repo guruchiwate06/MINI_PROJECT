@@ -1,0 +1,10 @@
+Experiment,Required data exists?,Valid labels?,Existing code?,Scientific novelty,Main risk,Recommendation
+Deep vibration CNN/TCN,Yes: six-channel files,Site-proximity proxies,CNN yes; TCN no,Method alone low,Nine sites; proxy timing,VERIFIED FEASIBLE for CNN; first baseline
+Vision encoder,Yes: 19 nominal paired runs,Visual labels unresolved,Loader only,Method alone low,"Cones, wrong-run images",CONDITIONALLY FEASIBLE
+Basic multimodal fusion,Nominal candidates yes,Spatial proxy only,Not implemented,Benchmark opportunity,Physical drift; cohort changes,CONDITIONALLY FEASIBLE
+Spatially constrained cross-attention,Candidate construction possible,Correspondences unvalidated,No,"Candidate, unproved",No measured alignment recovery,CONDITIONALLY FEASIBLE; defer
+Evidential fusion,Corruption stress inputs possible,Calibration small-cluster,No,Weak alone,Evidence need not be calibrated,CONDITIONALLY FEASIBLE; optional
+Spatial-temporal GNN,Line geometry diagnostic only,Same nine sites,No,Weak without topology/value,Smoothing; transductive leakage,CONDITIONALLY FEASIBLE for line graph; defer
+Cross-speed adaptation,Matched-direction cells yes,Proxies; sparse runs,No,Secondary,Direction/date/target-data use,CONDITIONALLY FEASIBLE
+Sensor placement analysis,Yes: mapped six channels,Same proxy labels,Feature columns reusable,Modest incremental,Selection and site dependence,VERIFIED FEASIBLE as controlled subset study
+Combined location/run evaluation,Yes: intervals and groups,Three test sites in old fold,Yes; audited,Protocol contribution possible,Prior tuning; image envelope,VERIFIED FEASIBLE for vibration grouping; multimodal conditional

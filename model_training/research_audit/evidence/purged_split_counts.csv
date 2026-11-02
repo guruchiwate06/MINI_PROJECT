@@ -1,0 +1,7 @@
+protocol,partition,before,after,dropped,positive_after
+block,train,10615,10269,346,747
+block,validation,2392,2345,47,207
+block,test,3267,3267,0,256
+spatial,train,6751,6731,20,682
+spatial,validation,3295,3275,20,138
+spatial,test,6228,6228,0,419

@@ -27,4 +27,9 @@ data/cached_window_features.csv
 outputs/*.pt
 outputs/*.pth
 outputs/*.pkl
+artifacts/
+.coverage
+*.egg-info/
+.pytest_cache/
+model_training/research_audit/evidence/*.npz
 

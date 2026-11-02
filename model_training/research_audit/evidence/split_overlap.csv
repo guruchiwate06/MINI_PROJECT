@@ -1,0 +1,16 @@
+protocol,partition_a,partition_b,overlapping_window_pairs,affected_a,affected_b,shared_runs,shared_positive_sites
+random,train,validation,3109,2883,2148,20,9
+random,train,test,4161,3770,2830,20,9
+random,validation,test,941,858,868,20,9
+block,train,validation,150,150,150,20,9
+block,train,test,196,196,196,20,9
+block,validation,test,47,47,47,20,9
+run,train,validation,0,0,0,0,9
+run,train,test,0,0,0,0,9
+run,validation,test,0,0,0,0,9
+spatial,train,validation,20,20,20,20,0
+spatial,train,test,0,0,0,20,0
+spatial,validation,test,20,20,20,20,0
+combined,train,validation,0,0,0,0,0
+combined,train,test,0,0,0,0,0
+combined,validation,test,0,0,0,0,0

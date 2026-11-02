@@ -1,0 +1,10 @@
+{
+  "speed_duration_pearson_r": -0.8946002021039542,
+  "notebook_code_cells": 5,
+  "notebook_executed_code_cells": 0,
+  "notebook_code_cells_with_outputs": 0,
+  "legacy_figure6_bin_count": 159,
+  "legacy_figure6_bin_latitude_span_deg": 2.5786163521974827e-05,
+  "legacy_figure6_bin_northing_span_m": 2.8705157232662377,
+  "legacy_figure6_true_bin_width_m": "not constant in chainage; latitude bins are not fixed 7.62 m route sections"
+}

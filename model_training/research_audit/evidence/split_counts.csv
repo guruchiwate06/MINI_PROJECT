@@ -1,0 +1,16 @@
+protocol,partition,windows,positive,negative,runs,sites
+random,train,10579,806,9773,20,"1,2,3,4,5,6,7,8,9"
+random,validation,2441,190,2251,20,"1,2,3,4,5,6,7,8,9"
+random,test,3254,243,3011,20,"1,2,3,4,5,6,7,8,9"
+block,train,10615,772,9843,20,"1,2,3,4,5,6,7,8,9"
+block,validation,2392,211,2181,20,"1,2,3,4,5,6,7,8,9"
+block,test,3267,256,3011,20,"1,2,3,4,5,6,7,8,9"
+run,train,10701,813,9888,13,"1,2,3,4,5,6,7,8,9"
+run,validation,2446,188,2258,3,"1,2,3,4,5,6,7,8,9"
+run,test,3127,238,2889,4,"1,2,3,4,5,6,7,8,9"
+spatial,train,6751,682,6069,20,"1,2,3,4,5"
+spatial,validation,3295,138,3157,20,6
+spatial,test,6228,419,5809,20,"7,8,9"
+combined,train,4423,449,3974,13,"1,2,3,4,5"
+combined,validation,504,22,482,3,6
+combined,test,1178,81,1097,4,"7,8,9"

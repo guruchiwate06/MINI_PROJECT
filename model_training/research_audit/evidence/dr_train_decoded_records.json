@@ -1,0 +1,53 @@
+[
+  {
+    "vehicle": "LRV4306",
+    "kind": "accelerometer_data",
+    "file": "D:\\DR_Train\\LRV4306\\accelerometer_data\\10213_20140911_3_2_8_1_2.mat",
+    "variable": "save_var",
+    "shape": [
+      1,
+      4667459
+    ],
+    "finite": true,
+    "min": -0.010415,
+    "max": 0.009981
+  },
+  {
+    "vehicle": "LRV4306",
+    "kind": "gps_data",
+    "file": "D:\\DR_Train\\LRV4306\\gps_data\\12051_20141016_5_3_4_2gps.mat",
+    "variable": "save_var_gps",
+    "shape": [
+      209,
+      5
+    ],
+    "finite": true,
+    "min": -80.0434633,
+    "max": 735882.538125
+  },
+  {
+    "vehicle": "LRV4313",
+    "kind": "accelerometer_data",
+    "file": "D:\\DR_Train\\LRV4313\\accelerometer_data\\10425_20160505_1_1_2_2_1.mat",
+    "variable": "save_var",
+    "shape": [
+      331695
+    ],
+    "finite": true,
+    "min": -0.221638,
+    "max": 0.240943
+  },
+  {
+    "vehicle": "LRV4313",
+    "kind": "gps_data",
+    "file": "D:\\DR_Train\\LRV4313\\gps_data\\2825_20150924_6_2_3_2gps.mat",
+    "variable": "save_var_gps",
+    "shape": [
+      195,
+      5
+    ],
+    "finite": true,
+    "min": -80.0104633,
+    "max": 736222.8649189814
+  }
+]

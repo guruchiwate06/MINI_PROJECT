@@ -1,0 +1,16 @@
+{
+  "data": {"root": "D:/Rail-VIVID", "artifacts": "../artifacts/railvivid_v1"},
+  "split": {"cohort": "paired"},
+  "vision": {
+    "model_id": "facebook/dinov3-vits16-pretrain-lvd1689m",
+    "revision": null,
+    "store_patch_tokens": true
+  },
+  "model": {"kind": "fusion", "fusion": "attention", "vision_dim": 384},
+  "training": {"device": "cuda", "require_cuda": true},
+  "experiment": {
+    "name": "dinov3_attention_combined_seed42",
+    "output": "../artifacts/experiments",
+    "notes": "Pin an approved exact vision-model revision before extraction. Nominal position uncertainty is an assumption, not independently validated alignment."
+  }
+}

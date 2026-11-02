@@ -1,0 +1,18 @@
+{
+  "src/evaluation/splitters.py": {
+    "byte_equal": false,
+    "text_equal_normalized_newlines": true
+  },
+  "run_benchmarks.py": {
+    "byte_equal": false,
+    "text_equal_normalized_newlines": true
+  },
+  "reports/baseline_results.json": {
+    "byte_equal": false,
+    "text_equal_normalized_newlines": true
+  },
+  "configs/baseline_config.json": {
+    "byte_equal": false,
+    "text_equal_normalized_newlines": true
+  }
+}

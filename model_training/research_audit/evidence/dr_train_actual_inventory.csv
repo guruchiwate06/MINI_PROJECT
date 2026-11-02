@@ -1,0 +1,5 @@
+vehicle,kind,files,bytes
+LRV4306,accelerometer_data,5500,24752889884
+LRV4306,gps_data,5500,33874910
+LRV4313,accelerometer_data,5500,26783288507
+LRV4313,gps_data,1459,32869740

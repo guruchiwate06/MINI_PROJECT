@@ -1,5 +1,7 @@
 # Rail-VIVID Dataset Benchmarking and Feasibility Audit
 
+The separate training pipeline is in [`model_training/`](model_training/README.md), with its [training guide](model_training/TRAINING_PIPELINE.md), source, configs, tests and research audit reports. Local verification does not train models. Historical experiments below are preserved.
+
 **Research Title:** Cross-Run Consistent Multimodal Anomaly Detection with Spatially Held-Out Evaluation on Rail-VIVID  
 **Auditor:** Senior Machine Learning Research Engineer  
 **Companion Publication:** Ma, S., Flanigan, K. A., Bergés, M., & Brooks, J. D. (2026). *A Multimodal Railway Vibration and Vision Dataset (Rail-VIVID)*. Nature Scientific Data 13:1343. DOI: [10.1038/s41597-026-07555-y](https://doi.org/10.1038/s41597-026-07555-y)  

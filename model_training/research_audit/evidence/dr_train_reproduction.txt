@@ -1,0 +1,24 @@
+Rows with complete features: 263
+location_group  label
+Denise          0        72
+                1        56
+Mesta_KSR       0        68
+                1        67
+dtype: int64
+
+--- RANDOM SPLIT (70/30, stratified) (train n=184, test n=79) ---
+  kNN            acc=0.646  balanced_acc=0.643  f1=0.611
+  RandomForest   acc=0.835  balanced_acc=0.828  f1=0.800
+  SVM            acc=0.582  balanced_acc=0.593  f1=0.629
+
+--- LOCATION-HELD-OUT: train=Denise, test=Mesta_KSR (train n=128, test n=135) ---
+  kNN            acc=0.459  balanced_acc=0.460  f1=0.482
+  RandomForest   acc=0.593  balanced_acc=0.594  f1=0.645
+  SVM            acc=0.356  balanced_acc=0.353  f1=0.044
+
+--- LOCATION-HELD-OUT: train=Mesta_KSR, test=Denise (train n=135, test n=128) ---
+  kNN            acc=0.461  balanced_acc=0.471  f1=0.473
+  RandomForest   acc=0.391  balanced_acc=0.415  f1=0.466
+  SVM            acc=0.367  balanced_acc=0.400  f1=0.477
+
+STDERR:

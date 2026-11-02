@@ -1,0 +1,60 @@
+Audit date: 2 November 2026 (Asia/Kolkata). Evidence is local unless linked to a primary external source. VERIFIED means the described check passed; it does not imply clinical, safety, or deployment validation.
+
+# Final research verdict: CONDITIONAL GO
+
+**GO** for an auditable vibration/generalization baseline and controlled sensor study. **CONDITIONAL GO** for a benchmark-focused multimodal paper after pairing/visual-label and split-support gates. **NO-GO in current form** for claims of guaranteed high F1, automatically drift-correcting attention, universal graph superiority, fine visual localization from raw timestamps, or future maintenance forecasting.
+
+The dataset is substantial in repeated signals, but small in independent anomalies. All 20 sensor records are readable and the RF baseline is reproducible. The main blockers are evidential: 5,119 wrong-run/duplicated image names, unmeasured physical alignment residuals, coordinate-proximity rather than visual fault labels, residual block/spatial boundary overlap, prior test reuse, and nine sites from one railway. Available RTX 5070 compute is not the limiting factor.
+
+Recommended title: **“Beyond Random Windows: Auditing Spatial and Run Generalization for Railway Anomaly Detection on Rail-VIVID.”** After genuine multimodal and alignment experiments exist, use **“Railway Anomaly Detection under Spatial and Run Shifts: A Multimodal Benchmark with Alignment Uncertainty.”** Avoid committing the title to cross-attention until it earns an advantage over simple fusion. The most credible conference contribution is a reproducible benchmark/protocol plus a carefully controlled alignment/fusion result, including a defensible negative finding if complex fusion fails.
+
+## Decision matrix
+
+| Experiment | Required data exists? | Valid labels? | Existing code? | Scientific novelty | Main risk | Recommendation |
+| --- | --- | --- | --- | --- | --- | --- |
+| Deep vibration CNN/TCN | Yes: six-channel files | Site-proximity proxies | CNN yes; TCN no | Method alone low | Nine sites; proxy timing | VERIFIED FEASIBLE for CNN; first baseline |
+| Vision encoder | Yes: 19 nominal paired runs | Visual labels unresolved | Loader only | Method alone low | Cones, wrong-run images | CONDITIONALLY FEASIBLE |
+| Basic multimodal fusion | Nominal candidates yes | Spatial proxy only | Not implemented | Benchmark opportunity | Physical drift; cohort changes | CONDITIONALLY FEASIBLE |
+| Spatially constrained cross-attention | Candidate construction possible | Correspondences unvalidated | No | Candidate, unproved | No measured alignment recovery | CONDITIONALLY FEASIBLE; defer |
+| Evidential fusion | Corruption stress inputs possible | Calibration small-cluster | No | Weak alone | Evidence need not be calibrated | CONDITIONALLY FEASIBLE; optional |
+| Spatial-temporal GNN | Line geometry diagnostic only | Same nine sites | No | Weak without topology/value | Smoothing; transductive leakage | CONDITIONALLY FEASIBLE for line graph; defer |
+| Cross-speed adaptation | Matched-direction cells yes | Proxies; sparse runs | No | Secondary | Direction/date/target-data use | CONDITIONALLY FEASIBLE |
+| Sensor placement analysis | Yes: mapped six channels | Same proxy labels | Feature columns reusable | Modest incremental | Selection and site dependence | VERIFIED FEASIBLE as controlled subset study |
+| Combined location/run evaluation | Yes: intervals and groups | Three test sites in old fold | Yes; audited | Protocol contribution possible | Prior tuning; image envelope | VERIFIED FEASIBLE for vibration grouping; multimodal conditional |
+
+“VERIFIED FEASIBLE” refers to the stated scope, never verified future accuracy. “CONDITIONALLY FEASIBLE” names an unmet prerequisite. A branched physical-topology GNN is **NOT CURRENTLY FEASIBLE** from the inspected evidence; first-in-literature status and remote 5070 execution are **NOT VERIFIED**. No fabricated feasibility percentages were assigned.
+
+## Explicit answers to all 30 questions
+
+1. **Required images/vibration?** Yes: 9,401,255 six-channel rows and 105,901 image files. One image run is temporally misassigned; 19 runs have nominal timestamp pairs.
+2. **Reliable alignment?** Numerical same-run matching works; reliable physical alignment is not established. The audit has 100,222 nominal frame/window pairs and zero independently corrected pairs. Measure landmark residuals first.
+3. **Nine sites sufficient for deep evaluation?** For a small, explicitly exploratory grouped study, yes. For broad fault-family/railway generalization or precise confidence claims, no. Repeated windows do not add independent defects.
+4. **Unseen anomaly locations testable?** Yes within this corridor: preserve disjoint site IDs and source/position support; old combined test holds out sites 7/8/9. It is not a new-railway test.
+5. **Enough independent observations for proposed architecture?** Enough waveform/image observations for a small pretrained/frozen-encoder model; insufficient evidence for a high-capacity end-to-end model to generalize across defect populations. A large sample count does not resolve nine-site diversity.
+6. **Six channels usable/comparable?** All finite, synchronized at 2 kHz and mapped to real placements. Comparable through explicit units and train-only channel handling, not interchangeable amplitudes. Original units metadata is inconsistent and must be documented.
+7. **Fair speed/direction tests?** Same-direction speed shifts are possible; only 22.5 km/h exists both ways. Full independent factorial speed/direction conclusions are unsupported, and actual speed/date require controls.
+8. **CPU benchmarks reproducible?** Ten RF rows exactly at saved precision; combined Isolation Forest matches its true saved row. Autoencoder matches the supplied three-decimal summary only, with small four-decimal metric differences and a 0.0042 cutoff difference. Claimed Isolation Forest combined tuple is misattributed from run-held-out; claimed DR-Train range is not reproduced.
+9. **Splits leakage-free?** No blanket claim. Block has 196 train/test shared-sample pairs; spatial has 20 train/validation and 20 validation/test pairs. Combined passes raw/run/site-disjoint checks, with remaining image/support/tuning qualifications.
+10. **GPS experiments interpretable?** As descriptive same-protocol controls, yes. They do not prove memorization causally; labels themselves depend on GPS, and confounded split/composition/threshold changes need controlled ablations.
+11. **Labels correct?** The published-coordinate proximity rule is reproduced exactly. Correct visual defect labels, actual impulse support and defect-free negatives are not independently established. Turnouts are not automatically damage events.
+12. **Earlier tuning contaminated tests?** Scores were repeatedly viewed and historical test-distribution thresholding existed. Complete architecture/hyperparameter history is unavailable. Treat old tests as exploratory; freeze a new nested grouped evaluation, disclose prior reuse, and seek external/new sites for confirmation.
+13. **DINOv2 plus raw encoder implementable?** Yes in principle with readable images/raw signals and available training compute. Only the raw CNN forward pass was executed here; weights, paired dataset and full vision/fusion smoke test remain prerequisites.
+14. **Cross-attention justified now?** Not yet. First demonstrate usable paired information and improvement over frozen-encoder vision, late fusion, concatenation and candidate pooling on matched cohorts.
+15. **Can it handle uncertain alignment?** Conditionally, with candidate positions, uncertainty/support masks and measured correspondence controls. Plain attention does not inherently recover clock drift.
+16. **GNN beyond smoothing?** No supporting experiment yet. Short corridor and no verified sampled branch topology make line convolution/smoothing essential cheaper comparators; defer the GNN.
+17. **Evidential fusion reliable evaluation?** Synthetic sensor-failure/corruption testing is possible; robust calibration/epistemic claims remain weak with nine sites. Compare temperature scaling/ensembles and risk–coverage first.
+18. **Cross-speed without direction confounding?** Yes for within-AtoB or within-BtoA comparisons, conditionally on run/date/site controls. Cross-direction changes at different speeds are a combined condition shift. DANN must disclose target data access.
+19. **Strongest novelty opportunity?** An explicit, reproducible source-support and alignment-aware site/run benchmark with fair fusion controls, not six architectural additions.
+20. **Beyond published baseline?** The existing vibration/grouped evaluation studies a different question; a completed, comparable multimodal benchmark would add evidence. Current code has no completed multimodal deep result.
+21. **Already-published problem?** Yes: image–vibration rail fusion (Wang 2025), visual/inertial misalignment analysis (Radosavljevic 2026), explicit image/axle-box alignment (Zhang 2026), and railway domain adaptation (Ghiasi 2025) exist. Exact Rail-VIVID protocol priority remains unverified, not a “first” claim.
+22. **Experiment establishing new contribution?** Independently validate alignment; exclude wrong-run imagery and cone shortcuts; compare simple and spatial-candidate fusion on frozen outer site/run folds with identical observations and offset curves. Show repeatable site-level/event improvement or rigorous limits that prior benchmarks conceal.
+23. **F1≥0.75/ROC-AUC≥0.96 plausible?** Speculative aspirations, unsupported under the hardest strict protocol. RF combined F1 is 0.2815 on its exact cohort; do not promise a target or extrapolate from GPU capacity.
+24. **Claims a reviewer would reject?** Unqualified leakage-free splits; causal overlap/GPS conclusions from changed splits; 0.96 vs 0.73 as direct improvement; thousands of independent defects; perfect timestamp alignment; first multimodal/misalignment method; future repairs; guaranteed high performance or acceptance.
+25. **Final title?** Use the benchmark-focused title above now. Adopt the multimodal title only after paired experiments are validated; omit cross-attention superiority until demonstrated.
+26. **Most credible conference contribution?** A transparent Rail-VIVID benchmark with reproducible RF/CNN baselines, source-support guards, multiple site/run folds, measured alignment limitations and controlled multimodal/sensor-ablation evidence. Publication strength depends on completed evidence and venue fit; acceptance is not guaranteed.
+27. **First code?** A versioned data/provenance manifest and support-aware split audit, integrating the additive interval guards and rejecting the wrong-date image run. Complete alignment calibration next. First GPU model is the existing raw CNN.
+28. **Reusable code?** CSV/image loader, 66-feature extractor, site constants, statistical models, raw CNN, validation calibration functions, old experiment cache and DR-Train station crosswalk. Preserve old protocol code/results for reproduction; don't duplicate the whole tree.
+29. **Avoid?** Six-model parallel research, invented graph branches, raw unpatched Transformers, vision training from scratch, premature end-to-end fine-tuning, DR labels transferred to Rail-VIVID, test-based selection, uncalibrated fine localization, and architectural claims supported only by a random split.
+30. **Smallest valid next GPU baseline?** On RTX 5070, run a real finite forward/backward smoke test and short six-channel 0.5 s CNN training using frozen purged inner groups, train-only statistics and validation-only checkpoint/threshold selection. Save provenance/predictions and compare with same-cohort RF only after outer evaluation settings are frozen. No advanced fusion is needed for this first baseline.
+
+Read `IMPLEMENTATION_ROADMAP.md` for acceptance gates and `EXISTING_BENCHMARK_VERIFICATION.md` for reproduced metrics. Literature basis and qualified novelty claims are linked in `RESEARCH_NOVELTY_MATRIX.md`.

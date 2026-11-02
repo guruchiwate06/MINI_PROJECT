@@ -1,0 +1,15 @@
+{
+  "rows": 18775,
+  "label_counts": {
+    "0": 15035,
+    "-1": 2501,
+    "1": 1239
+  },
+  "recomputed_label_mismatches": 0,
+  "recomputed_site_mismatches": 0,
+  "duplicate_run_start": 0,
+  "window_lengths": {
+    "1000": 18775
+  },
+  "feature_nonfinite": 0
+}

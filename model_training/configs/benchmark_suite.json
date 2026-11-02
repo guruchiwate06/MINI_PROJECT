@@ -1,0 +1,5 @@
+{
+  "methods": ["rf", "cnn", "tcn", "vision", "patch_memory", "concat", "pooling", "attention", "cross_run", "ssl_tcn", "full", "late"],
+  "seeds": [42, 43, 44],
+  "folds": [1, 2, 3]
+}

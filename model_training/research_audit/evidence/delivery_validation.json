@@ -1,0 +1,10 @@
+{
+  "report_count": 10,
+  "reports_nonempty": true,
+  "local_markdown_links_valid": true,
+  "rf_reproduction_saved_precision": "pass",
+  "sensor_rows": 9401255,
+  "images_inventoried": 105901,
+  "original_working_trees_clean": true,
+  "test_output": "...........                                                              [100%]\n11 passed in 7.74s"
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "file": "D:\\DR_Train\\LRV4306\\accelerometer_data\\10000_20140911_1_1_3_2_4.mat",
+    "error": "Please use HDF reader for matlab v7.3 files, e.g. h5py"
+  },
+  {
+    "file": "D:\\DR_Train\\LRV4306\\gps_data\\10001_20140911_1_1_5_1gps.mat",
+    "error": "'save_var'"
+  },
+  {
+    "file": "D:\\DR_Train\\LRV4313\\accelerometer_data\\10000_20160421_1_2_6_1_8.mat",
+    "shape": [
+      237569
+    ],
+    "dtype": "float64",
+    "finite": true,
+    "min": -0.076445,
+    "max": 0.072051
+  },
+  {
+    "file": "D:\\DR_Train\\LRV4313\\gps_data\\10001_20160421_1_2_6_2gps.mat",
+    "error": "'save_var'"
+  }
+]

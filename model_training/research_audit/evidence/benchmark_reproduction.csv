@@ -1,0 +1,13 @@
+model,split,modality,precision,recall,f1,roc_auc,pr_auc,calibrated_threshold,threshold_source,test_set_peeking,confusion_matrix,max_absolute_metric_difference
+Random Forest,Random_Window (Leaky Control),Vibration_Only,0.442,0.7531,0.5571,0.9431,0.473,0.55,Validation Set (Max F1),False,"[[2780, 231], [60, 183]]",5.551115123125783e-17
+Random Forest,Random_Window (Leaky Control),Vibration_Plus_GPS,0.4765,0.8354,0.6069,0.9579,0.601,0.5,Validation Set (Max F1),False,"[[2788, 223], [40, 203]]",1.1102230246251565e-16
+Random Forest,Block_Grouped_Window (Overlap-Free),Vibration_Only,0.3996,0.8242,0.5383,0.9293,0.417,0.35,Validation Set (Max F1),False,"[[2694, 317], [45, 211]]",5.551115123125783e-17
+Random Forest,Block_Grouped_Window (Overlap-Free),Vibration_Plus_GPS,0.4539,0.8086,0.5815,0.9447,0.4885,0.4,Validation Set (Max F1),False,"[[2762, 249], [49, 207]]",1.1102230246251565e-16
+Random Forest,Run_Held_Out,Vibration_Only,0.3685,0.6597,0.4729,0.9036,0.3736,0.45,Validation Set (Max F1),False,"[[2620, 269], [81, 157]]",1.1102230246251565e-16
+Random Forest,Run_Held_Out,Vibration_Plus_GPS,0.3547,0.7437,0.4803,0.9244,0.5009,0.4,Validation Set (Max F1),False,"[[2567, 322], [61, 177]]",0.0
+Random Forest,Spatial_Held_Out,Vibration_Only,0.5954,0.4988,0.5429,0.9191,0.5229,0.675,Validation Set (Max F1),False,"[[5667, 142], [210, 209]]",0.0
+Random Forest,Spatial_Held_Out,Vibration_Plus_GPS,0.5046,0.5251,0.5146,0.9071,0.4793,0.25,Validation Set (Max F1),False,"[[5593, 216], [199, 220]]",1.1102230246251565e-16
+Random Forest,Combined_Run_Spatial,Vibration_Only,0.3519,0.2346,0.2815,0.9012,0.336,0.525,Validation Set (Max F1),False,"[[1062, 35], [62, 19]]",5.551115123125783e-17
+Random Forest,Combined_Run_Spatial,Vibration_Plus_GPS,0.2368,0.2222,0.2293,0.8452,0.2254,0.2,Validation Set (Max F1),False,"[[1039, 58], [63, 18]]",1.1102230246251565e-16
+Isolation Forest,Combined_Run_Spatial,Vibration_Only,0.0858,0.4938,0.1463,0.5888,0.1227,0.0166,Validation Set (Tuned),False,"[[671, 426], [41, 40]]",0.0
+Signal Autoencoder,Combined_Run_Spatial,Vibration_Only,0.0941,0.6914,0.1657,0.5986,0.09,1.7605,Validation Set (Tuned),False,"[[558, 539], [25, 56]]",0.0041999999999999815

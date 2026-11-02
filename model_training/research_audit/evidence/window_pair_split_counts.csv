@@ -1,0 +1,16 @@
+protocol,partition,windows,nominal_pairs,positive_nominal_pairs,unique_images,physically_validated_pairs
+random,train,10579,9981,760,9981,0
+random,validation,2441,2316,184,2316,0
+random,test,3254,3080,225,3080,0
+block,train,10615,10143,739,10143,0
+block,validation,2392,2230,195,2230,0
+block,test,3267,3004,235,3004,0
+run,train,10701,10692,812,10692,0
+run,validation,2446,2439,187,2439,0
+run,test,3127,2246,170,2246,0
+spatial,train,6751,6368,643,6368,0
+spatial,validation,3295,3122,131,3122,0
+spatial,test,6228,5887,395,5887,0
+combined,train,4423,4419,449,4419,0
+combined,validation,504,504,22,504,0
+combined,test,1178,846,59,846,0

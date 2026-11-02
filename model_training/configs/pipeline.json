@@ -1,0 +1,18 @@
+{
+  "data": {
+    "root": "D:/Rail-VIVID",
+    "artifacts": "../artifacts/railvivid_v1"
+  },
+  "vision": {
+    "model_id": "facebook/dinov2-small",
+    "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+    "store_patch_tokens": true
+  },
+  "model": {"kind": "tcn"},
+  "training": {"device": "cuda", "require_cuda": true},
+  "experiment": {
+    "name": "tcn_combined_seed42",
+    "output": "../artifacts/experiments",
+    "notes": "Exploratory Rail-VIVID site-proximity labels; prior test use disclosed. No physical alignment claim without independently checked landmarks."
+  }
+}

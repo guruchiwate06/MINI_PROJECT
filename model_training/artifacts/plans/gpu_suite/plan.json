@@ -1,0 +1,429 @@
+{
+  "created": "2026-11-02T09:14:48.637767+00:00",
+  "jobs": [
+    {
+      "id": "fold1_pretrain_s42",
+      "method": "pretrain",
+      "fold": 1,
+      "seed": 42,
+      "command": "pretrain",
+      "config": "configs/fold1_pretrain_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_rf_s42",
+      "method": "rf",
+      "fold": 1,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold1_rf_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_cnn_s42",
+      "method": "cnn",
+      "fold": 1,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold1_cnn_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_tcn_s42",
+      "method": "tcn",
+      "fold": 1,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold1_tcn_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_ssl_tcn_s42",
+      "method": "ssl_tcn",
+      "fold": 1,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold1_ssl_tcn_s42.json",
+      "depends_on": "fold1_pretrain_s42"
+    },
+    {
+      "id": "fold1_pretrain_s43",
+      "method": "pretrain",
+      "fold": 1,
+      "seed": 43,
+      "command": "pretrain",
+      "config": "configs/fold1_pretrain_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_rf_s43",
+      "method": "rf",
+      "fold": 1,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold1_rf_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_cnn_s43",
+      "method": "cnn",
+      "fold": 1,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold1_cnn_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_tcn_s43",
+      "method": "tcn",
+      "fold": 1,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold1_tcn_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_ssl_tcn_s43",
+      "method": "ssl_tcn",
+      "fold": 1,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold1_ssl_tcn_s43.json",
+      "depends_on": "fold1_pretrain_s43"
+    },
+    {
+      "id": "fold1_pretrain_s44",
+      "method": "pretrain",
+      "fold": 1,
+      "seed": 44,
+      "command": "pretrain",
+      "config": "configs/fold1_pretrain_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_rf_s44",
+      "method": "rf",
+      "fold": 1,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold1_rf_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_cnn_s44",
+      "method": "cnn",
+      "fold": 1,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold1_cnn_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_tcn_s44",
+      "method": "tcn",
+      "fold": 1,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold1_tcn_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold1_ssl_tcn_s44",
+      "method": "ssl_tcn",
+      "fold": 1,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold1_ssl_tcn_s44.json",
+      "depends_on": "fold1_pretrain_s44"
+    },
+    {
+      "id": "fold2_pretrain_s42",
+      "method": "pretrain",
+      "fold": 2,
+      "seed": 42,
+      "command": "pretrain",
+      "config": "configs/fold2_pretrain_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_rf_s42",
+      "method": "rf",
+      "fold": 2,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold2_rf_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_cnn_s42",
+      "method": "cnn",
+      "fold": 2,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold2_cnn_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_tcn_s42",
+      "method": "tcn",
+      "fold": 2,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold2_tcn_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_ssl_tcn_s42",
+      "method": "ssl_tcn",
+      "fold": 2,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold2_ssl_tcn_s42.json",
+      "depends_on": "fold2_pretrain_s42"
+    },
+    {
+      "id": "fold2_pretrain_s43",
+      "method": "pretrain",
+      "fold": 2,
+      "seed": 43,
+      "command": "pretrain",
+      "config": "configs/fold2_pretrain_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_rf_s43",
+      "method": "rf",
+      "fold": 2,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold2_rf_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_cnn_s43",
+      "method": "cnn",
+      "fold": 2,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold2_cnn_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_tcn_s43",
+      "method": "tcn",
+      "fold": 2,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold2_tcn_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_ssl_tcn_s43",
+      "method": "ssl_tcn",
+      "fold": 2,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold2_ssl_tcn_s43.json",
+      "depends_on": "fold2_pretrain_s43"
+    },
+    {
+      "id": "fold2_pretrain_s44",
+      "method": "pretrain",
+      "fold": 2,
+      "seed": 44,
+      "command": "pretrain",
+      "config": "configs/fold2_pretrain_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_rf_s44",
+      "method": "rf",
+      "fold": 2,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold2_rf_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_cnn_s44",
+      "method": "cnn",
+      "fold": 2,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold2_cnn_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_tcn_s44",
+      "method": "tcn",
+      "fold": 2,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold2_tcn_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold2_ssl_tcn_s44",
+      "method": "ssl_tcn",
+      "fold": 2,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold2_ssl_tcn_s44.json",
+      "depends_on": "fold2_pretrain_s44"
+    },
+    {
+      "id": "fold3_pretrain_s42",
+      "method": "pretrain",
+      "fold": 3,
+      "seed": 42,
+      "command": "pretrain",
+      "config": "configs/fold3_pretrain_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_rf_s42",
+      "method": "rf",
+      "fold": 3,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold3_rf_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_cnn_s42",
+      "method": "cnn",
+      "fold": 3,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold3_cnn_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_tcn_s42",
+      "method": "tcn",
+      "fold": 3,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold3_tcn_s42.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_ssl_tcn_s42",
+      "method": "ssl_tcn",
+      "fold": 3,
+      "seed": 42,
+      "command": "train",
+      "config": "configs/fold3_ssl_tcn_s42.json",
+      "depends_on": "fold3_pretrain_s42"
+    },
+    {
+      "id": "fold3_pretrain_s43",
+      "method": "pretrain",
+      "fold": 3,
+      "seed": 43,
+      "command": "pretrain",
+      "config": "configs/fold3_pretrain_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_rf_s43",
+      "method": "rf",
+      "fold": 3,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold3_rf_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_cnn_s43",
+      "method": "cnn",
+      "fold": 3,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold3_cnn_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_tcn_s43",
+      "method": "tcn",
+      "fold": 3,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold3_tcn_s43.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_ssl_tcn_s43",
+      "method": "ssl_tcn",
+      "fold": 3,
+      "seed": 43,
+      "command": "train",
+      "config": "configs/fold3_ssl_tcn_s43.json",
+      "depends_on": "fold3_pretrain_s43"
+    },
+    {
+      "id": "fold3_pretrain_s44",
+      "method": "pretrain",
+      "fold": 3,
+      "seed": 44,
+      "command": "pretrain",
+      "config": "configs/fold3_pretrain_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_rf_s44",
+      "method": "rf",
+      "fold": 3,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold3_rf_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_cnn_s44",
+      "method": "cnn",
+      "fold": 3,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold3_cnn_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_tcn_s44",
+      "method": "tcn",
+      "fold": 3,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold3_tcn_s44.json",
+      "depends_on": null
+    },
+    {
+      "id": "fold3_ssl_tcn_s44",
+      "method": "ssl_tcn",
+      "fold": 3,
+      "seed": 44,
+      "command": "train",
+      "config": "configs/fold3_ssl_tcn_s44.json",
+      "depends_on": "fold3_pretrain_s44"
+    }
+  ],
+  "methods": [
+    "rf",
+    "cnn",
+    "tcn",
+    "ssl_tcn"
+  ],
+  "folds": [
+    1,
+    2,
+    3
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "test_evaluation_is_separate": true,
+  "claim": "planned comparisons, no performance generated",
+  "protocol": "matched paired cohorts; fold/seed counts are not independent defect counts"
+}

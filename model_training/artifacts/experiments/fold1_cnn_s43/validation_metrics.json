@@ -1,0 +1,46 @@
+{
+  "observations": 85,
+  "ignored_ambiguous": 42,
+  "positive": 20,
+  "prevalence": 0.23529411764705882,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "roc_auc": 1.0,
+  "average_precision": 1.0,
+  "threshold": 0.7819737058940393,
+  "confusion_matrix": [
+    [
+      65,
+      0
+    ],
+    [
+      0,
+      20
+    ]
+  ],
+  "brier": 0.0005620034380767772,
+  "negative_log_likelihood": 0.0030786485906483217,
+  "ece": 0.0027489251081730067,
+  "reliability_bins": [
+    {
+      "bin": 0,
+      "count": 65,
+      "mean_probability": 1.658167915366477e-06,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 7,
+      "count": 1,
+      "mean_probability": 0.7819737058940393,
+      "positive_fraction": 1.0
+    },
+    {
+      "bin": 9,
+      "count": 19,
+      "mean_probability": 0.9991829179381976,
+      "positive_fraction": 1.0
+    }
+  ],
+  "aurc_classification_error": 0.0
+}

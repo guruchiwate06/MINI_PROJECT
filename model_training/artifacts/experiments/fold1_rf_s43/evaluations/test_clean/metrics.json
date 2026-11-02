@@ -1,0 +1,91 @@
+{
+  "observations": 567,
+  "ignored_ambiguous": 113,
+  "positive": 57,
+  "prevalence": 0.10052910052910052,
+  "precision": 0.242152466367713,
+  "recall": 0.9473684210526315,
+  "f1": 0.38571428571428573,
+  "roc_auc": 0.9043687650498796,
+  "average_precision": 0.4973978463134968,
+  "threshold": 0.20701643994159463,
+  "confusion_matrix": [
+    [
+      341,
+      169
+    ],
+    [
+      3,
+      54
+    ]
+  ],
+  "brier": 0.07998784966816615,
+  "negative_log_likelihood": 0.2842580285155285,
+  "ece": 0.10474175016055837,
+  "reliability_bins": [
+    {
+      "bin": 0,
+      "count": 131,
+      "mean_probability": 0.01624312946711935,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 1,
+      "count": 189,
+      "mean_probability": 0.17104258099457337,
+      "positive_fraction": 0.010582010582010581
+    },
+    {
+      "bin": 2,
+      "count": 165,
+      "mean_probability": 0.23694257390889265,
+      "positive_fraction": 0.12121212121212122
+    },
+    {
+      "bin": 3,
+      "count": 49,
+      "mean_probability": 0.3508001210417933,
+      "positive_fraction": 0.30612244897959184
+    },
+    {
+      "bin": 4,
+      "count": 29,
+      "mean_probability": 0.43265953024238674,
+      "positive_fraction": 0.6206896551724138
+    },
+    {
+      "bin": 5,
+      "count": 4,
+      "mean_probability": 0.549017580970911,
+      "positive_fraction": 0.5
+    }
+  ],
+  "aurc_classification_error": 0.08113507635777288,
+  "events": {
+    "true_positive_events": 7,
+    "false_positive_events": 26,
+    "false_negative_events": 2,
+    "covered_site_traversals": 9,
+    "evaluated_distance_km": 1.1428445607736528,
+    "event_recall": 0.7777777777777778,
+    "event_precision": 0.21212121212121213,
+    "false_alarms_per_km": 22.750250464856922,
+    "localization_mae_m": 4.423276618541848,
+    "localization_p95_m": 8.791224921171167,
+    "target_semantics": "nominal documented site proximity, not independently adjudicated frame defects"
+  },
+  "ap_cluster_interval": {
+    "lower": 0.3561680845696869,
+    "upper": 0.8278259157996,
+    "valid_draws": 1000,
+    "run_clusters": 3,
+    "spatial_clusters": 3,
+    "method": "two-way pigeonhole resampling; small-cluster exploratory interval, not independent-defect certainty"
+  },
+  "corruption": {},
+  "synthetic_stress_test": false,
+  "threshold_source": "unchanged validation calibration",
+  "inference": {
+    "measured": false
+  }
+}

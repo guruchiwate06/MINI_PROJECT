@@ -1,0 +1,57 @@
+{
+  "created": "2026-11-02T08:20:20.532611+00:00",
+  "schema_version": 1,
+  "data_fingerprint": "a3d6ebd99f0c200b2c11b1664599a0d72415ee1d335dd2449ac361e3ded65b60",
+  "split_fingerprint": "a7007968bf3019a249c1c554f2846dbf33f9012b8b107132c5c77b351f7eebae",
+  "manifest_sha256": "8c58372d96b781203c11136005b1756cea76d2b5cd0d48d8eaae143e8c38f4f3",
+  "protocol": "combined",
+  "cohort": "vibration",
+  "initial_assigned_rows": 7212,
+  "retained_rows": 6874,
+  "summary": [
+    {
+      "partition": "test",
+      "rows": 1339,
+      "supervised": 1174,
+      "positives": 81,
+      "runs": 4,
+      "positive_sites": [
+        7,
+        8,
+        9
+      ],
+      "paired_rows": 949
+    },
+    {
+      "partition": "train",
+      "rows": 4996,
+      "supervised": 4095,
+      "positives": 449,
+      "runs": 13,
+      "positive_sites": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "paired_rows": 4894
+    },
+    {
+      "partition": "validation",
+      "rows": 539,
+      "supervised": 498,
+      "positives": 22,
+      "runs": 3,
+      "positive_sites": [
+        6
+      ],
+      "paired_rows": 493
+    }
+  ],
+  "alignment_mode": "nominal",
+  "alignment_checks": [],
+  "camera_envelope_assumption_m": 30.0,
+  "claim": "source guards checked; physical correspondence remains conditional on landmark evidence",
+  "test_history": "Prior published local test scores were inspected; folds are exploratory unless independently reserved."
+}

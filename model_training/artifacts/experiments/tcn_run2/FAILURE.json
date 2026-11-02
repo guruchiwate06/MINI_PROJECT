@@ -1,0 +1,6 @@
+{
+  "failed": "2026-11-02T08:51:05.103257+00:00",
+  "type": "KeyboardInterrupt",
+  "error": "",
+  "resume_checkpoint": "C:\\Users\\Thrill3r\\Downloads\\MINI_PROJECT\\model_training\\artifacts\\experiments\\tcn_run2\\last.pt"
+}

@@ -1,0 +1,11 @@
+{
+  "current_epoch": 17,
+  "total_epochs": 80,
+  "elapsed_s": 78.36843229999977,
+  "eta_s": 287.66894235882353,
+  "eta_human": "04m 47s",
+  "training_loss": 0.5424389346741563,
+  "val_score": 0.7475040098895058,
+  "best_score": 0.9795027276738308,
+  "patience_remaining": 0
+}

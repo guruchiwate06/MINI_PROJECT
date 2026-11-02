@@ -1,0 +1,7 @@
+{
+  "completed": "2026-11-02T10:06:35.426593+00:00",
+  "stage": "pretrain",
+  "experiment_fingerprint": "d6da4d8c9db1d9fadf08e51bf85f8af1e07961fb78e2523410279a09de14d615",
+  "checkpoint_sha256": "050e3f8da557dc464a29d3e76352419b4721fa3674dc10b3bc57ef12e69242f2",
+  "test_evaluated": false
+}

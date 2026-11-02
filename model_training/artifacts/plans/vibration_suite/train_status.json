@@ -1,0 +1,273 @@
+{
+  "updated": "2026-11-02T11:35:46.218871+00:00",
+  "jobs": [
+    {
+      "id": "fold1_pretrain_s42",
+      "command": "pretrain",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_rf_s42",
+      "status": "verified_complete_skipped"
+    },
+    {
+      "id": "fold1_cnn_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_tcn_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_ssl_tcn_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_pretrain_s43",
+      "command": "pretrain",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_rf_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_cnn_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_tcn_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_ssl_tcn_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_pretrain_s44",
+      "command": "pretrain",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_rf_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_cnn_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_tcn_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold1_ssl_tcn_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_pretrain_s42",
+      "command": "pretrain",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_rf_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_cnn_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_tcn_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_ssl_tcn_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_pretrain_s43",
+      "command": "pretrain",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_rf_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_cnn_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_tcn_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_ssl_tcn_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_pretrain_s44",
+      "command": "pretrain",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_rf_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_cnn_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_tcn_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold2_ssl_tcn_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_pretrain_s42",
+      "command": "pretrain",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_rf_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_cnn_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_tcn_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_ssl_tcn_s42",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_pretrain_s43",
+      "command": "pretrain",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_rf_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_cnn_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_tcn_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_ssl_tcn_s43",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_pretrain_s44",
+      "command": "pretrain",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_rf_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_cnn_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_tcn_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    },
+    {
+      "id": "fold3_ssl_tcn_s44",
+      "command": "train",
+      "returncode": 0,
+      "status": "ok"
+    }
+  ]
+}

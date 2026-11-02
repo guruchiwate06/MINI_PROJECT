@@ -4,11 +4,14 @@ __pycache__/
 *$py.class
 *.so
 
-# Environments
+# Environments & Node
 .venv/
 env/
 venv/
 ENV/
+node_modules/
+dist/
+.puppeteer_profile*
 
 # Large Raw Dataset Directories (Rail-VIVID raw multimodal data)
 AtoB_*/
@@ -23,13 +26,14 @@ extracted_details.txt
 *.pdf
 data/cached_window_features.csv
 
-# Output logs and checkpoints
+# Large raw sensor array copies (regenerated from D:/Rail-VIVID via railvivid prepare)
+model_training/artifacts/railvivid_v1/runs/
+
+# Output logs
 outputs/*.pt
 outputs/*.pth
 outputs/*.pkl
-artifacts/
 .coverage
 *.egg-info/
 .pytest_cache/
 model_training/research_audit/evidence/*.npz
-

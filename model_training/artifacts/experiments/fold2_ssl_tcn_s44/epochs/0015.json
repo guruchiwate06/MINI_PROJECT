@@ -1,0 +1,11 @@
+{
+  "epoch": 15,
+  "training_loss": 0.6301199890942218,
+  "validation_ap": 0.37995958935136354,
+  "learning_rate": 0.0009157348061512728,
+  "elapsed_s": 6.622168800000509,
+  "total_elapsed_s": 105.71584330000042,
+  "eta_s": 444.8975010999917,
+  "best": 0.4902379347980382,
+  "peak_cuda_allocated_bytes": null
+}

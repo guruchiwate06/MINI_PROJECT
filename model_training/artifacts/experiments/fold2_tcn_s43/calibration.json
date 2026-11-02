@@ -1,0 +1,8 @@
+{
+  "temperature": 0.6793847651769124,
+  "source": "validation only",
+  "method": "temperature",
+  "threshold": 0.886912234217156,
+  "policy": "max_f1",
+  "experiment_fingerprint": "43faa2a115e378fa83060b4bd1486dec1c390d466aaba78fafe90207664a6ece"
+}

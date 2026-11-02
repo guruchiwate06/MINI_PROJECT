@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-11-02T10:26:40.782383+00:00",
+  "python": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "packages": {
+    "torch": "2.5.1",
+    "torchvision": null,
+    "transformers": null,
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.9.0",
+    "Pillow": "12.3.0"
+  },
+  "torch_cuda_build": null,
+  "cuda_available": false,
+  "gpu": null,
+  "git_commit": "555e9216841bf30925fc9f6bad038979cf87caef",
+  "pipeline_source_hash": "af1d63fa78a4113fc837360b13af68c9bb4cc5aa237925e13426e24c1329e177"
+}

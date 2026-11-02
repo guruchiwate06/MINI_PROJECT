@@ -1,0 +1,97 @@
+{
+  "observations": 567,
+  "ignored_ambiguous": 113,
+  "positive": 57,
+  "prevalence": 0.10052910052910052,
+  "precision": 0.3216374269005848,
+  "recall": 0.9649122807017544,
+  "f1": 0.4824561403508772,
+  "roc_auc": 0.9228070175438596,
+  "average_precision": 0.5114213326470147,
+  "threshold": 0.23092311416591565,
+  "confusion_matrix": [
+    [
+      394,
+      116
+    ],
+    [
+      2,
+      55
+    ]
+  ],
+  "brier": 0.07813000282965203,
+  "negative_log_likelihood": 0.27906416889288604,
+  "ece": 0.10486420707993306,
+  "reliability_bins": [
+    {
+      "bin": 0,
+      "count": 131,
+      "mean_probability": 0.02000314249381596,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 1,
+      "count": 191,
+      "mean_probability": 0.16222415993182895,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 2,
+      "count": 159,
+      "mean_probability": 0.2393721768028476,
+      "positive_fraction": 0.11320754716981132
+    },
+    {
+      "bin": 3,
+      "count": 43,
+      "mean_probability": 0.3466353060701157,
+      "positive_fraction": 0.3953488372093023
+    },
+    {
+      "bin": 4,
+      "count": 37,
+      "mean_probability": 0.4382364390060858,
+      "positive_fraction": 0.4864864864864865
+    },
+    {
+      "bin": 5,
+      "count": 5,
+      "mean_probability": 0.5444051678929723,
+      "positive_fraction": 0.8
+    },
+    {
+      "bin": 6,
+      "count": 1,
+      "mean_probability": 0.6346953327050661,
+      "positive_fraction": 0.0
+    }
+  ],
+  "aurc_classification_error": 0.04075192041406448,
+  "events": {
+    "true_positive_events": 6,
+    "false_positive_events": 27,
+    "false_negative_events": 3,
+    "covered_site_traversals": 9,
+    "evaluated_distance_km": 1.1428445607736528,
+    "event_recall": 0.6666666666666666,
+    "event_precision": 0.18181818181818182,
+    "false_alarms_per_km": 23.62526009812065,
+    "localization_mae_m": 4.676598335289498,
+    "localization_p95_m": 8.892427920387519,
+    "target_semantics": "nominal documented site proximity, not independently adjudicated frame defects"
+  },
+  "ap_cluster_interval": {
+    "lower": 0.4196409113937932,
+    "upper": 0.8440033085194374,
+    "valid_draws": 1000,
+    "run_clusters": 3,
+    "spatial_clusters": 3,
+    "method": "two-way pigeonhole resampling; small-cluster exploratory interval, not independent-defect certainty"
+  },
+  "corruption": {},
+  "synthetic_stress_test": false,
+  "threshold_source": "unchanged validation calibration",
+  "inference": {
+    "measured": false
+  }
+}

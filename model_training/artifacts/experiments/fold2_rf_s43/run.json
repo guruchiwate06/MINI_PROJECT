@@ -1,0 +1,63 @@
+{
+  "started": "2026-11-02T10:36:32.209766+00:00",
+  "experiment_fingerprint": "208e2b87ccb546a9338e1aff6e991e827b0f4d151ba309a274ab50e7aa2b2ecf",
+  "split": {
+    "created": "2026-11-02T10:15:25.623612+00:00",
+    "schema_version": 1,
+    "data_fingerprint": "a3d6ebd99f0c200b2c11b1664599a0d72415ee1d335dd2449ac361e3ded65b60",
+    "split_fingerprint": "e65a6d0218225393649ec4e4e6df30dcb9b04204483f9e5e3b6c4d5c4c949d7c",
+    "manifest_sha256": "d8953aaf1396995efeab4a3f79bdf314a681145c8db23883ceef0c8c7ff859e7",
+    "protocol": "combined",
+    "cohort": "paired",
+    "initial_assigned_rows": 7629,
+    "retained_rows": 6667,
+    "summary": [
+      {
+        "partition": "test",
+        "rows": 800,
+        "supervised": 687,
+        "positives": 56,
+        "runs": 3,
+        "positive_sites": [
+          4,
+          5,
+          6
+        ],
+        "paired_rows": 800
+      },
+      {
+        "partition": "train",
+        "rows": 5402,
+        "supervised": 4486,
+        "positives": 454,
+        "runs": 13,
+        "positive_sites": [
+          1,
+          2,
+          3,
+          8,
+          9
+        ],
+        "paired_rows": 5402
+      },
+      {
+        "partition": "validation",
+        "rows": 465,
+        "supervised": 425,
+        "positives": 21,
+        "runs": 3,
+        "positive_sites": [
+          7
+        ],
+        "paired_rows": 465
+      }
+    ],
+    "alignment_mode": "nominal",
+    "alignment_checks": [],
+    "camera_envelope_assumption_m": 30.0,
+    "claim": "source guards checked; physical correspondence remains conditional on landmark evidence",
+    "test_history": "Prior published local test scores were inspected; folds are exploratory unless independently reserved."
+  },
+  "stage": "supervised",
+  "data_fingerprint": "a3d6ebd99f0c200b2c11b1664599a0d72415ee1d335dd2449ac361e3ded65b60"
+}

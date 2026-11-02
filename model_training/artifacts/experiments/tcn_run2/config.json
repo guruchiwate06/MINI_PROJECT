@@ -1,0 +1,148 @@
+{
+  "data": {
+    "root": "D:\\Rail-VIVID",
+    "artifacts": "C:\\Users\\Thrill3r\\Downloads\\MINI_PROJECT\\model_training\\artifacts\\railvivid_v1",
+    "sampling_hz": 2000,
+    "window_samples": 1000,
+    "stride_samples": 500,
+    "positive_radius_m": 6.0,
+    "buffer_radius_m": 18.0,
+    "reference_run": "AtoB_20_1",
+    "reference_step_samples": 500,
+    "max_reference_distance_m": 5.0,
+    "units": "g",
+    "chunk_rows": 100000
+  },
+  "alignment": {
+    "mode": "nominal",
+    "landmarks": null,
+    "max_time_residual_s": 0.1,
+    "uncertainty_m": 15.0,
+    "camera_footprint_m": 15.0,
+    "pooling_bandwidth_m": 10.0,
+    "candidate_offsets_m": [
+      -15.0,
+      -10.0,
+      -5.0,
+      0.0,
+      5.0,
+      10.0,
+      15.0
+    ],
+    "candidate_tolerance_m": 2.0,
+    "excluded_image_runs": [
+      "AtoB_22.5_4"
+    ]
+  },
+  "split": {
+    "protocol": "combined",
+    "seed": 42,
+    "test_runs": [
+      "AtoB_20_4",
+      "AtoB_22.5_4",
+      "BtoA_25_4",
+      "BtoA_27.5_4"
+    ],
+    "validation_runs": [
+      "AtoB_20_3",
+      "BtoA_22.5_3",
+      "BtoA_27.5_3"
+    ],
+    "test_sites": [
+      7,
+      8,
+      9
+    ],
+    "validation_sites": [
+      6
+    ],
+    "spatial_guard_m": 0.0,
+    "sample_embargo": 0,
+    "block_samples": 10000,
+    "test_fraction": 0.2,
+    "validation_fraction": 0.15,
+    "cohort": "vibration",
+    "label_sites": null,
+    "condition_direction": null,
+    "test_speeds": []
+  },
+  "vision": {
+    "model_id": "facebook/dinov2-small",
+    "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+    "local_files_only": true,
+    "batch_size": 16,
+    "store_patch_tokens": true,
+    "roi": [
+      0.0,
+      0.0,
+      1.0,
+      1.0
+    ],
+    "mask_boxes": [],
+    "embedding_dir": "vision"
+  },
+  "model": {
+    "kind": "tcn",
+    "channels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "width": 64,
+    "depth": 4,
+    "kernel_size": 7,
+    "embedding_dim": 128,
+    "dropout": 0.2,
+    "attention_heads": 4,
+    "vision_dim": 384,
+    "fusion": "attention",
+    "modality_dropout": 0.1,
+    "initial_encoder": null,
+    "rf_trees": 500,
+    "rf_max_depth": null,
+    "rf_min_leaf": 2,
+    "memory_patches": 20000,
+    "patches_per_reference_frame": 16
+  },
+  "training": {
+    "seed": 42,
+    "device": "cpu",
+    "require_cuda": false,
+    "epochs": 80,
+    "batch_size": 64,
+    "workers": 0,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "patience": 12,
+    "min_delta": 0.0001,
+    "gradient_clip": 1.0,
+    "amp": true,
+    "deterministic": true,
+    "accumulation_steps": 1,
+    "resume": null,
+    "pretrain_epochs": 50,
+    "ssl_variance_weight": 1.0,
+    "ssl_covariance_weight": 0.05,
+    "cross_run_weight": 0.0,
+    "cross_run_tolerance_m": 2.0
+  },
+  "evaluation": {
+    "threshold": "max_f1",
+    "temperature_scaling": true,
+    "event_tolerance_m": 10.0,
+    "event_merge_gap_m": 5.0,
+    "false_alarm_budget_per_km": 1.0,
+    "ece_bins": 10,
+    "bootstrap_repeats": 1000,
+    "bootstrap_seed": 73
+  },
+  "experiment": {
+    "name": "tcn_run2",
+    "output": "C:\\Users\\Thrill3r\\Downloads\\MINI_PROJECT\\model_training\\artifacts\\experiments",
+    "notes": "Exploratory Rail-VIVID site-proximity labels; prior test use disclosed. No physical alignment claim without independently checked landmarks."
+  },
+  "_config_path": "C:\\Users\\Thrill3r\\Downloads\\MINI_PROJECT\\model_training\\configs\\pipeline.json"
+}

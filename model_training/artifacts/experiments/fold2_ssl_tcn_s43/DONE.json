@@ -1,0 +1,7 @@
+{
+  "completed": "2026-11-02T10:40:45.709581+00:00",
+  "stage": "supervised",
+  "experiment_fingerprint": "1154023f8834c385cb9a662e074e76547e5760494db7547871b5dc7ac562ad19",
+  "checkpoint_sha256": "d580a22b4fc3088dcc9ad0b0649cd97eca5177271a2b1ad18f024f40b287e0db",
+  "test_evaluated": false
+}

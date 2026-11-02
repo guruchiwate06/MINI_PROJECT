@@ -1,0 +1,88 @@
+{
+  "observations": 452,
+  "ignored_ambiguous": 41,
+  "positive": 22,
+  "prevalence": 0.048672566371681415,
+  "precision": 0.3333333333333333,
+  "recall": 0.6818181818181818,
+  "f1": 0.44776119402985076,
+  "roc_auc": 0.9328752642706131,
+  "average_precision": 0.3196214983113006,
+  "threshold": 0.552514554665762,
+  "confusion_matrix": [
+    [
+      400,
+      30
+    ],
+    [
+      7,
+      15
+    ]
+  ],
+  "brier": 0.06473659689095917,
+  "negative_log_likelihood": 0.20987334634207622,
+  "ece": 0.08912408507700112,
+  "reliability_bins": [
+    {
+      "bin": 0,
+      "count": 321,
+      "mean_probability": 0.023462803084682512,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 1,
+      "count": 47,
+      "mean_probability": 0.13645538833627574,
+      "positive_fraction": 0.02127659574468085
+    },
+    {
+      "bin": 2,
+      "count": 14,
+      "mean_probability": 0.243185936289626,
+      "positive_fraction": 0.14285714285714285
+    },
+    {
+      "bin": 3,
+      "count": 10,
+      "mean_probability": 0.3386509435864688,
+      "positive_fraction": 0.2
+    },
+    {
+      "bin": 4,
+      "count": 12,
+      "mean_probability": 0.44799751989845465,
+      "positive_fraction": 0.16666666666666666
+    },
+    {
+      "bin": 5,
+      "count": 9,
+      "mean_probability": 0.5540096441518707,
+      "positive_fraction": 0.2222222222222222
+    },
+    {
+      "bin": 6,
+      "count": 10,
+      "mean_probability": 0.6554702231522287,
+      "positive_fraction": 0.5
+    },
+    {
+      "bin": 7,
+      "count": 9,
+      "mean_probability": 0.7509341758596189,
+      "positive_fraction": 0.2222222222222222
+    },
+    {
+      "bin": 8,
+      "count": 9,
+      "mean_probability": 0.8451373410370289,
+      "positive_fraction": 0.5555555555555556
+    },
+    {
+      "bin": 9,
+      "count": 11,
+      "mean_probability": 0.9333279953778728,
+      "positive_fraction": 0.09090909090909091
+    }
+  ],
+  "aurc_classification_error": 0.01646402514393721
+}

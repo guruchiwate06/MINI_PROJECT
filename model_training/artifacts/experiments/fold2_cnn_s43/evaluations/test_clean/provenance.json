@@ -1,0 +1,15 @@
+{
+  "evaluated": "2026-11-02T11:37:02.955946+00:00",
+  "partition": "test",
+  "experiment_fingerprint": "82723bca2f8e124513b48665cfb7e424138f588ecf80880e328d3f0d51ff96b8",
+  "split_fingerprint": "e65a6d0218225393649ec4e4e6df30dcb9b04204483f9e5e3b6c4d5c4c949d7c",
+  "cohort_fingerprint": "fea3ef9b846885f60459c385cd4596781f83c875d3bd28edb00a553fda74b44a",
+  "model_kind": "cnn",
+  "seed": 43,
+  "alignment": "nominal",
+  "corruption": {},
+  "checkpoint_sha256": "f5f1e845ade936a23abf5e0f31feea00d0b4299fc8a8e719a13039056deb5b38",
+  "predictions_sha256": "bc6a74788655094f88dcbaf2d4071b0af7a89f77b9c0097c3070ff2abeb07c42",
+  "test_access_disclosed": true,
+  "notes": "Exploratory Rail-VIVID site-proximity labels; prior test use disclosed. No physical alignment claim without independently checked landmarks."
+}

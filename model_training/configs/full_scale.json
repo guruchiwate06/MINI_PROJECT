@@ -1,0 +1,22 @@
+{
+  "data": {"root": "D:/Rail-VIVID", "artifacts": "../artifacts/railvivid_v1"},
+  "split": {"protocol": "combined", "cohort": "paired"},
+  "vision": {
+    "model_id": "facebook/dinov2-small",
+    "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+    "batch_size": 16,
+    "store_patch_tokens": true
+  },
+  "model": {"kind": "fusion", "fusion": "attention_gated"},
+  "training": {
+    "device": "cuda", "require_cuda": true, "epochs": 80, "pretrain_epochs": 50,
+    "batch_size": 64, "workers": 0, "prefetch_factor": 2, "max_open_runs": 32,
+    "amp": true, "deterministic": true, "cross_run_weight": 0.1
+  },
+  "evaluation": {"threshold": "false_alarm_budget", "false_alarm_budget_per_km": 1.0, "bootstrap_repeats": 1000},
+  "experiment": {
+    "name": "full_scale_fusion_seed42",
+    "output": "../artifacts/experiments/full_scale",
+    "notes": "Exploratory guarded paired run/site folds; historical test reuse disclosed. Default DINOv2 is pinned; DINOv3 is a separate validation-selected experiment. Nominal alignment is unverified. Full suite transfers train-only SSL; standalone training requires an explicit encoder checkpoint to claim SSL initialization. No guaranteed benchmark superiority."
+  }
+}

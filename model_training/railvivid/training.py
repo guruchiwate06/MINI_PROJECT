@@ -47,7 +47,8 @@ def make_loader(dataset,cfg,shuffle=False,epoch=0,drop_last=False):
     dataset.epoch=epoch;generator=torch.Generator().manual_seed(cfg['training']['seed']+epoch)
     return DataLoader(dataset,batch_size=cfg['training']['batch_size'],shuffle=shuffle,drop_last=drop_last,
         num_workers=cfg['training']['workers'],pin_memory=cfg['training']['device'].startswith('cuda') and torch.cuda.is_available(),
-        persistent_workers=False,generator=generator)
+        persistent_workers=False,generator=generator,
+        **({'prefetch_factor':cfg['training']['prefetch_factor']} if cfg['training']['workers'] else {}))
 
 def accumulation_examples(dataset_size,batch_size,accumulation_steps,step,drop_last=False):
     effective=(dataset_size//batch_size)*batch_size if drop_last else dataset_size
@@ -159,7 +160,9 @@ def train(cfg,pretrain=False):
             for epoch in range(first,epochs):
                 model.train();loader=make_loader(dataset,cfg,shuffle=True,epoch=epoch,drop_last=pretrain)
                 if not len(loader):raise DataIntegrityError('No batches: reduce batch_size for the permitted cohort')
+                if device.type=='cuda':torch.cuda.synchronize(device);torch.cuda.reset_peak_memory_stats(device)
                 optimizer.zero_grad(set_to_none=True);total=0.;seen=0;start_time=time.perf_counter()
+                updates=0
                 for step,batch in enumerate(loader):
                     batch=collate_to_device(batch,device);size=len(batch['label'])
                     examples=accumulation_examples(len(dataset),cfg['training']['batch_size'],cfg['training']['accumulation_steps'],step,drop_last=pretrain)
@@ -167,10 +170,13 @@ def train(cfg,pretrain=False):
                         if pretrain:
                             a,b=model(batch['waveform']);loss=ssl_loss(a.float(),b.float(),cfg['training']['ssl_variance_weight'],cfg['training']['ssl_covariance_weight'])
                         else:
-                            logits=model(batch);loss=criterion(logits,batch['label'])+model.auxiliary_loss(batch,batch['label'])
+                            logits,encoding=model.forward_features(batch)
+                            loss=criterion(logits,batch['label'])+model.auxiliary_loss(batch,batch['label'],encoding)
                         if cfg['training']['cross_run_weight']>0 and batch['partner_available'].any():
                             if not hasattr(model,'encoder'):raise ConfigurationError('Cross-run consistency requires a TCN-based encoder')
-                            member=batch['partner_available'];a=model.encoder(batch['waveform'][member]);b=model.encoder(batch['partner_waveform'][member])
+                            member=batch['partner_available']
+                            a=model.encoder(batch['waveform'][member]) if pretrain else encoding[member]
+                            b=model.encoder(batch['partner_waveform'][member])
                             consistency=(1-torch.nn.functional.cosine_similarity(a,b,dim=1)).mean()
                             loss=loss+cfg['training']['cross_run_weight']*consistency
                     if not torch.isfinite(loss):raise TrainingError(f'Nonfinite loss at epoch {epoch+1}, batch {step}; no samples were silently skipped')
@@ -179,8 +185,11 @@ def train(cfg,pretrain=False):
                         scaler.unscale_(optimizer)
                         norm=torch.nn.utils.clip_grad_norm_(model.parameters(),cfg['training']['gradient_clip'],error_if_nonfinite=True)
                         scaler.step(optimizer);scaler.update();optimizer.zero_grad(set_to_none=True)
+                        updates+=1
                     total+=float(loss.detach())*size;seen+=size
                 scheduler.step()
+                if device.type=='cuda':torch.cuda.synchronize(device)
+                training_seconds=time.perf_counter()-start_time;validation_start=time.perf_counter()
                 if pretrain:
                     # Fixed final epoch; no validation/test observations enter SSL or its stopping rule.
                     score=-total/seen;improved=True
@@ -190,6 +199,8 @@ def train(cfg,pretrain=False):
                     score=result['average_precision']
                     if score is None:raise DataIntegrityError('Validation AP is undefined')
                     improved=score>best+cfg['training']['min_delta']
+                if device.type=='cuda':torch.cuda.synchronize(device)
+                validation_seconds=time.perf_counter()-validation_start;checkpoint_start=time.perf_counter()
                 if improved:best=score;bad_epochs=0
                 else:bad_epochs+=1
                 state={'epoch':epoch,'pretrain':pretrain,'model':model.state_dict(),'optimizer':optimizer.state_dict(),'scheduler':scheduler.state_dict(),
@@ -197,6 +208,9 @@ def train(cfg,pretrain=False):
                 save_checkpoint(folder/'last.pt',state)
                 if improved:save_checkpoint(folder/'best.pt',state)
                 row={'epoch':epoch+1,'training_loss':total/seen,'validation_ap':None if pretrain else score,'learning_rate':scheduler.get_last_lr()[0],
+                    'training_seconds':training_seconds,'validation_seconds':validation_seconds,
+                    'checkpoint_seconds':time.perf_counter()-checkpoint_start,'optimizer_updates':updates,'training_windows':seen,
+                    'training_windows_per_second':seen/max(training_seconds,1e-12),
                     'elapsed_s':time.perf_counter()-start_time,'best':best,'peak_cuda_allocated_bytes':torch.cuda.max_memory_allocated(device) if device.type=='cuda' else None}
                 write_json(folder/f'epochs/{epoch+1:04d}.json',row);LOG.info('Epoch %d/%d loss=%.5f score=%.5f',epoch+1,epochs,total/seen,score)
                 if not pretrain and bad_epochs>=cfg['training']['patience']:break

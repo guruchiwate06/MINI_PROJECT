@@ -20,6 +20,7 @@ DEFAULTS={
           'dropout':0.2,'attention_heads':4,'vision_dim':384,'fusion':'attention','modality_dropout':0.1,
           'initial_encoder':None,'rf_trees':500,'rf_max_depth':None,'rf_min_leaf':2,'memory_patches':20000,'patches_per_reference_frame':16},
  'training':{'seed':42,'device':'cuda','require_cuda':True,'epochs':80,'batch_size':64,'workers':0,
+             'prefetch_factor':2,'max_open_runs':32,
              'learning_rate':0.001,'weight_decay':0.0001,'patience':12,'min_delta':0.0001,'gradient_clip':1.,
              'amp':True,'deterministic':True,'accumulation_steps':1,'resume':None,
              'pretrain_epochs':50,'ssl_variance_weight':1.,'ssl_covariance_weight':0.05,'cross_run_weight':0.,'cross_run_tolerance_m':2.},
@@ -78,7 +79,7 @@ def validate_config(c):
         if isinstance(value,bool) or not isinstance(value,(int,float)) or value<=0 or (integer and not isinstance(value,int)):
             raise ConfigurationError(f'{name} must be a positive '+('integer' if integer else 'number'))
     for section,keys in [('data',['sampling_hz','window_samples','stride_samples','chunk_rows','reference_step_samples']),
-                         ('training',['epochs','batch_size','patience','accumulation_steps','pretrain_epochs']),
+                         ('training',['epochs','batch_size','patience','accumulation_steps','pretrain_epochs','prefetch_factor','max_open_runs']),
                          ('model',['width','depth','kernel_size','embedding_dim','attention_heads','vision_dim'])]:
         for key in keys: positive(c[section][key],f'{section}.{key}',True)
     for k in ['rf_trees','rf_min_leaf','memory_patches','patches_per_reference_frame']:positive(c['model'][k],'model.'+k,True)
@@ -121,7 +122,8 @@ def validate_config(c):
     if c['model']['embedding_dim']%c['model']['attention_heads']: raise ConfigurationError('embedding_dim must be divisible by attention_heads')
     for k in ['dropout','modality_dropout']:
         if not 0<=c['model'][k]<1: raise ConfigurationError(f'model.{k} must be in [0,1)')
-    if c['training']['workers']<0: raise ConfigurationError('workers must be nonnegative')
+    if isinstance(c['training']['workers'],bool) or not isinstance(c['training']['workers'],int) or c['training']['workers']<0:
+        raise ConfigurationError('workers must be a nonnegative integer')
     for k in ['learning_rate','gradient_clip']: positive(c['training'][k],f'training.{k}')
     if c['evaluation']['threshold'] not in ['max_f1','false_alarm_budget']: raise ConfigurationError('Unknown threshold policy')
     if not c['experiment']['name'] or Path(c['experiment']['name']).name!=c['experiment']['name'] or c['experiment']['name'] in ['.','..']:

@@ -2,12 +2,16 @@
 
 All new model-pipeline files are organized here on the `model-training` branch. The historical experiments at the repository root remain intact.
 
+Follow [Full scale run](FULL_SCALE_RUN.md) for the full fusion configuration, strict preflight, timing logs, clean comparisons, reliability tests and repeated-pass studies. Keep any active experiment on its original checkout and commit.
+
 - [Training and evaluation guide](TRAINING_PIPELINE.md)
 - [Research audit and evidence](research_audit/README.md)
 - [Implementation status](research_audit/PIPELINE_BUILD_STATUS.md)
 - [Fitting-free validation record](reports/pipeline_validation.json)
 - [Default training config](configs/pipeline.json)
 - [117-task benchmark definition](configs/benchmark_suite.json)
+- [Full fusion configuration](configs/full_scale.json)
+- [Full scale validation](reports/full_scale_validation.json)
 
 ```text
 model_training/

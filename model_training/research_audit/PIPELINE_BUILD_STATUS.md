@@ -2,7 +2,7 @@
 
 **Implemented; no models trained during this implementation.** This laptop performed code validation, data conversion and forward-only tests. GPU optimization and real pretrained-encoder execution remain unrun. No pretrained weights were downloaded.
 
-Start with [the training-machine guide](../TRAINING_PIPELINE.md). The package entry point is `python -m railvivid` from `mini_project_rajguru/model_training`, or `railvivid` after editable installation.
+Start with [the full-scale run guide](../FULL_SCALE_RUN.md). The latest fitting-free record is [full_scale_validation.json](../reports/full_scale_validation.json); the actual paired metadata workload is [full_scale_workload.json](../reports/full_scale_workload.json). These supersede the initial implementation's test count and provide no trained-model scores. Current remote GPU testing remains pending review.
 
 ## Delivered
 

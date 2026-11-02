@@ -1,5 +1,7 @@
 # Rail-VIVID training and benchmark pipeline
 
+For the next full campaign use [FULL_SCALE_RUN.md](FULL_SCALE_RUN.md) and `configs/full_scale.json`. That guide includes strict preflight, shared-encoding/data-loader changes, measured timing fields and explicit additional benchmark stages. Existing experiments must remain on their original source identity.
+
 This is executable pipeline code for the RTX 5070 training machine. **No model training is performed by preparation, doctor, smoke, plan, bundle, or the fitting-free test suite.** Training requires an explicit `train`, `pretrain`, or `suite-run` command and defaults to CUDA with no CPU fallback.
 
 Historical `src/`, `run_benchmarks.py`, cached results and checkpoints at the repository root are preserved. This separate `model_training/` folder includes the new `railvivid/` package and a snapshot of the legacy `src/` dependencies it imports. Do not run the historical benchmark driver to launch this pipeline: it uses different protocols and overwrites its historical JSON output.

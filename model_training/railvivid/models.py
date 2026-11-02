@@ -38,13 +38,18 @@ class ResearchModel(nn.Module):
         self.distance_scale=cfg['alignment']['pooling_bandwidth_m']
 
     def forward(self,batch):
+        return self.forward_features(batch)[0]
+
+    def forward_features(self,batch):
+        """Return logits and a shared encoding; never retain batch state on the module."""
         if self.kind=='cnn':
-            logits=self.cnn(batch['waveform']);return logits[:,1]-logits[:,0]
-        if self.kind=='tcn':return self.vibration_head(self.encoder(batch['waveform'])).squeeze(-1)
+            logits=self.cnn(batch['waveform']);return logits[:,1]-logits[:,0],None
+        if self.kind=='tcn':
+            v=self.encoder(batch['waveform']);return self.vibration_head(v).squeeze(-1),v
         mask=batch['vision_mask'];present=mask.any(1);z=self.vision_projection(batch['vision'])
         if self.kind=='vision':
             weights=mask.float()/mask.sum(1,keepdim=True).clamp_min(1)
-            return self.vision_head((z*weights[:,:,None]).sum(1)).squeeze(-1)
+            return self.vision_head((z*weights[:,:,None]).sum(1)).squeeze(-1),None
         tokens=self.encoder.tokens(batch['waveform']);v=tokens.mean(1)
         if self.fusion in ['attention','attention_gated']:
             safe_mask=mask.clone();safe_mask[~present,0]=True
@@ -64,11 +69,11 @@ class ResearchModel(nn.Module):
             gate=self.gate(torch.cat([v,visual,quality,present[:,None].float()],1));visual=visual*gate
         fused=self.head(torch.cat([v,visual,present[:,None].float()],1)).squeeze(-1)
         # Missing vision falls back to an explicitly supervised vibration head.
-        return torch.where(present,fused,self.vibration_head(v).squeeze(-1))
+        return torch.where(present,fused,self.vibration_head(v).squeeze(-1)),v
 
-    def auxiliary_loss(self,batch,labels):
+    def auxiliary_loss(self,batch,labels,encoding=None):
         if self.kind!='fusion':return batch['waveform'].sum()*0
-        v=self.encoder(batch['waveform'])
+        v=self.encoder(batch['waveform']) if encoding is None else encoding
         return .25*nn.functional.binary_cross_entropy_with_logits(self.vibration_head(v).squeeze(-1),labels)
 
 class TimeFrequencySSL(nn.Module):

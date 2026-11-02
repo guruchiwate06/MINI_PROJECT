@@ -1,5 +1,7 @@
 # Local Compute & Training Audit — Rail-VIVID Research Pipeline
 
+**Follow-up clarification:** this report describes a separate training computer. Its hardware should not be compared with the development laptop. The training-time figures below are estimates, not a measured 117-task GPU completion record. Use the [full-scale guide](../FULL_SCALE_RUN.md) and [metadata workload](../reports/full_scale_workload.json): the inspected paired suite reaches 567,330 updates at epoch limits, with extraction, validation and evaluation additional. Local fingerprints alone do not establish full validation against published dataset checksums. Current model testing on the other computer is pending; no new accuracy result is asserted here.
+
 **Audit Date:** 2 November 2026 (Asia/Kolkata)  
 **Branch:** `model-training`  
 **Execution Policy:** Diagnostic & throughput profiling only; model training was started, timed, and stopped. No permanent model checkpoints were trained or committed.

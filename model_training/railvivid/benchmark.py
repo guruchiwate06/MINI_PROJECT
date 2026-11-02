@@ -1,5 +1,5 @@
 from __future__ import annotations
-import copy,json,subprocess,sys
+import copy,json,subprocess,sys,time
 from pathlib import Path
 import pandas as pd
 from .common import read_json,write_json,write_csv,utc_now,fingerprint
@@ -17,9 +17,11 @@ METHODS={
 }
 FOLDS=[([1,2,3],[4]),([4,5,6],[7]),([7,8,9],[6])]
 STRESSES={'clean':{},'missing_vision':{'missing_vision':True},'missing_axles':{'missing_channels':[2,4]},
+ 'missing_vibration':{'missing_vibration':True},
  'noise_0p1':{'noise_std_normalized':.1},'noise_0p5':{'noise_std_normalized':.5},
  'shift_minus15':{'alignment_prior_shift_m':-15.},'shift_plus15':{'alignment_prior_shift_m':15.},
  'shift_minus5':{'alignment_prior_shift_m':-5.},'shift_plus5':{'alignment_prior_shift_m':5.},
+ 'shift_minus10':{'alignment_prior_shift_m':-10.},'shift_plus10':{'alignment_prior_shift_m':10.},
  'blur':{'blur_radius_px':2.},'dark':{'brightness_factor':.5}}
 
 def set_value(cfg,key,value):
@@ -43,7 +45,8 @@ def plan_suite(cfg,output,methods=None,seeds=(42,43,44),folds=(1,2,3)):
         for seed in seeds:
             base=copy.deepcopy(cfg);base.pop('_config_path',None)
             base['split'].update({'protocol':'combined','cohort':'paired','test_sites':FOLDS[fold-1][0],'validation_sites':FOLDS[fold-1][1]})
-            base['training'].update({'seed':seed,'resume':None});base['model']['initial_encoder']=None
+            # The full-model base config must not leak its consistency loss into controls.
+            base['training'].update({'seed':seed,'resume':None,'cross_run_weight':0.});base['model']['initial_encoder']=None
             pretrain_name=f'fold{fold}_pretrain_s{seed}'
             if set(methods)&{'ssl_tcn','full'}:
                 pre=copy.deepcopy(base);pre['model']['kind']='tcn';pre['experiment']['name']=pretrain_name
@@ -92,8 +95,9 @@ def execute_suite(plan_path,stage='train',continue_on_error=False):
             args+=['--vibration-run',str(Path(cfg['experiment']['output'])/job['vibration_run']),
                    '--vision-run',str(Path(cfg['experiment']['output'])/job['vision_run'])]
         if stage=='train' and (folder/'last.pt').is_file():args+=['--set','training.resume='+str(folder/'last.pt')]
-        result=subprocess.run(args,check=False)
-        item={'id':job['id'],'command':command,'returncode':result.returncode,'status':'ok' if result.returncode==0 else 'failed'};status.append(item)
+        started=time.perf_counter();result=subprocess.run(args,check=False)
+        item={'id':job['id'],'command':command,'returncode':result.returncode,'status':'ok' if result.returncode==0 else 'failed',
+              'wall_seconds':time.perf_counter()-started};status.append(item)
         write_json(plan_path.parent/f'{stage}_status.json',{'updated':utc_now(),'jobs':status})
         if result.returncode:
             failed.add(job['id'])

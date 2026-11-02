@@ -55,22 +55,38 @@ class WindowDataset(Dataset):
         self.root=Path(root);self.frame=frame.reset_index(drop=True);self.normalizer=normalizer;self.cfg=cfg
         self.vision=vision;self.augment=augment;self.epoch=0;self.corruption=corruption or {};self._arrays=OrderedDict()
         self.channels=np.asarray(cfg['model']['channels'])-1
+        # Compact metadata is prepared once; the epoch hot path never creates Pandas rows.
+        self.run_ids=self.frame.run_id.to_numpy(copy=True)
+        self.starts=self.frame.start_idx.to_numpy(dtype='int64',copy=True)
+        self.ends=self.frame.end_idx.to_numpy(dtype='int64',copy=True)
+        self.window_ids=self.frame.window_id.to_numpy(copy=True)
+        self.labels=self.frame.label.to_numpy(dtype='float32',copy=True)
+        self.mean=np.asarray(normalizer['mean'],dtype='float32')[:,None]
+        self.std=np.asarray(normalizer['std'],dtype='float32')[:,None]
+        self.max_open_runs=cfg['training']['max_open_runs']
         self.partners={}
         if augment and cfg['training']['cross_run_weight']>0:
             from .geometry import nearest_indices
             byrun={r:g.sort_values('chainage_m') for r,g in self.frame.groupby('run_id')}
-            for i,row in self.frame.iterrows():
-                matches=[]
-                for run,g in byrun.items():
-                    if run==row.run_id:continue
-                    j=nearest_indices(g.chainage_m.to_numpy(),np.asarray([row.chainage_m]))[0];other=g.iloc[j]
-                    if abs(other.chainage_m-row.chainage_m)<=cfg['training']['cross_run_tolerance_m']:matches.append(int(other.name))
-                if matches:self.partners[i]=matches
+            for run,g in byrun.items():
+                for other_run,other in byrun.items():
+                    if run==other_run:continue
+                    distances=other.chainage_m.to_numpy();queries=g.chainage_m.to_numpy()
+                    nearest=nearest_indices(distances,queries)
+                    permitted=np.abs(distances[nearest]-queries)<=cfg['training']['cross_run_tolerance_m']
+                    for i,j in zip(g.index.to_numpy()[permitted],other.index.to_numpy()[nearest[permitted]]):
+                        self.partners.setdefault(int(i),[]).append(int(j))
         self.k=len(cfg['alignment']['candidate_offsets_m']);self.dim=cfg['model']['vision_dim']
+        self.vision_indices=np.full((len(self.frame),self.k),-1,dtype='int64')
+        self.offset_values=np.zeros((len(self.frame),self.k),dtype='float32')
         if vision:
             required={f for ids in frame.candidate_frame_ids for f in ids}
             missing=required-set(vision.lookup)
             if missing:raise ArtifactError(f'Vision cache lacks {len(missing)} required frames. Extract the matching cache before training.')
+            for i,(ids,offsets) in enumerate(zip(self.frame.candidate_frame_ids,self.frame.candidate_offsets_m)):
+                if len(ids)>self.k or len(ids)!=len(offsets):raise DataIntegrityError('Invalid vision candidate/offset capacity')
+                self.vision_indices[i,:len(ids)]=[vision.lookup[fid] for fid in ids]
+                self.offset_values[i,:len(ids)]=offsets
 
     def __getstate__(self):
         state=self.__dict__.copy();state['_arrays']=OrderedDict();return state
@@ -82,21 +98,21 @@ class WindowDataset(Dataset):
             path=self.root/'runs'/run/'acceleration.npy'
             try:self._arrays[run]=np.load(path,mmap_mode='r')
             except (OSError,ValueError) as e:raise ArtifactError(f'Cannot open waveform cache {path}: {e}') from e
-            if len(self._arrays)>4:self._arrays.popitem(last=False)
+            if len(self._arrays)>self.max_open_runs:self._arrays.popitem(last=False)
         self._arrays.move_to_end(run);return self._arrays[run]
 
     def __getitem__(self,index):
-        row=self.frame.iloc[index]
-        raw=self.array(row.run_id)
-        if row.start_idx<0 or row.end_idx>len(raw) or row.end_idx-row.start_idx!=self.cfg['data']['window_samples']:
-            raise DataIntegrityError(f'{row.window_id}: raw source interval is out of bounds')
-        wave=np.asarray(raw[int(row.start_idx):int(row.end_idx),self.channels],dtype='float32').T.copy()
-        finite(wave,row.window_id)
-        wave=(wave-np.asarray(self.normalizer['mean'],dtype='float32')[:,None])/np.asarray(self.normalizer['std'],dtype='float32')[:,None]
-        item_seed=int.from_bytes(hashlib.sha256(f"{self.cfg['training']['seed']}:{self.epoch}:{row.window_id}".encode()).digest()[:8],'little')
-        rng=np.random.default_rng(item_seed)
-        if self.augment:wave=wave*rng.uniform(.95,1.05)+rng.normal(0,.02,wave.shape).astype('float32')
+        raw=self.array(self.run_ids[index]);start=self.starts[index];end=self.ends[index]
+        if start<0 or end>len(raw) or end-start!=self.cfg['data']['window_samples']:
+            raise DataIntegrityError(f'{self.window_ids[index]}: raw source interval is out of bounds')
+        wave=np.asarray(raw[start:end,self.channels],dtype='float32').T.copy()
+        finite(wave,self.window_ids[index]);wave=(wave-self.mean)/self.std
         noise=float(self.corruption.get('noise_std_normalized',0))
+        rng=None
+        if self.augment or noise:
+            item_seed=int.from_bytes(hashlib.sha256(f"{self.cfg['training']['seed']}:{self.epoch}:{self.window_ids[index]}".encode()).digest()[:8],'little')
+            rng=np.random.default_rng(item_seed)
+        if self.augment:wave=wave*rng.uniform(.95,1.05)+rng.normal(0,.02,wave.shape).astype('float32')
         if noise:wave=wave+rng.normal(0,noise,wave.shape).astype('float32')
         for channel in self.corruption.get('missing_channels',[]):
             where=np.flatnonzero(self.channels==channel-1)
@@ -105,21 +121,21 @@ class WindowDataset(Dataset):
         vision=np.zeros((self.k,self.dim),dtype='float32');quality=np.zeros((self.k,2),dtype='float32')
         mask=np.zeros(self.k,dtype=bool);offsets=np.zeros(self.k,dtype='float32')
         if self.vision and not self.corruption.get('missing_vision'):
-            for j,(fid,delta) in enumerate(zip(row.candidate_frame_ids,row.candidate_offsets_m)):
-                if j>=self.k:raise DataIntegrityError('Candidate count exceeds configured capacity')
-                p=self.vision.lookup[fid];vision[j]=self.vision.features[p];quality[j]=self.vision.quality[p];mask[j]=True;offsets[j]=delta
+            mask=self.vision_indices[index]>=0;positions=self.vision_indices[index,mask]
+            vision[mask]=self.vision.features[positions];quality[mask]=self.vision.quality[positions]
+            offsets=self.offset_values[index].copy()
         if self.augment and self.cfg['model']['kind']=='fusion' and rng.random()<self.cfg['model']['modality_dropout']:mask[:]=False;vision[:]=0
         partner=np.zeros_like(wave);partner_available=False
         if index in self.partners:
-            other=self.frame.iloc[self.partners[index][self.epoch%len(self.partners[index])]]
-            partner=np.asarray(self.array(other.run_id)[int(other.start_idx):int(other.end_idx),self.channels],dtype='float32').T.copy()
-            partner=(partner-np.asarray(self.normalizer['mean'],dtype='float32')[:,None])/np.asarray(self.normalizer['std'],dtype='float32')[:,None]
+            other=self.partners[index][self.epoch%len(self.partners[index])]
+            partner=np.asarray(self.array(self.run_ids[other])[self.starts[other]:self.ends[other],self.channels],dtype='float32').T.copy()
+            finite(partner,self.window_ids[other]);partner=(partner-self.mean)/self.std
             partner_available=True
         offsets=offsets-float(self.corruption.get('alignment_prior_shift_m',0))
         finite(vision,'vision cache');finite(quality,'image quality')
         return {'waveform':torch.from_numpy(wave.astype('float32')),'vision':torch.from_numpy(vision),
             'vision_mask':torch.from_numpy(mask),'offsets':torch.from_numpy(offsets),'quality':torch.from_numpy(quality),
-            'label':torch.tensor(float(row.label)),'index':torch.tensor(index),
+            'label':torch.tensor(float(self.labels[index])),'index':torch.tensor(index),
             'partner_waveform':torch.from_numpy(partner),'partner_available':torch.tensor(partner_available)}
 
 def collate_to_device(batch,device):return {k:v.to(device,non_blocking=True) for k,v in batch.items()}

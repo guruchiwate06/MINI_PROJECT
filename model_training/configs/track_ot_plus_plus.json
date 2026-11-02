@@ -1,0 +1,9 @@
+{
+  "base_config": "full_scale.json",
+  "base_overrides": ["split.test_sites=[1,2,3]", "split.validation_sites=[4]"],
+  "experiment": {
+    "name": "track_ot_pp_fold1_full_s42",
+    "output": "../artifacts/track_ot",
+    "notes": "Rail-VIVID only; same source data, guarded paired folds and original window evaluation labels. Historical test inspection disclosed. TRACK-OT++ has not yet been trained or physically validated."
+  }
+}

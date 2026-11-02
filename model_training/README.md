@@ -1,5 +1,9 @@
 # Rail-VIVID model training
 
+New: [TRACK-OT++ implementation and training-device handoff](TRACK_OT_PLUS_PLUS.md) adds unbalanced sequence matching, bounded drift correction, weak-label learning, cross-run cycles and withheld-marker evaluation on the same Rail-VIVID dataset. No TRACK-OT++ training result is claimed yet.
+
+Verification: [TRACK-OT++ fitting-free checks](reports/track_ot_validation.json): 89 passing checks, including 18 TRACK-OT tests; zero local optimizer steps.
+
 All new model-pipeline files are organized here on the `model-training` branch. The historical experiments at the repository root remain intact.
 
 Follow [Full scale run](FULL_SCALE_RUN.md) for the full fusion configuration, strict preflight, timing logs, clean comparisons, reliability tests and repeated-pass studies. Keep any active experiment on its original checkout and commit.
@@ -37,6 +41,6 @@ python scripts/validate_pipeline.py
 
 Install an appropriate CUDA-enabled PyTorch build on the RTX 5070 computer before training. The model-training commands are explicit, default to requiring CUDA and do not silently fall back to CPU. No models were trained during local implementation or this folder reorganization.
 
-Data and model artifacts are not in Git: raw recordings/images, memory maps, feature caches, pretrained weights, checkpoints, generated plans and zip bundles stay local. Run `plan` on the training computer to resolve its local paths. The pinned model configuration and full benchmark generator are versioned here.
+The branch retains the previously published benchmark results. Keep new raw recordings/images, memory maps, feature caches, weights, checkpoints and generated plans outside source commits. Run `plan` on the training computer to resolve its local paths. The pinned configuration and benchmark generator are versioned here.
 
 The `src/` snapshot preserves existing model/feature imports so this folder can be installed independently. Original root-level modules/results are unchanged. Historical audit utilities that reproduce old experiments use the repository-root implementation; they are separate from the fitting-free pipeline validation command above.

@@ -1,0 +1,55 @@
+{
+  "checked_at_utc": "2026-11-02T17:27:34.461344+00:00",
+  "base_results_commit": "338f1ad235986725556ff7ab7f3627467ae50c17",
+  "dataset": "Rail-VIVID only",
+  "track_ot_source_hash": "2fe650d9d169bf7b4e400e6ba1fa599db6635ce98286df7e45317bf3bf06f991",
+  "tests": {
+    "command": "python -m pytest tests_pipeline -q --disable-warnings --maxfail=2",
+    "passed": 89,
+    "new_track_ot_checks": 18,
+    "optimizer_steps_forbidden": true,
+    "forest_fitting_forbidden": true
+  },
+  "synthetic_forward": {
+    "trained": false,
+    "optimizer_steps": 0,
+    "synthetic": true,
+    "parameters": 3371052,
+    "output_shape": [
+      2
+    ],
+    "max_solver_residual": 0.0,
+    "device": "cpu"
+  },
+  "local_training_started": false,
+  "pretrained_downloads_performed": false,
+  "raw_dataset_modified": false,
+  "raw_dataset_mounted_on_development_host": false,
+  "default_campaign": {
+    "variants": 11,
+    "folds": 3,
+    "seeds": 3,
+    "planned_training_jobs": 99,
+    "executed": 0,
+    "configuration_validation": "All 99 configurations generated and resolved without fitting"
+  },
+  "coverage": [
+    "transport numerical gradients and rejected observations",
+    "cross-run correspondence cycle gradients",
+    "missing-modality fallbacks",
+    "unchanged anchor cohorts and source guards",
+    "synthetic frozen-checkpoint evaluation",
+    "patch cache loading and hashes",
+    "train-only alignment interval calibration",
+    "withheld marker evaluation and missing coverage",
+    "optical flow on synthetic images",
+    "immutable plan and checkpoint/calibration integrity"
+  ],
+  "not_verified": [
+    "CUDA execution on RTX 5070",
+    "training convergence and runtime",
+    "physical camera-vibration alignment on Rail-VIVID",
+    "real marker annotations",
+    "benchmark improvements or publication novelty"
+  ]
+}

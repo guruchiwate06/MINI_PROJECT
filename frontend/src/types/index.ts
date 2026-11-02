@@ -54,11 +54,11 @@ export interface BenchmarkRecord {
   model: 'Isolation Forest' | 'Random Forest' | 'Logistic Regression' | 'Signal Autoencoder' | 'Vibration 1D CNN' | 'ViT VAE (Published)';
   modalities: 'Vibration_Only' | 'Vibration_Plus_Env' | 'Vibration_Plus_GPS' | 'Vision Only';
   split_strategy:
-    | 'Random_Window (Leaky Control)'
-    | 'Block_Grouped_Window (Overlap-Free)'
-    | 'Run_Held_Out'
-    | 'Spatial_Held_Out'
-    | 'Combined_Run_Spatial';
+  | 'Random_Window (Leaky Control)'
+  | 'Block_Grouped_Window (Overlap-Free)'
+  | 'Run_Held_Out'
+  | 'Spatial_Held_Out'
+  | 'Combined_Run_Spatial';
   precision: number;
   recall: number;
   f1: number;

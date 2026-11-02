@@ -49,13 +49,12 @@ export const TelemetryHeader: React.FC = () => {
               <Activity className="h-3 w-3 text-hud-amber" /> Zone Status
             </span>
             <span
-              className={`font-bold ${
-                spatialZone === 'ANOMALY'
+              className={`font-bold ${spatialZone === 'ANOMALY'
                   ? 'text-rose-400 animate-pulse'
                   : spatialZone === 'BUFFER'
-                  ? 'text-amber-400'
-                  : 'text-hud-cyan'
-              }`}
+                    ? 'text-amber-400'
+                    : 'text-hud-cyan'
+                }`}
             >
               {spatialZone} ({currentSpeed} km/h)
             </span>

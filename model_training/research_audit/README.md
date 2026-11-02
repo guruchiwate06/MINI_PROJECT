@@ -22,6 +22,7 @@ See [pipeline build status](PIPELINE_BUILD_STATUS.md) for implemented features, 
 8. [Recommended architecture](RECOMMENDED_ARCHITECTURE.md)
 9. [Implementation roadmap](IMPLEMENTATION_ROADMAP.md)
 10. [Final decision and all 30 answers](FINAL_RESEARCH_VERDICT.md)
+11. [Local compute and training throughput audit](LOCAL_COMPUTE_AND_TRAINING_AUDIT.md)
 
 ## Reproduce audit outputs
 

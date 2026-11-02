@@ -150,3 +150,4 @@ The table below contrasts the historical results (contaminated by test-set thres
 1. **Test-Set Peeking Fully Eliminated:** All models now use `calibrate_threshold` on validation data. Zero test-set labels or scores are touched prior to inference.
 2. **Autocorrelation Leakage Contained:** `BlockGroupedWindowSplitter` proves that sliding window overlap previously inflated PR-AUC by $\approx 12\%$.
 3. **The Current Pipeline Is Trustworthy:** The benchmarking suite in `run_benchmarks.py` is verified, leak-free, reproducible, and supported by 7 passing unit tests in `tests/`.
+

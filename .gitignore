@@ -28,3 +28,8 @@ outputs/*.pt
 outputs/*.pth
 outputs/*.pkl
 
+
+# Frontend dependencies and builds
+frontend/node_modules/
+frontend/dist/
+frontend/.puppeteer_profile/

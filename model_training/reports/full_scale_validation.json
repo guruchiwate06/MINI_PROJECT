@@ -4,10 +4,10 @@
   "pretrained_weights_downloaded": false,
   "scope": "Fitting-free unit tests, synthetic fixture inference, checkpoint/metrics/split/CLI validation. GPU training and real pretrained encoder execution were not run.",
   "tests_returncode": 0,
-  "stdout": ".......................................................................  [100%]\n71 passed in 20.30s\n",
+  "stdout": ".......................................................................  [100%]\n71 passed in 23.19s\n",
   "stderr": "",
   "environment": {
-    "timestamp": "2026-11-02T10:11:50.672856+00:00",
+    "timestamp": "2026-11-02T10:15:56.532124+00:00",
     "python": "3.13.5 (tags/v3.13.5:6cb20a2, Jun 11 2025, 16:15:46) [MSC v.1943 64 bit (AMD64)]",
     "platform": "Windows-11-10.0.26300-SP0",
     "packages": {
@@ -23,7 +23,7 @@
     "torch_cuda_build": null,
     "cuda_available": false,
     "gpu": null,
-    "git_commit": "82115ea68ec74d4a26cc0f29c29cc90aa46a319b",
-    "pipeline_source_hash": "f8569eebcb9b161cd38290072a17343c1dc26fd4df54a7452e72acb3ec7cee64"
+    "git_commit": "558b54aec2e4e7047aca72040b5576ea0089a9a7",
+    "pipeline_source_hash": "39f6da9876f87842e1f39fdfa74d53672d4513e35c117c173916f45f6563c74a"
   }
 }

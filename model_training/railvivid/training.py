@@ -29,11 +29,11 @@ def experiment_identity(cfg,split_info):
 
 def rng_state():
     state=np.random.get_state()
-    return {'python':random.getstate(),'numpy':{'kind':state[0],'keys':torch.from_numpy(state[1].copy()),'position':state[2],'has_gaussian':state[3],'cached_gaussian':state[4]},
+    return {'python':random.getstate(),'numpy':{'kind':state[0],'keys':torch.from_numpy(state[1].astype(np.int64)),'position':state[2],'has_gaussian':state[3],'cached_gaussian':state[4]},
             'torch':torch.get_rng_state(),'cuda':torch.cuda.get_rng_state_all() if torch.cuda.is_available() else []}
 
 def restore_rng(state):
-    random.setstate(state['python']);n=state['numpy'];np.random.set_state((n['kind'],n['keys'].numpy(),n['position'],n['has_gaussian'],n['cached_gaussian']))
+    random.setstate(state['python']);n=state['numpy'];np.random.set_state((n['kind'],n['keys'].numpy().astype(np.uint32),n['position'],n['has_gaussian'],n['cached_gaussian']))
     torch.set_rng_state(state['torch'])
     if torch.cuda.is_available() and state['cuda']:torch.cuda.set_rng_state_all(state['cuda'])
 
@@ -157,12 +157,15 @@ def train(cfg,pretrain=False):
             positives=int(tr.label.eq(1).sum());negatives=int(tr.label.eq(0).sum())
             pos_weight=torch.tensor(negatives/max(positives,1),device=device)
             criterion=torch.nn.BCEWithLogitsLoss(pos_weight=pos_weight)
+            overall_start=time.perf_counter()
+            epoch_durations=[]
             for epoch in range(first,epochs):
                 model.train();loader=make_loader(dataset,cfg,shuffle=True,epoch=epoch,drop_last=pretrain)
                 if not len(loader):raise DataIntegrityError('No batches: reduce batch_size for the permitted cohort')
                 if device.type=='cuda':torch.cuda.synchronize(device);torch.cuda.reset_peak_memory_stats(device)
                 optimizer.zero_grad(set_to_none=True);total=0.;seen=0;start_time=time.perf_counter()
                 updates=0
+                log_interval=max(1, len(loader)//4)
                 for step,batch in enumerate(loader):
                     batch=collate_to_device(batch,device);size=len(batch['label'])
                     examples=accumulation_examples(len(dataset),cfg['training']['batch_size'],cfg['training']['accumulation_steps'],step,drop_last=pretrain)
@@ -187,11 +190,16 @@ def train(cfg,pretrain=False):
                         scaler.step(optimizer);scaler.update();optimizer.zero_grad(set_to_none=True)
                         updates+=1
                     total+=float(loss.detach())*size;seen+=size
+                    if (step+1)%log_interval==0 or (step+1)==len(loader):
+                        batch_elapsed=time.perf_counter()-start_time
+                        batches_per_sec=(step+1)/max(batch_elapsed,1e-6)
+                        epoch_eta=(len(loader)-(step+1))/batches_per_sec
+                        LOG.info('  [Epoch %d/%d] Batch %d/%d (%.0f%%) | Loss: %.4f | Speed: %.1f batch/s | Epoch ETA: %.1fs',
+                                 epoch+1,epochs,step+1,len(loader),(step+1)/len(loader)*100,float(loss.detach()),batches_per_sec,epoch_eta)
                 scheduler.step()
                 if device.type=='cuda':torch.cuda.synchronize(device)
                 training_seconds=time.perf_counter()-start_time;validation_start=time.perf_counter()
                 if pretrain:
-                    # Fixed final epoch; no validation/test observations enter SSL or its stopping rule.
                     score=-total/seen;improved=True
                 else:
                     validation=predict(model,val_dataset,cfg,device)
@@ -207,12 +215,19 @@ def train(cfg,pretrain=False):
                     'scaler':scaler.state_dict(),'rng':rng_state(),'best':best,'bad_epochs':bad_epochs,'experiment_fingerprint':identity}
                 save_checkpoint(folder/'last.pt',state)
                 if improved:save_checkpoint(folder/'best.pt',state)
+                epoch_elapsed=time.perf_counter()-start_time
+                epoch_durations.append(epoch_elapsed)
+                avg_epoch=sum(epoch_durations)/len(epoch_durations)
+                total_eta_s=(epochs-(epoch+1))*avg_epoch
+                eta_str=f'{int(total_eta_s//60):02d}m {int(total_eta_s%60):02d}s' if total_eta_s>=60 else f'{total_eta_s:.1f}s'
                 row={'epoch':epoch+1,'training_loss':total/seen,'validation_ap':None if pretrain else score,'learning_rate':scheduler.get_last_lr()[0],
                     'training_seconds':training_seconds,'validation_seconds':validation_seconds,
                     'checkpoint_seconds':time.perf_counter()-checkpoint_start,'optimizer_updates':updates,'training_windows':seen,
                     'training_windows_per_second':seen/max(training_seconds,1e-12),
-                    'elapsed_s':time.perf_counter()-start_time,'best':best,'peak_cuda_allocated_bytes':torch.cuda.max_memory_allocated(device) if device.type=='cuda' else None}
-                write_json(folder/f'epochs/{epoch+1:04d}.json',row);LOG.info('Epoch %d/%d loss=%.5f score=%.5f',epoch+1,epochs,total/seen,score)
+                    'elapsed_s':epoch_elapsed,'total_elapsed_s':time.perf_counter()-overall_start,'eta_s':total_eta_s,'best':best,'peak_cuda_allocated_bytes':torch.cuda.max_memory_allocated(device) if device.type=='cuda' else None}
+                write_json(folder/f'epochs/{epoch+1:04d}.json',row)
+                write_json(folder/'progress.json',{'current_epoch':epoch+1,'total_epochs':epochs,'elapsed_s':time.perf_counter()-overall_start,'eta_s':total_eta_s,'eta_human':eta_str,'training_loss':total/seen,'val_score':score,'best_score':best,'patience_remaining':cfg['training']['patience']-bad_epochs if not pretrain else None})
+                LOG.info('Epoch %d/%d complete in %.2fs | Loss: %.5f | Val AP: %.5f | Best AP: %.5f | Total ETA: %s',epoch+1,epochs,epoch_elapsed,total/seen,score,best,eta_str)
                 if not pretrain and bad_epochs>=cfg['training']['patience']:break
             if pretrain:
                 save_checkpoint(folder/'encoder.pt',{'encoder':model.encoder.state_dict(),'data_fingerprint':data_info['data_fingerprint'],

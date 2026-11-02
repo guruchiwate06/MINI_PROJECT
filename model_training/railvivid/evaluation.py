@@ -72,19 +72,22 @@ def save_evaluation(cfg,predictions,folder,partition,case,identity,info,checkpoi
     return {'evaluation':str(destination),'metrics':metrics}
 
 def render_report(folder,predictions,metrics):
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    from sklearn.metrics import precision_recall_curve,roc_curve
-    y=predictions.loc[predictions.label.isin([0,1]),'label'];p=predictions.loc[predictions.label.isin([0,1]),'probability']
-    fig,axes=plt.subplots(1,3,figsize=(14,4))
-    if len(y.unique())==2:
-        precision,recall,_=precision_recall_curve(y,p);axes[0].plot(recall,precision);axes[0].axhline(y.mean(),ls='--',color='gray')
-        fpr,tpr,_=roc_curve(y,p);axes[1].plot(fpr,tpr)
-    reliability=metrics['reliability_bins'];axes[2].plot([r['mean_probability'] for r in reliability],[r['positive_fraction'] for r in reliability],marker='o');axes[2].plot([0,1],[0,1],ls='--',color='gray')
-    axes[0].set(xlabel='Recall',ylabel='Precision',title='Precision–recall');axes[1].set(xlabel='False positive rate',ylabel='True positive rate',title='ROC')
-    axes[2].set(xlabel='Predicted probability',ylabel='Observed positive fraction',title='Calibration')
-    fig.tight_layout();fig.savefig(folder/'curves.png',dpi=150);plt.close(fig)
+    try:
+        import matplotlib
+        matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
+        from sklearn.metrics import precision_recall_curve,roc_curve
+        y=predictions.loc[predictions.label.isin([0,1]),'label'];p=predictions.loc[predictions.label.isin([0,1]),'probability']
+        fig,axes=plt.subplots(1,3,figsize=(14,4))
+        if len(y.unique())==2:
+            precision,recall,_=precision_recall_curve(y,p);axes[0].plot(recall,precision);axes[0].axhline(y.mean(),ls='--',color='gray')
+            fpr,tpr,_=roc_curve(y,p);axes[1].plot(fpr,tpr)
+        reliability=metrics['reliability_bins'];axes[2].plot([r['mean_probability'] for r in reliability],[r['positive_fraction'] for r in reliability],marker='o');axes[2].plot([0,1],[0,1],ls='--',color='gray')
+        axes[0].set(xlabel='Recall',ylabel='Precision',title='Precision–recall');axes[1].set(xlabel='False positive rate',ylabel='True positive rate',title='ROC')
+        axes[2].set(xlabel='Predicted probability',ylabel='Observed positive fraction',title='Calibration')
+        fig.tight_layout();fig.savefig(folder/'curves.png',dpi=150);plt.close(fig)
+    except ImportError:
+        LOG.warning('matplotlib is not installed; skipping curves.png plot generation')
     rows=['# Evaluation report','',f"Observations: {metrics['observations']}; positives: {metrics['positive']}; ambiguous binary labels omitted: {metrics['ignored_ambiguous']}.",'',
         '| Metric | Value |','| --- | --- |']
     for key in ['average_precision','roc_auc','precision','recall','f1','brier','negative_log_likelihood','ece','aurc_classification_error']:

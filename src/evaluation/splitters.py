@@ -2,10 +2,11 @@
 Evaluation Splitters for Rail-VIVID Anomaly Detection
 
 This module implements leakage-resistant evaluation protocols:
-1. RandomWindowSplitter: Leaky baseline (optimistic control).
-2. RunHeldOutSplitter: Holds out complete runs (evaluates cross-run generalization).
-3. SpatialHeldOutSplitter: Holds out entire physical track regions / anomaly IDs.
-4. CombinedRunAndSpatialSplitter: Holds out both unseen runs and unseen spatial anomaly sites.
+1. RandomWindowSplitter: Leaky baseline (optimistic control; allows overlap across split).
+2. BlockGroupedWindowSplitter: Leakage-free temporal block split (prevents window overlap leakage).
+3. RunHeldOutSplitter: Holds out complete runs (evaluates cross-run generalization).
+4. SpatialHeldOutSplitter: Dynamically partitions track sectors based on anomaly clusters.
+5. CombinedRunAndSpatialSplitter: Holds out both unseen runs and unseen spatial anomaly sites.
 """
 
 import numpy as np
@@ -29,7 +30,7 @@ GROUND_TRUTH_ANOMALIES = [
 
 def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """Computes great-circle distance between two GPS coordinates in meters."""
-    R = 6371000.0  # Earth radius in meters
+    R = 6371000.0
     phi1, phi2 = np.radians(lat1), np.radians(lat2)
     dphi = np.radians(lat2 - lat1)
     dlam = np.radians(lon2 - lon1)
@@ -66,7 +67,7 @@ def assign_spatial_labels(
 
     labels = np.zeros(len(df), dtype=int)
     labels[min_dists <= anomaly_radius_m] = 1
-    labels[(min_dists > anomaly_radius_m) & (min_dists <= buffer_radius_m)] = -1  # Buffer zone
+    labels[(min_dists > anomaly_radius_m) & (min_dists <= buffer_radius_m)] = -1
 
     df['dist_to_nearest_anomaly_m'] = min_dists
     df['nearest_anomaly_id'] = nearest_ids
@@ -77,7 +78,7 @@ def assign_spatial_labels(
 class RandomWindowSplitter:
     """
     Splits windows purely at random.
-    WARNING: Highly susceptible to temporal correlation leakage!
+    WARNING: Highly susceptible to temporal correlation leakage due to sliding window overlap!
     Provided strictly as an optimistic upper-bound reference baseline.
     """
     def __init__(self, val_ratio: float = 0.15, test_ratio: float = 0.20, seed: int = 42):
@@ -86,7 +87,6 @@ class RandomWindowSplitter:
         self.seed = seed
 
     def split(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-        # Filter out buffer zone windows
         valid_df = df[df['label'] != -1].copy()
         n = len(valid_df)
         np.random.seed(self.seed)
@@ -106,9 +106,48 @@ class RandomWindowSplitter:
         )
 
 
+class BlockGroupedWindowSplitter:
+    """
+    Groups contiguous windows into blocks (e.g. 20 consecutive windows = 5 seconds)
+    before splitting, preventing adjacent overlapping windows from leaking between train and test.
+    """
+    def __init__(self, block_size: int = 20, val_ratio: float = 0.15, test_ratio: float = 0.20, seed: int = 42):
+        self.block_size = block_size
+        self.val_ratio = val_ratio
+        self.test_ratio = test_ratio
+        self.seed = seed
+
+    def split(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        valid_df = df[df['label'] != -1].copy()
+        run_col = 'run_id' if 'run_id' in valid_df.columns else 'run'
+        
+        # Assign block ID per run
+        valid_df['block_id'] = valid_df.groupby(run_col).cumcount() // self.block_size
+        unique_blocks = valid_df[[run_col, 'block_id']].drop_duplicates().values
+        
+        np.random.seed(self.seed)
+        shuffled_blocks = np.random.permutation(len(unique_blocks))
+        n_test = int(len(unique_blocks) * self.test_ratio)
+        n_val = int(len(unique_blocks) * self.val_ratio)
+        
+        test_block_tuples = set(map(tuple, unique_blocks[shuffled_blocks[:n_test]]))
+        val_block_tuples = set(map(tuple, unique_blocks[shuffled_blocks[n_test:n_test + n_val]]))
+        
+        row_tuples = list(zip(valid_df[run_col], valid_df['block_id']))
+        test_mask = [t in test_block_tuples for t in row_tuples]
+        val_mask = [t in val_block_tuples for t in row_tuples]
+        train_mask = [not (t or v) for t, v in zip(test_mask, val_mask)]
+        
+        return (
+            valid_df[train_mask].drop(columns=['block_id']).copy(),
+            valid_df[val_mask].drop(columns=['block_id']).copy(),
+            valid_df[test_mask].drop(columns=['block_id']).copy()
+        )
+
+
 class RunHeldOutSplitter:
     """
-    Holds out entire runs. Training occurs on a subset of runs; validation and
+    Holds out complete runs. Training occurs on a subset of runs; validation and
     testing evaluate cross-run temporal generalization across speeds/directions.
     """
     def __init__(
@@ -136,8 +175,9 @@ class RunHeldOutSplitter:
 
 class SpatialHeldOutSplitter:
     """
-    Holds out entire physical anomaly locations and track segments.
-    Evaluates whether the model can detect unseen anomalies at novel track locations.
+    Holds out entire physical anomaly locations and track sectors.
+    Dynamically partitions both anomalous and normal track windows based on
+    proximity to anomaly clusters, eliminating arbitrary latitude hardcoding.
     """
     def __init__(
         self,
@@ -153,25 +193,38 @@ class SpatialHeldOutSplitter:
         else:
             self.train_anomaly_ids = set(train_anomaly_ids)
 
-    def split(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-        # Filter out buffer windows
-        valid_df = df[df['label'] != -1].copy()
+        self.anom_map = {a['id']: a for a in GROUND_TRUTH_ANOMALIES}
 
-        # Anomaly windows partitioned by physical anomaly ID
+    def _min_dist_to_ids(self, lats: np.ndarray, lons: np.ndarray, ids: Set[int]) -> np.ndarray:
+        if not ids:
+            return np.full(len(lats), np.inf)
+        coords = [(self.anom_map[i]['lat'], self.anom_map[i]['lon']) for i in ids if i in self.anom_map]
+        if not coords:
+            return np.full(len(lats), np.inf)
+        dists = [np.array([haversine_distance(lat, lon, c[0], c[1]) for lat, lon in zip(lats, lons)])
+                 for c in coords]
+        return np.min(dists, axis=0)
+
+    def split(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        valid_df = df[df['label'] != -1].copy()
+        lats = valid_df['latitude'].values if 'latitude' in valid_df.columns else valid_df['Latitude'].values
+        lons = valid_df['longitude'].values if 'longitude' in valid_df.columns else valid_df['Longitude'].values
+
+        # Anomaly windows partitioned strictly by anomaly ID
         test_anom_mask = (valid_df['label'] == 1) & (valid_df['nearest_anomaly_id'].isin(self.test_anomaly_ids))
         val_anom_mask = (valid_df['label'] == 1) & (valid_df['nearest_anomaly_id'].isin(self.val_anomaly_ids))
         train_anom_mask = (valid_df['label'] == 1) & (valid_df['nearest_anomaly_id'].isin(self.train_anomaly_ids))
 
-        # Normal track windows can be partitioned geographically or distributed across splits
-        # To prevent spatial leakage, assign normal track by latitude intervals:
-        # Held-out anomalies 7, 8, 9 are located in south sector (lat < 40.2330)
-        # Val anomaly 6 is located in mid sector (40.2330 <= lat < 40.2340)
-        # Train anomalies 1-5 are located in north sector (lat >= 40.2340)
-        lat_arr = valid_df['latitude'].values if 'latitude' in valid_df.columns else valid_df['Latitude'].values
+        # Dynamic Voronoi partitioning for normal track (label == 0)
+        norm_mask = (valid_df['label'] == 0)
+        dist_to_train = self._min_dist_to_ids(lats, lons, self.train_anomaly_ids)
+        dist_to_val = self._min_dist_to_ids(lats, lons, self.val_anomaly_ids)
+        dist_to_test = self._min_dist_to_ids(lats, lons, self.test_anomaly_ids)
 
-        test_norm_mask = (valid_df['label'] == 0) & (lat_arr < 40.2330)
-        val_norm_mask = (valid_df['label'] == 0) & (lat_arr >= 40.2330) & (lat_arr < 40.2340)
-        train_norm_mask = (valid_df['label'] == 0) & (lat_arr >= 40.2340)
+        # Assign normal window to nearest anomaly cluster
+        test_norm_mask = norm_mask & (dist_to_test <= dist_to_train) & (dist_to_test <= dist_to_val)
+        val_norm_mask = norm_mask & (dist_to_val < dist_to_test) & (dist_to_val <= dist_to_train)
+        train_norm_mask = norm_mask & (dist_to_train < dist_to_test) & (dist_to_train < dist_to_val)
 
         train_df = valid_df[train_anom_mask | train_norm_mask].copy()
         val_df = valid_df[val_anom_mask | val_norm_mask].copy()
@@ -204,4 +257,3 @@ class CombinedRunAndSpatialSplitter:
         test_df = test_sp[test_sp[run_col].isin(self.run_splitter.test_runs)].copy()
 
         return train_df, val_df, test_df
-

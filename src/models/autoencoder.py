@@ -1,5 +1,7 @@
 """
 PyTorch Reconstruction Autoencoder for Vibration Feature Anomaly Detection
+
+Provides leak-free threshold calibration on validation or training data.
 """
 
 import torch
@@ -7,6 +9,7 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import f1_score
 from typing import Optional
 
 
@@ -46,6 +49,7 @@ class SignalAutoencoderDetector:
         self.seed = seed
         self.scaler = StandardScaler()
         self.model = None
+        self.threshold_ = 0.0
 
     def fit(self, X_train: np.ndarray, y_train: Optional[np.ndarray] = None):
         torch.manual_seed(self.seed)
@@ -77,6 +81,9 @@ class SignalAutoencoderDetector:
                 loss.backward()
                 optimizer.step()
 
+        # Set default threshold on training normal reconstructions (e.g. 95th percentile)
+        train_recon_errors = self.score_samples(X_fit)
+        self.threshold_ = float(np.percentile(train_recon_errors, 95.0))
         return self
 
     def score_samples(self, X: np.ndarray) -> np.ndarray:
@@ -89,3 +96,24 @@ class SignalAutoencoderDetector:
             mse = torch.mean((recon - tensor_x) ** 2, dim=1).cpu().numpy()
         return mse
 
+    def calibrate_threshold(self, X_val: np.ndarray, y_val: Optional[np.ndarray] = None) -> float:
+        """Calibrates threshold on validation data without touching test data."""
+        val_scores = self.score_samples(X_val)
+        if y_val is not None and np.sum(y_val == 1) > 0 and np.sum(y_val == 0) > 0:
+            candidate_thresholds = np.percentile(val_scores, np.linspace(70, 99, 30))
+            best_f1 = -1.0
+            best_thresh = self.threshold_
+            for thresh in candidate_thresholds:
+                preds = (val_scores >= thresh).astype(int)
+                score = f1_score(y_val, preds, zero_division=0)
+                if score > best_f1:
+                    best_f1 = score
+                    best_thresh = float(thresh)
+            self.threshold_ = best_thresh
+        else:
+            self.threshold_ = float(np.percentile(val_scores, 95.0))
+        return self.threshold_
+
+    def predict(self, X: np.ndarray) -> np.ndarray:
+        scores = self.score_samples(X)
+        return (scores >= self.threshold_).astype(int)

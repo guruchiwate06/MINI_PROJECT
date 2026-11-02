@@ -3,169 +3,193 @@
     "model":"Isolation Forest",
     "modalities":"Vibration_Only",
     "split_strategy":"Random_Window (Leaky Control)",
-    "precision":0.1074,
-    "recall":0.144,
-    "f1":0.123,
+    "precision":0.1016,
+    "recall":0.1852,
+    "f1":0.1312,
     "roc_auc":0.5405,
     "pr_auc":0.0863,
+    "calibrated_threshold":-0.0248,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2720,
-        291
+        2613,
+        398
       ],
       [
-        208,
-        35
+        198,
+        45
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Only",
     "split_strategy":"Random_Window (Leaky Control)",
-    "precision":0.4362,
-    "recall":0.8025,
-    "f1":0.5652,
+    "precision":0.442,
+    "recall":0.7531,
+    "f1":0.5571,
     "roc_auc":0.9431,
     "pr_auc":0.473,
+    "calibrated_threshold":0.55,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2759,
-        252
+        2780,
+        231
       ],
       [
-        48,
-        195
+        60,
+        183
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Only",
     "split_strategy":"Random_Window (Leaky Control)",
-    "precision":0.2644,
-    "recall":0.8519,
-    "f1":0.4035,
+    "precision":0.3234,
+    "recall":0.716,
+    "f1":0.4456,
     "roc_auc":0.8964,
-    "pr_auc":0.3657,
+    "pr_auc":0.3662,
+    "calibrated_threshold":0.65,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2435,
-        576
+        2647,
+        364
       ],
       [
-        36,
-        207
+        69,
+        174
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Signal Autoencoder",
     "modalities":"Vibration_Only",
     "split_strategy":"Random_Window (Leaky Control)",
-    "precision":0.0828,
-    "recall":0.1111,
-    "f1":0.0949,
+    "precision":0.0806,
+    "recall":0.3374,
+    "f1":0.1301,
     "roc_auc":0.5287,
     "pr_auc":0.0801,
+    "calibrated_threshold":0.1603,
+    "threshold_source":"Validation Set (Tuned\/95th pctl)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2712,
-        299
+        2075,
+        936
       ],
       [
-        216,
-        27
+        161,
+        82
       ]
     ],
-    "limitations":"Unsupervised reconstruction; high reconstruction error on rough normal track."
+    "limitations":"Unsupervised reconstruction; elevated error on high-energy curves."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Random_Window (Leaky Control)",
-    "precision":0.092,
-    "recall":0.1235,
-    "f1":0.1054,
+    "precision":0.082,
+    "recall":0.2757,
+    "f1":0.1264,
     "roc_auc":0.5409,
     "pr_auc":0.0847,
+    "calibrated_threshold":-0.0469,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2715,
-        296
+        2261,
+        750
       ],
       [
-        213,
-        30
+        176,
+        67
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Random_Window (Leaky Control)",
-    "precision":0.4379,
-    "recall":0.7984,
-    "f1":0.5656,
+    "precision":0.4068,
+    "recall":0.8807,
+    "f1":0.5566,
     "roc_auc":0.9424,
     "pr_auc":0.4857,
+    "calibrated_threshold":0.375,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2762,
-        249
+        2699,
+        312
       ],
       [
-        49,
-        194
+        29,
+        214
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Random_Window (Leaky Control)",
-    "precision":0.2773,
-    "recall":0.856,
-    "f1":0.4189,
+    "precision":0.3784,
+    "recall":0.6214,
+    "f1":0.4704,
     "roc_auc":0.904,
     "pr_auc":0.3697,
+    "calibrated_threshold":0.75,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2469,
-        542
+        2763,
+        248
       ],
       [
-        35,
-        208
+        92,
+        151
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Random_Window (Leaky Control)",
-    "precision":0.092,
-    "recall":0.1235,
-    "f1":0.1054,
+    "precision":0.0781,
+    "recall":0.251,
+    "f1":0.1191,
     "roc_auc":0.5277,
     "pr_auc":0.0822,
+    "calibrated_threshold":-0.0458,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2715,
-        296
+        2291,
+        720
       ],
       [
-        213,
-        30
+        182,
+        61
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
@@ -176,6 +200,9 @@
     "f1":0.6069,
     "roc_auc":0.9579,
     "pr_auc":0.601,
+    "calibrated_threshold":0.5,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
         2788,
@@ -186,154 +213,415 @@
         203
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Random_Window (Leaky Control)",
-    "precision":0.2621,
-    "recall":0.8477,
-    "f1":0.4004,
-    "roc_auc":0.9002,
-    "pr_auc":0.3811,
+    "precision":0.388,
+    "recall":0.6132,
+    "f1":0.4753,
+    "roc_auc":0.9003,
+    "pr_auc":0.381,
+    "calibrated_threshold":0.75,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2431,
-        580
+        2776,
+        235
       ],
       [
-        37,
-        206
+        94,
+        149
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.0723,
+    "recall":0.2852,
+    "f1":0.1153,
+    "roc_auc":0.4921,
+    "pr_auc":0.0764,
+    "calibrated_threshold":-0.0523,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2074,
+        937
+      ],
+      [
+        183,
+        73
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.3996,
+    "recall":0.8242,
+    "f1":0.5383,
+    "roc_auc":0.9293,
+    "pr_auc":0.417,
+    "calibrated_threshold":0.35,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2694,
+        317
+      ],
+      [
+        45,
+        211
+      ]
+    ],
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.2812,
+    "recall":0.668,
+    "f1":0.3958,
+    "roc_auc":0.8457,
+    "pr_auc":0.2703,
+    "calibrated_threshold":0.6,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2574,
+        437
+      ],
+      [
+        85,
+        171
+      ]
+    ],
+    "limitations":"Linear decision boundary; high false alarm rate."
+  },
+  {
+    "model":"Signal Autoencoder",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.0819,
+    "recall":0.2695,
+    "f1":0.1257,
+    "roc_auc":0.5383,
+    "pr_auc":0.0802,
+    "calibrated_threshold":0.1779,
+    "threshold_source":"Validation Set (Tuned\/95th pctl)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2238,
+        773
+      ],
+      [
+        187,
+        69
+      ]
+    ],
+    "limitations":"Unsupervised reconstruction; elevated error on high-energy curves."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.0742,
+    "recall":0.293,
+    "f1":0.1184,
+    "roc_auc":0.4917,
+    "pr_auc":0.0736,
+    "calibrated_threshold":-0.0596,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2075,
+        936
+      ],
+      [
+        181,
+        75
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.3992,
+    "recall":0.8281,
+    "f1":0.5388,
+    "roc_auc":0.9302,
+    "pr_auc":0.4199,
+    "calibrated_threshold":0.35,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2692,
+        319
+      ],
+      [
+        44,
+        212
+      ]
+    ],
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.2785,
+    "recall":0.7344,
+    "f1":0.4039,
+    "roc_auc":0.8494,
+    "pr_auc":0.2641,
+    "calibrated_threshold":0.575,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2524,
+        487
+      ],
+      [
+        68,
+        188
+      ]
+    ],
+    "limitations":"Linear decision boundary; high false alarm rate."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.0704,
+    "recall":0.2148,
+    "f1":0.1061,
+    "roc_auc":0.4743,
+    "pr_auc":0.0712,
+    "calibrated_threshold":-0.0473,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2285,
+        726
+      ],
+      [
+        201,
+        55
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.4539,
+    "recall":0.8086,
+    "f1":0.5815,
+    "roc_auc":0.9447,
+    "pr_auc":0.4885,
+    "calibrated_threshold":0.4,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2762,
+        249
+      ],
+      [
+        49,
+        207
+      ]
+    ],
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Block_Grouped_Window (Overlap-Free)",
+    "precision":0.3381,
+    "recall":0.5586,
+    "f1":0.4212,
+    "roc_auc":0.8492,
+    "pr_auc":0.2761,
+    "calibrated_threshold":0.725,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
+    "confusion_matrix":[
+      [
+        2731,
+        280
+      ],
+      [
+        113,
+        143
+      ]
+    ],
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Only",
     "split_strategy":"Run_Held_Out",
-    "precision":0.0799,
-    "recall":0.105,
-    "f1":0.0907,
+    "precision":0.0714,
+    "recall":0.7143,
+    "f1":0.1299,
     "roc_auc":0.4781,
     "pr_auc":0.0764,
+    "calibrated_threshold":-0.0491,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2601,
-        288
+        679,
+        2210
       ],
       [
-        213,
-        25
+        68,
+        170
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Only",
     "split_strategy":"Run_Held_Out",
-    "precision":0.379,
-    "recall":0.5924,
-    "f1":0.4623,
+    "precision":0.3685,
+    "recall":0.6597,
+    "f1":0.4729,
     "roc_auc":0.9036,
     "pr_auc":0.3736,
+    "calibrated_threshold":0.45,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2658,
-        231
+        2620,
+        269
       ],
       [
-        97,
-        141
+        81,
+        157
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Only",
     "split_strategy":"Run_Held_Out",
-    "precision":0.0768,
+    "precision":0.0767,
     "recall":1.0,
-    "f1":0.1427,
-    "roc_auc":0.8227,
-    "pr_auc":0.2575,
+    "f1":0.1425,
+    "roc_auc":0.8238,
+    "pr_auc":0.2585,
+    "calibrated_threshold":0.45,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        29,
-        2860
+        24,
+        2865
       ],
       [
         0,
         238
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Signal Autoencoder",
     "modalities":"Vibration_Only",
     "split_strategy":"Run_Held_Out",
-    "precision":0.0958,
-    "recall":0.1261,
-    "f1":0.1089,
+    "precision":0.0938,
+    "recall":0.3782,
+    "f1":0.1504,
     "roc_auc":0.6127,
     "pr_auc":0.1036,
+    "calibrated_threshold":1.9794,
+    "threshold_source":"Validation Set (Tuned\/95th pctl)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2606,
-        283
+        2020,
+        869
       ],
       [
-        208,
-        30
+        148,
+        90
       ]
     ],
-    "limitations":"Unsupervised reconstruction; high reconstruction error on rough normal track."
+    "limitations":"Unsupervised reconstruction; elevated error on high-energy curves."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Run_Held_Out",
-    "precision":0.0671,
-    "recall":0.0882,
-    "f1":0.0762,
+    "precision":0.0749,
+    "recall":0.8067,
+    "f1":0.137,
     "roc_auc":0.4754,
     "pr_auc":0.0739,
+    "calibrated_threshold":-0.0437,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2597,
-        292
+        517,
+        2372
       ],
       [
-        217,
-        21
+        46,
+        192
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Run_Held_Out",
-    "precision":0.3783,
-    "recall":0.542,
-    "f1":0.4456,
+    "precision":0.3238,
+    "recall":0.7101,
+    "f1":0.4447,
     "roc_auc":0.8908,
     "pr_auc":0.3775,
+    "calibrated_threshold":0.375,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2677,
-        212
+        2536,
+        353
       ],
       [
-        109,
-        129
+        69,
+        169
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
@@ -344,6 +632,9 @@
     "f1":0.1415,
     "roc_auc":0.5,
     "pr_auc":0.0761,
+    "calibrated_threshold":0.2,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
         0,
@@ -354,489 +645,558 @@
         238
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Run_Held_Out",
-    "precision":0.0639,
-    "recall":0.084,
-    "f1":0.0726,
+    "precision":0.0727,
+    "recall":0.7899,
+    "f1":0.1332,
     "roc_auc":0.4646,
     "pr_auc":0.0709,
+    "calibrated_threshold":-0.0507,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2596,
-        293
+        492,
+        2397
       ],
       [
-        218,
-        20
+        50,
+        188
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Run_Held_Out",
-    "precision":0.423,
-    "recall":0.6345,
-    "f1":0.5076,
+    "precision":0.3547,
+    "recall":0.7437,
+    "f1":0.4803,
     "roc_auc":0.9244,
     "pr_auc":0.5009,
+    "calibrated_threshold":0.4,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        2683,
-        206
+        2567,
+        322
       ],
       [
-        87,
-        151
+        61,
+        177
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Run_Held_Out",
-    "precision":0.0769,
+    "precision":0.0767,
     "recall":1.0,
-    "f1":0.1428,
+    "f1":0.1426,
     "roc_auc":0.8242,
-    "pr_auc":0.2689,
+    "pr_auc":0.269,
+    "calibrated_threshold":0.4,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        32,
-        2857
+        26,
+        2863
       ],
       [
         0,
         238
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Only",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.1565,
-    "recall":0.2029,
-    "f1":0.1767,
-    "roc_auc":0.5618,
-    "pr_auc":0.1062,
+    "precision":0.0845,
+    "recall":0.4606,
+    "f1":0.1428,
+    "roc_auc":0.5807,
+    "pr_auc":0.0946,
+    "calibrated_threshold":-0.0581,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        4550,
-        458
+        3717,
+        2092
       ],
       [
-        334,
-        85
+        226,
+        193
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Only",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.5278,
-    "recall":0.6348,
-    "f1":0.5764,
-    "roc_auc":0.9156,
-    "pr_auc":0.5496,
+    "precision":0.5954,
+    "recall":0.4988,
+    "f1":0.5429,
+    "roc_auc":0.9191,
+    "pr_auc":0.5229,
+    "calibrated_threshold":0.675,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        4770,
-        238
+        5667,
+        142
       ],
       [
-        153,
-        266
+        210,
+        209
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Only",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.3418,
-    "recall":0.7088,
-    "f1":0.4612,
-    "roc_auc":0.8399,
-    "pr_auc":0.4106,
+    "precision":0.4987,
+    "recall":0.4439,
+    "f1":0.4697,
+    "roc_auc":0.8414,
+    "pr_auc":0.3902,
+    "calibrated_threshold":0.8,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        4436,
-        572
+        5622,
+        187
       ],
       [
-        122,
-        297
+        233,
+        186
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Signal Autoencoder",
     "modalities":"Vibration_Only",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.0902,
-    "recall":0.1169,
-    "f1":0.1019,
-    "roc_auc":0.5166,
-    "pr_auc":0.0812,
+    "precision":0.0803,
+    "recall":0.3031,
+    "f1":0.1269,
+    "roc_auc":0.5235,
+    "pr_auc":0.0718,
+    "calibrated_threshold":0.221,
+    "threshold_source":"Validation Set (Tuned\/95th pctl)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        4514,
-        494
+        4354,
+        1455
       ],
       [
-        370,
-        49
+        292,
+        127
       ]
     ],
-    "limitations":"Unsupervised reconstruction; high reconstruction error on rough normal track."
+    "limitations":"Unsupervised reconstruction; elevated error on high-energy curves."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.1344,
-    "recall":0.1742,
-    "f1":0.1518,
-    "roc_auc":0.5408,
-    "pr_auc":0.1014,
+    "precision":0.0794,
+    "recall":0.42,
+    "f1":0.1335,
+    "roc_auc":0.5501,
+    "pr_auc":0.0886,
+    "calibrated_threshold":-0.0612,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        4538,
-        470
+        3767,
+        2042
       ],
       [
-        346,
-        73
+        243,
+        176
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.5106,
-    "recall":0.6301,
-    "f1":0.5641,
-    "roc_auc":0.9177,
-    "pr_auc":0.5291,
+    "precision":0.6038,
+    "recall":0.4511,
+    "f1":0.5164,
+    "roc_auc":0.9143,
+    "pr_auc":0.5045,
+    "calibrated_threshold":0.7,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        4755,
-        253
+        5685,
+        124
       ],
       [
-        155,
-        264
+        230,
+        189
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.356,
-    "recall":0.7136,
-    "f1":0.475,
-    "roc_auc":0.846,
-    "pr_auc":0.4211,
+    "precision":0.494,
+    "recall":0.4893,
+    "f1":0.4916,
+    "roc_auc":0.8476,
+    "pr_auc":0.4008,
+    "calibrated_threshold":0.775,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        4467,
-        541
+        5599,
+        210
       ],
       [
-        120,
-        299
+        214,
+        205
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.14,
-    "recall":0.1814,
-    "f1":0.158,
-    "roc_auc":0.5418,
-    "pr_auc":0.102,
+    "precision":0.0834,
+    "recall":0.4344,
+    "f1":0.14,
+    "roc_auc":0.5538,
+    "pr_auc":0.0896,
+    "calibrated_threshold":-0.043,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        4541,
-        467
+        3810,
+        1999
       ],
       [
-        343,
-        76
+        237,
+        182
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.0,
-    "recall":0.0,
-    "f1":0.0,
-    "roc_auc":0.917,
-    "pr_auc":0.5182,
+    "precision":0.5046,
+    "recall":0.5251,
+    "f1":0.5146,
+    "roc_auc":0.9071,
+    "pr_auc":0.4793,
+    "calibrated_threshold":0.25,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        5008,
-        0
+        5593,
+        216
       ],
       [
-        419,
-        0
+        199,
+        220
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Spatial_Held_Out",
-    "precision":0.3964,
-    "recall":0.4749,
-    "f1":0.4321,
-    "roc_auc":0.8205,
-    "pr_auc":0.3498,
+    "precision":0.4098,
+    "recall":0.6611,
+    "f1":0.5059,
+    "roc_auc":0.8531,
+    "pr_auc":0.4504,
+    "calibrated_threshold":0.875,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        4705,
-        303
+        5410,
+        399
       ],
       [
-        220,
-        199
+        142,
+        277
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Only",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.1068,
-    "recall":0.1358,
-    "f1":0.1196,
-    "roc_auc":0.5836,
-    "pr_auc":0.1228,
+    "precision":0.0858,
+    "recall":0.4938,
+    "f1":0.1463,
+    "roc_auc":0.5888,
+    "pr_auc":0.1227,
+    "calibrated_threshold":0.0166,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        854,
-        92
+        671,
+        426
       ],
       [
-        70,
-        11
+        41,
+        40
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Only",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.3492,
-    "recall":0.2716,
-    "f1":0.3056,
-    "roc_auc":0.8862,
-    "pr_auc":0.3474,
+    "precision":0.3519,
+    "recall":0.2346,
+    "f1":0.2815,
+    "roc_auc":0.9012,
+    "pr_auc":0.336,
+    "calibrated_threshold":0.525,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        905,
-        41
+        1062,
+        35
       ],
       [
-        59,
-        22
+        62,
+        19
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Only",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.0956,
-    "recall":0.6667,
-    "f1":0.1672,
-    "roc_auc":0.6322,
-    "pr_auc":0.254,
+    "precision":0.0882,
+    "recall":0.6296,
+    "f1":0.1548,
+    "roc_auc":0.6531,
+    "pr_auc":0.2475,
+    "calibrated_threshold":0.675,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        435,
-        511
+        570,
+        527
       ],
       [
-        27,
-        54
+        30,
+        51
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Signal Autoencoder",
     "modalities":"Vibration_Only",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.1359,
-    "recall":0.1728,
-    "f1":0.1522,
-    "roc_auc":0.6151,
-    "pr_auc":0.1097,
+    "precision":0.0943,
+    "recall":0.6914,
+    "f1":0.1659,
+    "roc_auc":0.5988,
+    "pr_auc":0.0901,
+    "calibrated_threshold":1.7563,
+    "threshold_source":"Validation Set (Tuned\/95th pctl)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        857,
-        89
+        559,
+        538
       ],
       [
-        67,
-        14
+        25,
+        56
       ]
     ],
-    "limitations":"Unsupervised reconstruction; high reconstruction error on rough normal track."
+    "limitations":"Unsupervised reconstruction; elevated error on high-energy curves."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.0971,
-    "recall":0.1235,
-    "f1":0.1087,
-    "roc_auc":0.5641,
-    "pr_auc":0.1034,
+    "precision":0.0856,
+    "recall":0.5802,
+    "f1":0.1492,
+    "roc_auc":0.541,
+    "pr_auc":0.0876,
+    "calibrated_threshold":0.0341,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        853,
-        93
+        595,
+        502
       ],
       [
-        71,
-        10
+        34,
+        47
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.3818,
-    "recall":0.2593,
-    "f1":0.3088,
-    "roc_auc":0.9057,
-    "pr_auc":0.3888,
+    "precision":0.3478,
+    "recall":0.1975,
+    "f1":0.252,
+    "roc_auc":0.8939,
+    "pr_auc":0.3295,
+    "calibrated_threshold":0.5,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        912,
-        34
+        1067,
+        30
       ],
       [
-        60,
-        21
+        65,
+        16
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Plus_Env",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.0789,
+    "precision":0.0688,
     "recall":1.0,
-    "f1":0.1462,
+    "f1":0.1287,
     "roc_auc":0.5,
-    "pr_auc":0.0789,
+    "pr_auc":0.0688,
+    "calibrated_threshold":0.875,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
         0,
-        946
+        1097
       ],
       [
         0,
         81
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   },
   {
     "model":"Isolation Forest",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.1262,
-    "recall":0.1605,
-    "f1":0.1413,
-    "roc_auc":0.5669,
-    "pr_auc":0.1147,
+    "precision":0.0792,
+    "recall":0.4691,
+    "f1":0.1355,
+    "roc_auc":0.5386,
+    "pr_auc":0.0827,
+    "calibrated_threshold":0.0475,
+    "threshold_source":"Validation Set (Tuned\/Contamination)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        856,
-        90
+        655,
+        442
       ],
       [
-        68,
-        13
+        43,
+        38
       ]
     ],
-    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+    "limitations":"Unsupervised density; sensitive to track curvature & speed."
   },
   {
     "model":"Random Forest",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.0,
-    "recall":0.0,
-    "f1":0.0,
-    "roc_auc":0.8258,
-    "pr_auc":0.2048,
+    "precision":0.2368,
+    "recall":0.2222,
+    "f1":0.2293,
+    "roc_auc":0.8452,
+    "pr_auc":0.2254,
+    "calibrated_threshold":0.2,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        946,
-        0
+        1039,
+        58
       ],
       [
-        81,
-        0
+        63,
+        18
       ]
     ],
-    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+    "limitations":"Catastrophic spatial failure if GPS coordinates included."
   },
   {
     "model":"Logistic Regression",
     "modalities":"Vibration_Plus_GPS",
     "split_strategy":"Combined_Run_Spatial",
-    "precision":0.1032,
-    "recall":0.6049,
-    "f1":0.1763,
-    "roc_auc":0.6314,
-    "pr_auc":0.247,
+    "precision":0.0861,
+    "recall":0.6173,
+    "f1":0.1511,
+    "roc_auc":0.6465,
+    "pr_auc":0.2575,
+    "calibrated_threshold":0.825,
+    "threshold_source":"Validation Set (Max F1)",
+    "test_set_peeking":false,
     "confusion_matrix":[
       [
-        520,
-        426
+        566,
+        531
       ],
       [
-        32,
-        49
+        31,
+        50
       ]
     ],
-    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+    "limitations":"Linear decision boundary; high false alarm rate."
   }
 ]

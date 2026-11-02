@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Large Raw Dataset Directories (Rail-VIVID raw multimodal data)
+AtoB_*/
+BtoA_*/
+Anomaly/
+.cache/
+.DS_Store
+
+# Large data binaries & extracted scratch files
+paper_extracted_text.txt
+extracted_details.txt
+*.pdf
+data/cached_window_features.csv
+
+# Output logs and checkpoints
+outputs/*.pt
+outputs/*.pth
+outputs/*.pkl

@@ -1,0 +1,842 @@
+[
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.1074,
+    "recall":0.144,
+    "f1":0.123,
+    "roc_auc":0.5405,
+    "pr_auc":0.0863,
+    "confusion_matrix":[
+      [
+        2720,
+        291
+      ],
+      [
+        208,
+        35
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.4362,
+    "recall":0.8025,
+    "f1":0.5652,
+    "roc_auc":0.9431,
+    "pr_auc":0.473,
+    "confusion_matrix":[
+      [
+        2759,
+        252
+      ],
+      [
+        48,
+        195
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.2644,
+    "recall":0.8519,
+    "f1":0.4035,
+    "roc_auc":0.8964,
+    "pr_auc":0.3657,
+    "confusion_matrix":[
+      [
+        2435,
+        576
+      ],
+      [
+        36,
+        207
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Signal Autoencoder",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.0828,
+    "recall":0.1111,
+    "f1":0.0949,
+    "roc_auc":0.5287,
+    "pr_auc":0.0801,
+    "confusion_matrix":[
+      [
+        2712,
+        299
+      ],
+      [
+        216,
+        27
+      ]
+    ],
+    "limitations":"Unsupervised reconstruction; high reconstruction error on rough normal track."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.092,
+    "recall":0.1235,
+    "f1":0.1054,
+    "roc_auc":0.5409,
+    "pr_auc":0.0847,
+    "confusion_matrix":[
+      [
+        2715,
+        296
+      ],
+      [
+        213,
+        30
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.4379,
+    "recall":0.7984,
+    "f1":0.5656,
+    "roc_auc":0.9424,
+    "pr_auc":0.4857,
+    "confusion_matrix":[
+      [
+        2762,
+        249
+      ],
+      [
+        49,
+        194
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.2773,
+    "recall":0.856,
+    "f1":0.4189,
+    "roc_auc":0.904,
+    "pr_auc":0.3697,
+    "confusion_matrix":[
+      [
+        2469,
+        542
+      ],
+      [
+        35,
+        208
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.092,
+    "recall":0.1235,
+    "f1":0.1054,
+    "roc_auc":0.5277,
+    "pr_auc":0.0822,
+    "confusion_matrix":[
+      [
+        2715,
+        296
+      ],
+      [
+        213,
+        30
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.4765,
+    "recall":0.8354,
+    "f1":0.6069,
+    "roc_auc":0.9579,
+    "pr_auc":0.601,
+    "confusion_matrix":[
+      [
+        2788,
+        223
+      ],
+      [
+        40,
+        203
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Random_Window (Leaky Control)",
+    "precision":0.2621,
+    "recall":0.8477,
+    "f1":0.4004,
+    "roc_auc":0.9002,
+    "pr_auc":0.3811,
+    "confusion_matrix":[
+      [
+        2431,
+        580
+      ],
+      [
+        37,
+        206
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.0799,
+    "recall":0.105,
+    "f1":0.0907,
+    "roc_auc":0.4781,
+    "pr_auc":0.0764,
+    "confusion_matrix":[
+      [
+        2601,
+        288
+      ],
+      [
+        213,
+        25
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.379,
+    "recall":0.5924,
+    "f1":0.4623,
+    "roc_auc":0.9036,
+    "pr_auc":0.3736,
+    "confusion_matrix":[
+      [
+        2658,
+        231
+      ],
+      [
+        97,
+        141
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.0768,
+    "recall":1.0,
+    "f1":0.1427,
+    "roc_auc":0.8227,
+    "pr_auc":0.2575,
+    "confusion_matrix":[
+      [
+        29,
+        2860
+      ],
+      [
+        0,
+        238
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Signal Autoencoder",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.0958,
+    "recall":0.1261,
+    "f1":0.1089,
+    "roc_auc":0.6127,
+    "pr_auc":0.1036,
+    "confusion_matrix":[
+      [
+        2606,
+        283
+      ],
+      [
+        208,
+        30
+      ]
+    ],
+    "limitations":"Unsupervised reconstruction; high reconstruction error on rough normal track."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.0671,
+    "recall":0.0882,
+    "f1":0.0762,
+    "roc_auc":0.4754,
+    "pr_auc":0.0739,
+    "confusion_matrix":[
+      [
+        2597,
+        292
+      ],
+      [
+        217,
+        21
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.3783,
+    "recall":0.542,
+    "f1":0.4456,
+    "roc_auc":0.8908,
+    "pr_auc":0.3775,
+    "confusion_matrix":[
+      [
+        2677,
+        212
+      ],
+      [
+        109,
+        129
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.0761,
+    "recall":1.0,
+    "f1":0.1415,
+    "roc_auc":0.5,
+    "pr_auc":0.0761,
+    "confusion_matrix":[
+      [
+        0,
+        2889
+      ],
+      [
+        0,
+        238
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.0639,
+    "recall":0.084,
+    "f1":0.0726,
+    "roc_auc":0.4646,
+    "pr_auc":0.0709,
+    "confusion_matrix":[
+      [
+        2596,
+        293
+      ],
+      [
+        218,
+        20
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.423,
+    "recall":0.6345,
+    "f1":0.5076,
+    "roc_auc":0.9244,
+    "pr_auc":0.5009,
+    "confusion_matrix":[
+      [
+        2683,
+        206
+      ],
+      [
+        87,
+        151
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Run_Held_Out",
+    "precision":0.0769,
+    "recall":1.0,
+    "f1":0.1428,
+    "roc_auc":0.8242,
+    "pr_auc":0.2689,
+    "confusion_matrix":[
+      [
+        32,
+        2857
+      ],
+      [
+        0,
+        238
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.1565,
+    "recall":0.2029,
+    "f1":0.1767,
+    "roc_auc":0.5618,
+    "pr_auc":0.1062,
+    "confusion_matrix":[
+      [
+        4550,
+        458
+      ],
+      [
+        334,
+        85
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.5278,
+    "recall":0.6348,
+    "f1":0.5764,
+    "roc_auc":0.9156,
+    "pr_auc":0.5496,
+    "confusion_matrix":[
+      [
+        4770,
+        238
+      ],
+      [
+        153,
+        266
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.3418,
+    "recall":0.7088,
+    "f1":0.4612,
+    "roc_auc":0.8399,
+    "pr_auc":0.4106,
+    "confusion_matrix":[
+      [
+        4436,
+        572
+      ],
+      [
+        122,
+        297
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Signal Autoencoder",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.0902,
+    "recall":0.1169,
+    "f1":0.1019,
+    "roc_auc":0.5166,
+    "pr_auc":0.0812,
+    "confusion_matrix":[
+      [
+        4514,
+        494
+      ],
+      [
+        370,
+        49
+      ]
+    ],
+    "limitations":"Unsupervised reconstruction; high reconstruction error on rough normal track."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.1344,
+    "recall":0.1742,
+    "f1":0.1518,
+    "roc_auc":0.5408,
+    "pr_auc":0.1014,
+    "confusion_matrix":[
+      [
+        4538,
+        470
+      ],
+      [
+        346,
+        73
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.5106,
+    "recall":0.6301,
+    "f1":0.5641,
+    "roc_auc":0.9177,
+    "pr_auc":0.5291,
+    "confusion_matrix":[
+      [
+        4755,
+        253
+      ],
+      [
+        155,
+        264
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.356,
+    "recall":0.7136,
+    "f1":0.475,
+    "roc_auc":0.846,
+    "pr_auc":0.4211,
+    "confusion_matrix":[
+      [
+        4467,
+        541
+      ],
+      [
+        120,
+        299
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.14,
+    "recall":0.1814,
+    "f1":0.158,
+    "roc_auc":0.5418,
+    "pr_auc":0.102,
+    "confusion_matrix":[
+      [
+        4541,
+        467
+      ],
+      [
+        343,
+        76
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.0,
+    "recall":0.0,
+    "f1":0.0,
+    "roc_auc":0.917,
+    "pr_auc":0.5182,
+    "confusion_matrix":[
+      [
+        5008,
+        0
+      ],
+      [
+        419,
+        0
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Spatial_Held_Out",
+    "precision":0.3964,
+    "recall":0.4749,
+    "f1":0.4321,
+    "roc_auc":0.8205,
+    "pr_auc":0.3498,
+    "confusion_matrix":[
+      [
+        4705,
+        303
+      ],
+      [
+        220,
+        199
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.1068,
+    "recall":0.1358,
+    "f1":0.1196,
+    "roc_auc":0.5836,
+    "pr_auc":0.1228,
+    "confusion_matrix":[
+      [
+        854,
+        92
+      ],
+      [
+        70,
+        11
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.3492,
+    "recall":0.2716,
+    "f1":0.3056,
+    "roc_auc":0.8862,
+    "pr_auc":0.3474,
+    "confusion_matrix":[
+      [
+        905,
+        41
+      ],
+      [
+        59,
+        22
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.0956,
+    "recall":0.6667,
+    "f1":0.1672,
+    "roc_auc":0.6322,
+    "pr_auc":0.254,
+    "confusion_matrix":[
+      [
+        435,
+        511
+      ],
+      [
+        27,
+        54
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Signal Autoencoder",
+    "modalities":"Vibration_Only",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.1359,
+    "recall":0.1728,
+    "f1":0.1522,
+    "roc_auc":0.6151,
+    "pr_auc":0.1097,
+    "confusion_matrix":[
+      [
+        857,
+        89
+      ],
+      [
+        67,
+        14
+      ]
+    ],
+    "limitations":"Unsupervised reconstruction; high reconstruction error on rough normal track."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.0971,
+    "recall":0.1235,
+    "f1":0.1087,
+    "roc_auc":0.5641,
+    "pr_auc":0.1034,
+    "confusion_matrix":[
+      [
+        853,
+        93
+      ],
+      [
+        71,
+        10
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.3818,
+    "recall":0.2593,
+    "f1":0.3088,
+    "roc_auc":0.9057,
+    "pr_auc":0.3888,
+    "confusion_matrix":[
+      [
+        912,
+        34
+      ],
+      [
+        60,
+        21
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_Env",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.0789,
+    "recall":1.0,
+    "f1":0.1462,
+    "roc_auc":0.5,
+    "pr_auc":0.0789,
+    "confusion_matrix":[
+      [
+        0,
+        946
+      ],
+      [
+        0,
+        81
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  },
+  {
+    "model":"Isolation Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.1262,
+    "recall":0.1605,
+    "f1":0.1413,
+    "roc_auc":0.5669,
+    "pr_auc":0.1147,
+    "confusion_matrix":[
+      [
+        856,
+        90
+      ],
+      [
+        68,
+        13
+      ]
+    ],
+    "limitations":"Unsupervised density; sensitive to operational speed shifts."
+  },
+  {
+    "model":"Random Forest",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.0,
+    "recall":0.0,
+    "f1":0.0,
+    "roc_auc":0.8258,
+    "pr_auc":0.2048,
+    "confusion_matrix":[
+      [
+        946,
+        0
+      ],
+      [
+        81,
+        0
+      ]
+    ],
+    "limitations":"Prone to memorizing physical track landmarks if coordinates included."
+  },
+  {
+    "model":"Logistic Regression",
+    "modalities":"Vibration_Plus_GPS",
+    "split_strategy":"Combined_Run_Spatial",
+    "precision":0.1032,
+    "recall":0.6049,
+    "f1":0.1763,
+    "roc_auc":0.6314,
+    "pr_auc":0.247,
+    "confusion_matrix":[
+      [
+        520,
+        426
+      ],
+      [
+        32,
+        49
+      ]
+    ],
+    "limitations":"Linear decision boundary; cannot capture nonlinear suspension dynamics."
+  }
+]

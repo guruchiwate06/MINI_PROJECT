@@ -1,0 +1,39 @@
+{
+  "dataset": {
+    "name": "Rail-VIVID",
+    "track_length_m": 1400.0,
+    "sampling_rate_hz": 2000.0,
+    "vibration_channels": [
+      "Channel1",
+      "Channel2",
+      "Channel3",
+      "Channel4",
+      "Channel5",
+      "Channel6"
+    ]
+  },
+  "windowing": {
+    "window_size_samples": 1000,
+    "stride_samples": 500,
+    "anomaly_radius_m": 6.0,
+    "buffer_radius_m": 18.0
+  },
+  "splits": {
+    "test_runs": [
+      "AtoB_20_4",
+      "AtoB_22.5_4",
+      "BtoA_25_4",
+      "BtoA_27.5_4"
+    ],
+    "val_runs": [
+      "AtoB_20_3",
+      "BtoA_22.5_3",
+      "BtoA_27.5_3"
+    ],
+    "test_anomaly_ids": [7, 8, 9],
+    "val_anomaly_ids": [6],
+    "train_anomaly_ids": [1, 2, 3, 4, 5]
+  },
+  "seed": 42
+}
+

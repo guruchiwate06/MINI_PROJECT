@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-11-03T04:34:35.324315+00:00",
+  "python": "3.11.17 (main, Oct 14 2026, 01:04:22) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "packages": {
+    "torch": "2.12.0.dev20260408+cu128",
+    "torchvision": "0.27.0.dev20260407+cu128",
+    "transformers": "5.22.1",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.9.0",
+    "Pillow": "13.0.0"
+  },
+  "torch_cuda_build": "12.8",
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 5070 Laptop GPU",
+  "git_commit": "f9165ab924dd7a3365c25b8894869bd4d73bddd2",
+  "pipeline_source_hash": "dfeebb918e8e9c221af1fc6756f03f0e4f7f960230125e875282159b617515ee",
+  "track_ot_source_hash": "b3277563c76e6e305b912097c2bf2f19628e8d511c5d06761de17734974f7834"
+}

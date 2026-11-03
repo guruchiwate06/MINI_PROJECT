@@ -6,6 +6,7 @@ import logging
 import os
 import tempfile
 import time
+import sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -78,7 +79,7 @@ def loader(dataset, c, shuffle=False, epoch=0):
     return DataLoader(dataset, batch_size=c["training"]["batch_size"], shuffle=shuffle,
                       generator=torch.Generator().manual_seed(c["training"]["seed"] + epoch),
                       num_workers=c["training"]["workers"], persistent_workers=False,
-                      pin_memory=torch.cuda.is_available() and c["training"]["device"].startswith("cuda"))
+                      pin_memory=torch.cuda.is_available() and c["training"]["device"].startswith("cuda") and sys.platform != "win32")
 
 
 def to_device(batch, device): return {k: v.to(device, non_blocking=True) for k, v in batch.items()}

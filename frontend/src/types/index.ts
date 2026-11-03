@@ -220,6 +220,15 @@ export interface EvaluatedExperiment {
   fold: string;
   seed: number;
   split_strategy: string;
+  split_fingerprint?: string;
+  split_cohort?: string;
+  evaluation_partition?: string;
+  is_test_evaluated?: boolean;
+  record_type?: string;
+  checkpoint_path?: string | null;
+  interrupted_epoch?: number;
+  interrupted_batch?: string;
+  failure_reason?: string;
   modality?: string;
   test_sites: number[] | string;
   val_sites: number[] | string;

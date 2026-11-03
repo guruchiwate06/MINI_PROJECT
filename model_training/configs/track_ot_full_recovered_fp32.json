@@ -1,0 +1,15 @@
+{
+  "base_config": "full_scale.json",
+  "base_overrides": ["split.test_sites=[1,2,3]", "split.validation_sites=[4]"],
+  "training": {
+    "amp": false,
+    "epochs": 25,
+    "patience": 5,
+    "min_delta": 0.0001
+  },
+  "experiment": {
+    "name": "track_ot_pp_fold1_full_recovered_s42",
+    "output": "../artifacts/track_ot",
+    "notes": "Full TRACK-OT++ training run on RTX 5070 in FP32 with warm-start weights from recovery pilot (best.pt @ Val AP 0.9207). Disclosed as continuation using weights only with fresh optimizer and cosine schedule. Validated Rail-VIVID source, guarded folds (val: 4, test: 1,2,3), spatial leakage controls, and test set held out until frozen."
+  }
+}

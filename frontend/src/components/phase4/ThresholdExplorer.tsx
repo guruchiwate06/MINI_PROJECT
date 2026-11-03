@@ -218,8 +218,18 @@ export const ThresholdExplorer: React.FC<ThresholdExplorerProps> = ({ explorerDa
         <div className="p-3.5 rounded-lg bg-railway-darkest/80 border border-railway-border/70 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-3">
-              <span className="text-white font-bold text-sm">
-                Threshold: <span className="text-hud-cyan font-mono text-base">{interactiveThreshold.toFixed(4)}</span>
+              <span className="text-white font-bold text-sm flex items-center gap-2">
+                <span>Threshold:</span>
+                <span className="text-hud-cyan font-mono text-base">{interactiveThreshold.toFixed(4)}</span>
+                {Math.abs(interactiveThreshold - activeModel.val_calibrated_threshold) < 0.005 ? (
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold">
+                    VALIDATED CALIBRATED OPERATING POINT
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold">
+                    EXPLORATORY (UNVALIDATED) OPERATING POINT
+                  </span>
+                )}
               </span>
               <span className="text-railway-muted text-[11px]">
                 (Calibrated Val: <b className="text-amber-400">{activeModel.val_calibrated_threshold.toFixed(4)}</b> • Default: <b className="text-slate-400">{activeModel.default_threshold.toFixed(2)}</b>)

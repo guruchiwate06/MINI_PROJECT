@@ -5,7 +5,8 @@ import { DataIntegrityBadge } from '../common/DataIntegrityBadge';
 import {
   BarChart3,
   TrendingUp,
-  Layers
+  Layers,
+  Info
 } from 'lucide-react';
 
 interface BenchmarkComparisonProps {
@@ -21,12 +22,17 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
   selectedExperimentId,
   onSelectExperiment
 }) => {
-  const [activeChartTab, setActiveChartTab] = useState<'pr-roc' | 'f1-bar' | 'precision-recall-scatter' | 'confusion'>('pr-roc');
+  const [activeChartTab, setActiveChartTab] = useState<'pr-roc' | 'f1-bar' | 'confusion'>('pr-roc');
 
-  // Currently selected experiment
+  // Filter out non-test-evaluated models from test comparisons
+  const testModels = useMemo(() => {
+    return experiments.filter((e) => e.is_test_evaluated !== false && e.method !== 'track_ot_pp');
+  }, [experiments]);
+
+  // Currently selected experiment (default to first test model if active is invalid)
   const activeExp = useMemo(() => {
-    return experiments.find((e) => e.id === selectedExperimentId) || experiments[0];
-  }, [experiments, selectedExperimentId]);
+    return testModels.find((e) => e.id === selectedExperimentId) || testModels[0] || experiments[0];
+  }, [testModels, selectedExperimentId, experiments]);
 
   // Explorer model matching activeExp
   const activeExplorer = useMemo(() => {
@@ -46,7 +52,7 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
       backgroundColor: 'transparent',
       title: {
         text: `${activeExplorer.model_name} — Precision-Recall Curve`,
-        subtext: `Evaluated Test Partition (Holdout Sites [1,2,3]) • AP: ${activeExp.average_precision?.toFixed(4) || 'N/A'}`,
+        subtext: `Test Partition • Average Precision (AP): ${activeExp.average_precision !== null && activeExp.average_precision !== undefined ? activeExp.average_precision.toFixed(4) : 'UNAVAILABLE'} (Continuous Scores)`,
         textStyle: { color: '#f8fafc', fontSize: 13, fontFamily: 'monospace' },
         subtextStyle: { color: '#94a3b8', fontSize: 11, fontFamily: 'monospace' },
         top: 0,
@@ -108,7 +114,7 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
           markPoint: {
             data: [
               {
-                coord: [activeExp.recall || 0.89, activeExp.precision || 0.19],
+                coord: [activeExp.recall ?? 0.89, activeExp.precision ?? 0.19],
                 symbol: 'pin',
                 symbolSize: 32,
                 itemStyle: { color: '#f59e0b' },
@@ -136,7 +142,7 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
       backgroundColor: 'transparent',
       title: {
         text: `${activeExplorer.model_name} — Receiver Operating Characteristic (ROC)`,
-        subtext: `ROC-AUC: ${activeExp.roc_auc?.toFixed(4) || 'N/A'} • True Positive vs False Positive Rate`,
+        subtext: `ROC-AUC: ${activeExp.roc_auc !== null && activeExp.roc_auc !== undefined ? activeExp.roc_auc.toFixed(4) : 'UNAVAILABLE'} • Continuous Probabilities`,
         textStyle: { color: '#f8fafc', fontSize: 13, fontFamily: 'monospace' },
         subtextStyle: { color: '#94a3b8', fontSize: 11, fontFamily: 'monospace' },
         top: 0,
@@ -212,8 +218,8 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
 
   // 3. F1 Comparison Bar Chart
   const f1BarOption = useMemo(() => {
-    // Select top 12 representative models
-    const topModels = experiments
+    // Select top 10 representative test models
+    const topModels = testModels
       .filter((e) => e.f1 !== null && e.f1 > 0)
       .sort((a, b) => (b.f1 || 0) - (a.f1 || 0))
       .slice(0, 10);
@@ -225,8 +231,8 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
     return {
       backgroundColor: 'transparent',
       title: {
-        text: 'Top 10 Models by F1 Score on Spatial Holdout Partitions',
-        subtext: 'Comparison of F1 and Average Precision (AP)',
+        text: 'Top 10 Test Models by F1 Score on Spatial Holdout Partitions',
+        subtext: 'F1 Score (Threshold-Calibrated) vs Average Precision (AP, Continuous Step-Curve)',
         textStyle: { color: '#f8fafc', fontSize: 13, fontFamily: 'monospace' },
         subtextStyle: { color: '#94a3b8', fontSize: 11, fontFamily: 'monospace' },
         top: 0,
@@ -281,12 +287,12 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
         }
       ]
     };
-  }, [experiments]);
+  }, [testModels]);
 
   // Confusion Matrix stats
   const cm = activeExp.confusion_matrix || [
-    [activeExp.tn, activeExp.fp],
-    [activeExp.fn, activeExp.tp]
+    [Number(activeExp.tn) || 0, Number(activeExp.fp) || 0],
+    [Number(activeExp.fn) || 0, Number(activeExp.tp) || 0]
   ];
   const tn = Number(cm[0][0]) || 0;
   const fp = Number(cm[0][1]) || 0;
@@ -344,7 +350,7 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
             onChange={(e) => onSelectExperiment(e.target.value)}
             className="px-2.5 py-1 rounded bg-railway-darkest border border-railway-border text-white text-xs font-mono focus:outline-none focus:border-hud-cyan cursor-pointer"
           >
-            {experiments.slice(0, 20).map((e) => (
+            {testModels.map((e) => (
               <option key={e.id} value={e.id}>
                 {e.model_name} ({e.id})
               </option>
@@ -355,19 +361,37 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
 
       {/* Main Chart Canvas */}
       {activeChartTab === 'pr-roc' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-railway-surface/40 border border-railway-border/80 backdrop-blur">
-            <ReactECharts option={prCurveOption} style={{ height: '320px', width: '100%' }} />
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-railway-surface/40 border border-railway-border/80 backdrop-blur">
+              <ReactECharts option={prCurveOption} style={{ height: '320px', width: '100%' }} />
+            </div>
+            <div className="p-4 rounded-xl bg-railway-surface/40 border border-railway-border/80 backdrop-blur">
+              <ReactECharts option={rocCurveOption} style={{ height: '320px', width: '100%' }} />
+            </div>
           </div>
-          <div className="p-4 rounded-xl bg-railway-surface/40 border border-railway-border/80 backdrop-blur">
-            <ReactECharts option={rocCurveOption} style={{ height: '320px', width: '100%' }} />
+
+          <div className="p-3.5 rounded-xl bg-railway-surface/40 border border-railway-border/70 text-xs font-mono flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-railway-muted">
+              <Info className="h-4 w-4 text-hud-cyan shrink-0" />
+              <span>
+                <b>Average Precision (AP) Implementation Note:</b> AP evaluates the area under the PR step curve via exact scikit-learn convention: step-wise precision weighted by recall increments. Unlike trapezoidal PR-AUC, this avoids non-linear interpolation distortion between adjacent recall points.
+              </span>
+            </div>
+            <div className="text-[11px] text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/30 whitespace-nowrap">
+              Continuous Probabilities Used
+            </div>
           </div>
         </div>
       )}
 
       {activeChartTab === 'f1-bar' && (
-        <div className="p-4 rounded-xl bg-railway-surface/40 border border-railway-border/80 backdrop-blur">
+        <div className="p-4 rounded-xl bg-railway-surface/40 border border-railway-border/80 backdrop-blur space-y-3">
           <ReactECharts option={f1BarOption} style={{ height: '340px', width: '100%' }} />
+          <div className="p-2.5 rounded bg-railway-darkest/70 border border-railway-border/50 text-[11px] text-railway-muted font-mono flex items-center gap-2">
+            <Info className="h-3.5 w-3.5 text-hud-cyan shrink-0" />
+            <span>F1 score is evaluated at the frozen validation-calibrated decision threshold. AP is threshold-independent across all continuous operating points.</span>
+          </div>
         </div>
       )}
 
@@ -383,7 +407,7 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
             </div>
 
             <p className="text-[11px] text-railway-muted font-sans">
-              Evaluated on {total} unpeeking test windows. Threshold calibrated on validation partition: <b>{activeExp.calibrated_threshold}</b>.
+              Evaluated on {total} unpeeking test windows. Threshold calibrated strictly on validation partition: <b>{activeExp.calibrated_threshold?.toFixed(4) ?? 'UNAVAILABLE'}</b>.
             </p>
 
             <div className="grid grid-cols-2 gap-2 text-center text-xs mt-2">
@@ -441,35 +465,35 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="p-2 rounded bg-railway-darkest/70 border border-railway-border/50">
                 <span className="text-[10px] text-railway-muted block">ACCURACY</span>
-                <span className="text-sm font-bold text-white">{activeExp.accuracy?.toFixed(4) || '—'}</span>
+                <span className="text-sm font-bold text-white">{activeExp.accuracy !== null && activeExp.accuracy !== undefined ? activeExp.accuracy.toFixed(4) : 'UNAVAILABLE'}</span>
               </div>
               <div className="p-2 rounded bg-railway-darkest/70 border border-railway-border/50">
                 <span className="text-[10px] text-railway-muted block">BALANCED ACCURACY</span>
-                <span className="text-sm font-bold text-white">{activeExp.balanced_accuracy?.toFixed(4) || '—'}</span>
+                <span className="text-sm font-bold text-white">{activeExp.balanced_accuracy !== null && activeExp.balanced_accuracy !== undefined ? activeExp.balanced_accuracy.toFixed(4) : 'UNAVAILABLE'}</span>
               </div>
               <div className="p-2 rounded bg-railway-darkest/70 border border-railway-border/50">
                 <span className="text-[10px] text-railway-muted block">PRECISION (PPV)</span>
-                <span className="text-sm font-bold text-white">{activeExp.precision?.toFixed(4) || '—'}</span>
+                <span className="text-sm font-bold text-white">{activeExp.precision !== null && activeExp.precision !== undefined ? activeExp.precision.toFixed(4) : 'UNAVAILABLE'}</span>
               </div>
               <div className="p-2 rounded bg-railway-darkest/70 border border-railway-border/50">
                 <span className="text-[10px] text-railway-muted block">RECALL / SENSITIVITY</span>
-                <span className="text-sm font-bold text-white">{activeExp.recall?.toFixed(4) || '—'}</span>
+                <span className="text-sm font-bold text-white">{activeExp.recall !== null && activeExp.recall !== undefined ? activeExp.recall.toFixed(4) : 'UNAVAILABLE'}</span>
               </div>
               <div className="p-2 rounded bg-railway-darkest/70 border border-railway-border/50">
                 <span className="text-[10px] text-railway-muted block">SPECIFICITY (TNR)</span>
-                <span className="text-sm font-bold text-white">{activeExp.specificity?.toFixed(4) || '—'}</span>
+                <span className="text-sm font-bold text-white">{activeExp.specificity !== null && activeExp.specificity !== undefined ? activeExp.specificity.toFixed(4) : 'UNAVAILABLE'}</span>
               </div>
               <div className="p-2 rounded bg-railway-darkest/70 border border-railway-border/50">
                 <span className="text-[10px] text-railway-muted block">F1 SCORE</span>
-                <span className="text-sm font-bold text-hud-cyan">{activeExp.f1?.toFixed(4) || '—'}</span>
+                <span className="text-sm font-bold text-hud-cyan">{activeExp.f1 !== null && activeExp.f1 !== undefined ? activeExp.f1.toFixed(4) : 'UNAVAILABLE'}</span>
               </div>
               <div className="p-2 rounded bg-railway-darkest/70 border border-railway-border/50">
                 <span className="text-[10px] text-railway-muted block">MATTHEWS CORR (MCC)</span>
-                <span className="text-sm font-bold text-white">{activeExp.mcc?.toFixed(4) || '—'}</span>
+                <span className="text-sm font-bold text-white">{activeExp.mcc !== null && activeExp.mcc !== undefined ? activeExp.mcc.toFixed(4) : 'UNAVAILABLE'}</span>
               </div>
               <div className="p-2 rounded bg-railway-darkest/70 border border-railway-border/50">
                 <span className="text-[10px] text-railway-muted block">BRIER SCORE</span>
-                <span className="text-sm font-bold text-white">{activeExp.brier_score?.toFixed(4) || '—'}</span>
+                <span className="text-sm font-bold text-white">{activeExp.brier_score !== null && activeExp.brier_score !== undefined ? activeExp.brier_score.toFixed(4) : 'UNAVAILABLE'}</span>
               </div>
             </div>
 
@@ -478,15 +502,15 @@ export const BenchmarkComparison: React.FC<BenchmarkComparisonProps> = ({
               <span className="text-[10px] text-hud-amber font-bold uppercase block">Railway Operational Event Metrics</span>
               <div className="flex justify-between">
                 <span className="text-railway-muted">Event Recall (Anomaly Hits):</span>
-                <span className="text-white font-bold">{activeExp.event_recall !== null ? `${(activeExp.event_recall * 100).toFixed(1)}%` : '—'}</span>
+                <span className="text-white font-bold">{activeExp.event_recall !== null && activeExp.event_recall !== undefined ? `${(activeExp.event_recall * 100).toFixed(1)}%` : 'UNAVAILABLE'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-railway-muted">False Alarms Rate:</span>
-                <span className="text-rose-400 font-bold">{activeExp.false_alarms_per_km !== null ? `${activeExp.false_alarms_per_km} / km` : '—'}</span>
+                <span className="text-railway-muted">False Alarms per Track-km:</span>
+                <span className="text-white font-bold">{activeExp.false_alarms_per_km !== null && activeExp.false_alarms_per_km !== undefined ? `${activeExp.false_alarms_per_km} /km` : 'UNAVAILABLE'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-railway-muted">Defect Localization MAE:</span>
-                <span className="text-white font-bold">{activeExp.localization_mae_m !== null ? `${activeExp.localization_mae_m} m` : '—'}</span>
+                <span className="text-railway-muted">Localization MAE:</span>
+                <span className="text-white font-bold">{activeExp.localization_mae_m !== null && activeExp.localization_mae_m !== undefined ? `±${activeExp.localization_mae_m} m` : 'UNAVAILABLE'}</span>
               </div>
             </div>
           </div>

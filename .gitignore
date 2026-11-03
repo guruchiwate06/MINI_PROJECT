@@ -46,3 +46,6 @@ outputs/*.pkl
 *.egg-info/
 .pytest_cache/
 model_training/research_audit/evidence/*.npz
+
+# PyTorch profiler traces
+*_trace.json

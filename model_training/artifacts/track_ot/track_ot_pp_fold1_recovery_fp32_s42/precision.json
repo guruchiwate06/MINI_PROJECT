@@ -1,0 +1,5 @@
+{
+  "autocast": false,
+  "dtype": "torch.float32",
+  "loss_scaling": false
+}

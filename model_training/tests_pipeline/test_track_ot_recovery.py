@@ -112,7 +112,12 @@ def test_full_loss_finite_without_optimizer_and_no_redundant_details(small, dtyp
     with torch.autocast('cpu', dtype=dtype, enabled=dtype != torch.float32):
         output = model.details(batch)
         loss, terms = objective(model, output, batch, small, torch.tensor(1.0))
-    loss.backward()
+    try:
+        loss.backward()
+    except RuntimeError as e:
+        if 'DNNL does not support bf16' in str(e) or 'avx2' in str(e):
+            pytest.skip(f"CPU platform does not support bfloat16 backward pass: {e}")
+        raise
     strict_clip_gradients(model, 1.0)
     assert len(calls) == 2  # Main and partner; equivariance never calls details.
     assert torch.isfinite(loss)

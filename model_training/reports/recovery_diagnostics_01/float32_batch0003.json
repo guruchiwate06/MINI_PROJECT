@@ -1,0 +1,503 @@
+{
+  "batch": 3,
+  "precision": "float32",
+  "loader_seconds": 0.06879009999101982,
+  "source_window_ids": [
+    "AtoB_20_1:219500:220500",
+    "AtoB_20_1:220000:221000",
+    "AtoB_20_1:224500:225500",
+    "AtoB_20_1:225000:226000"
+  ],
+  "transfer_seconds": 0.001418500003637746,
+  "loss_scale": 1.0,
+  "forward_seconds": 0.4634299000026658,
+  "auxiliary_loss_seconds": 1.4478742999926908,
+  "weighted_loss_components": {
+    "supervised": 1.7567572593688965,
+    "auxiliary": 0.5143095254898071,
+    "crossing": 0.005523242522031069,
+    "transport": -0.0013258745893836021,
+    "drift": 0.00014464935520663857,
+    "equivariance": 0.000299923587590456,
+    "recurrence": 0.0,
+    "cycle": 0.002279961481690407,
+    "brier": 0.046476446092128754
+  },
+  "loss": 2.324465036392212,
+  "solver_iterations": 32,
+  "component_gradients": {
+    "supervised": {
+      "finite": true,
+      "nonfinite_parameters": [],
+      "finite_elements_l2_norm": 12.2457260363777,
+      "largest": [
+        {
+          "parameter": "instance_head.4.weight",
+          "max_abs": 1.3815441131591797
+        },
+        {
+          "parameter": "instance_head.4.bias",
+          "max_abs": 0.454137921333313
+        },
+        {
+          "parameter": "quality_gate.2.bias",
+          "max_abs": 0.2833191752433777
+        },
+        {
+          "parameter": "vibration_head.weight",
+          "max_abs": 0.2804744839668274
+        },
+        {
+          "parameter": "image_projection.1.weight",
+          "max_abs": 0.2758534550666809
+        },
+        {
+          "parameter": "wave_encoder.sensor_fusion.0.weight",
+          "max_abs": 0.23000891506671906
+        },
+        {
+          "parameter": "wave_encoder.frequency.1.weight",
+          "max_abs": 0.20661506056785583
+        },
+        {
+          "parameter": "quality_gate.2.weight",
+          "max_abs": 0.20612284541130066
+        },
+        {
+          "parameter": "warp.shift.weight",
+          "max_abs": 0.1954268515110016
+        },
+        {
+          "parameter": "instance_head.1.weight",
+          "max_abs": 0.1608341932296753
+        }
+      ]
+    },
+    "auxiliary": {
+      "finite": true,
+      "nonfinite_parameters": [],
+      "finite_elements_l2_norm": 3.121029127911676,
+      "largest": [
+        {
+          "parameter": "vision_head.weight",
+          "max_abs": 0.15839898586273193
+        },
+        {
+          "parameter": "vibration_head.weight",
+          "max_abs": 0.14593206346035004
+        },
+        {
+          "parameter": "warp.shift.weight",
+          "max_abs": 0.14301797747612
+        },
+        {
+          "parameter": "vision_head.bias",
+          "max_abs": 0.10643929243087769
+        },
+        {
+          "parameter": "quality_gate.2.bias",
+          "max_abs": 0.07913202047348022
+        },
+        {
+          "parameter": "wave_encoder.sensor_fusion.0.weight",
+          "max_abs": 0.06831290572881699
+        },
+        {
+          "parameter": "wave_encoder.frequency.1.weight",
+          "max_abs": 0.058241307735443115
+        },
+        {
+          "parameter": "quality_gate.2.weight",
+          "max_abs": 0.05753088742494583
+        },
+        {
+          "parameter": "warp.shift.bias",
+          "max_abs": 0.052096445113420486
+        },
+        {
+          "parameter": "image_projection.1.weight",
+          "max_abs": 0.04977385327219963
+        }
+      ]
+    },
+    "crossing": {
+      "finite": true,
+      "nonfinite_parameters": [],
+      "finite_elements_l2_norm": 0.014839442632705759,
+      "largest": [
+        {
+          "parameter": "warp.shift.weight",
+          "max_abs": 0.0015500476583838463
+        },
+        {
+          "parameter": "warp.rate.weight",
+          "max_abs": 0.0013594012707471848
+        },
+        {
+          "parameter": "warp.rate.bias",
+          "max_abs": 0.0011249853996559978
+        },
+        {
+          "parameter": "warp.shift.bias",
+          "max_abs": 0.000603920198045671
+        },
+        {
+          "parameter": "wave_encoder.sensor_fusion.0.weight",
+          "max_abs": 0.00023372193390969187
+        },
+        {
+          "parameter": "wave_encoder.frequency.1.weight",
+          "max_abs": 0.00020433819736354053
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.4.body.0.weight",
+          "max_abs": 0.00017423080862499774
+        },
+        {
+          "parameter": "wave_encoder.branches.2.net.6.weight",
+          "max_abs": 0.00016095879254862666
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.0.weight",
+          "max_abs": 0.00014784793893340975
+        },
+        {
+          "parameter": "wave_encoder.branches.1.net.6.weight",
+          "max_abs": 0.00014222931349650025
+        }
+      ]
+    },
+    "transport": {
+      "finite": true,
+      "nonfinite_parameters": [],
+      "finite_elements_l2_norm": 0.18365803658554372,
+      "largest": [
+        {
+          "parameter": "warp.shift.weight",
+          "max_abs": 0.022272078320384026
+        },
+        {
+          "parameter": "warp.shift.bias",
+          "max_abs": 0.00853019580245018
+        },
+        {
+          "parameter": "wave_encoder.sensor_fusion.0.weight",
+          "max_abs": 0.00356317893601954
+        },
+        {
+          "parameter": "wave_encoder.frequency.1.weight",
+          "max_abs": 0.002896711463108659
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.4.body.0.weight",
+          "max_abs": 0.002510125283151865
+        },
+        {
+          "parameter": "wave_encoder.branches.2.net.6.weight",
+          "max_abs": 0.0023885401897132397
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.0.weight",
+          "max_abs": 0.0021718095522373915
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.0.bias",
+          "max_abs": 0.0020308811217546463
+        },
+        {
+          "parameter": "wave_encoder.branches.1.net.6.weight",
+          "max_abs": 0.001982741057872772
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.0.weight",
+          "max_abs": 0.0019735898822546005
+        }
+      ]
+    },
+    "drift": {
+      "finite": true,
+      "nonfinite_parameters": [],
+      "finite_elements_l2_norm": 0.002775272448074627,
+      "largest": [
+        {
+          "parameter": "warp.shift.weight",
+          "max_abs": 0.00047546325367875397
+        },
+        {
+          "parameter": "warp.shift.bias",
+          "max_abs": 0.0001686263713054359
+        },
+        {
+          "parameter": "warp.rate.weight",
+          "max_abs": 8.896470535546541e-05
+        },
+        {
+          "parameter": "image_projection.1.weight",
+          "max_abs": 2.164947181881871e-05
+        },
+        {
+          "parameter": "wave_encoder.sensor_fusion.0.weight",
+          "max_abs": 1.7507923985249363e-05
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.4.body.0.weight",
+          "max_abs": 1.7018044673022814e-05
+        },
+        {
+          "parameter": "wave_encoder.frequency.1.weight",
+          "max_abs": 1.6213880371651612e-05
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.0.bias",
+          "max_abs": 1.4930688848835416e-05
+        },
+        {
+          "parameter": "wave_encoder.branches.2.net.6.weight",
+          "max_abs": 1.302823602600256e-05
+        },
+        {
+          "parameter": "wave_encoder.branches.1.net.6.weight",
+          "max_abs": 1.2912666534248274e-05
+        }
+      ]
+    },
+    "equivariance": {
+      "finite": true,
+      "nonfinite_parameters": [],
+      "finite_elements_l2_norm": 0.042117820758105565,
+      "largest": [
+        {
+          "parameter": "warp.shift.weight",
+          "max_abs": 0.005120608024299145
+        },
+        {
+          "parameter": "warp.shift.bias",
+          "max_abs": 0.001617807662114501
+        },
+        {
+          "parameter": "wave_encoder.sensor_fusion.0.weight",
+          "max_abs": 0.0008527312893420458
+        },
+        {
+          "parameter": "wave_encoder.frequency.1.weight",
+          "max_abs": 0.0007056769100017846
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.4.body.0.weight",
+          "max_abs": 0.0005979136913083494
+        },
+        {
+          "parameter": "wave_encoder.branches.2.net.6.weight",
+          "max_abs": 0.0005374509491957724
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.0.weight",
+          "max_abs": 0.0005104197771288455
+        },
+        {
+          "parameter": "wave_encoder.branches.1.net.6.weight",
+          "max_abs": 0.0004941418883390725
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.0.bias",
+          "max_abs": 0.0004861466004513204
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.0.weight",
+          "max_abs": 0.00047198490938171744
+        }
+      ]
+    },
+    "recurrence": {
+      "finite": true,
+      "nonfinite_parameters": [],
+      "finite_elements_l2_norm": 0.0,
+      "largest": [
+        {
+          "parameter": "wave_encoder.branches.0.net.0.weight",
+          "max_abs": 0.0
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.0.bias",
+          "max_abs": 0.0
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.1.weight",
+          "max_abs": 0.0
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.1.bias",
+          "max_abs": 0.0
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.0.weight",
+          "max_abs": 0.0
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.0.bias",
+          "max_abs": 0.0
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.1.weight",
+          "max_abs": 0.0
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.1.bias",
+          "max_abs": 0.0
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.4.weight",
+          "max_abs": 0.0
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.4.bias",
+          "max_abs": 0.0
+        }
+      ]
+    },
+    "cycle": {
+      "finite": true,
+      "nonfinite_parameters": [],
+      "finite_elements_l2_norm": 0.03382279141881261,
+      "largest": [
+        {
+          "parameter": "warp.shift.weight",
+          "max_abs": 0.0040915836580097675
+        },
+        {
+          "parameter": "warp.shift.bias",
+          "max_abs": 0.0016008795937523246
+        },
+        {
+          "parameter": "warp.rate.weight",
+          "max_abs": 0.0014955928782001138
+        },
+        {
+          "parameter": "warp.rate.bias",
+          "max_abs": 0.0011641948949545622
+        },
+        {
+          "parameter": "wave_encoder.sensor_fusion.0.weight",
+          "max_abs": 0.0006533359410241246
+        },
+        {
+          "parameter": "wave_encoder.frequency.1.weight",
+          "max_abs": 0.000434273446444422
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.4.body.0.weight",
+          "max_abs": 0.0004127224674448371
+        },
+        {
+          "parameter": "wave_encoder.branches.2.net.6.weight",
+          "max_abs": 0.00039763335371389985
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.0.bias",
+          "max_abs": 0.0003973177808802575
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.3.body.0.bias",
+          "max_abs": 0.00038003167719580233
+        }
+      ]
+    },
+    "brier": {
+      "finite": true,
+      "nonfinite_parameters": [],
+      "finite_elements_l2_norm": 0.0975762694967422,
+      "largest": [
+        {
+          "parameter": "instance_head.4.weight",
+          "max_abs": 0.010942600667476654
+        },
+        {
+          "parameter": "instance_head.4.bias",
+          "max_abs": 0.0035786814987659454
+        },
+        {
+          "parameter": "image_projection.1.weight",
+          "max_abs": 0.002410061424598098
+        },
+        {
+          "parameter": "quality_gate.2.bias",
+          "max_abs": 0.0021869619376957417
+        },
+        {
+          "parameter": "wave_encoder.sensor_fusion.0.weight",
+          "max_abs": 0.001805628533475101
+        },
+        {
+          "parameter": "wave_encoder.frequency.1.weight",
+          "max_abs": 0.0016152934404090047
+        },
+        {
+          "parameter": "quality_gate.2.weight",
+          "max_abs": 0.001591213047504425
+        },
+        {
+          "parameter": "vibration_head.weight",
+          "max_abs": 0.0014993054792284966
+        },
+        {
+          "parameter": "warp.shift.weight",
+          "max_abs": 0.0014715597499161959
+        },
+        {
+          "parameter": "wave_encoder.branches.0.net.4.body.0.weight",
+          "max_abs": 0.0012712337775155902
+        }
+      ]
+    }
+  },
+  "backward_seconds": 0.4884070999978576,
+  "gradients": {
+    "finite": true,
+    "nonfinite_parameters": [],
+    "finite_elements_l2_norm": 14.425136789137825,
+    "largest": [
+      {
+        "parameter": "instance_head.4.weight",
+        "max_abs": 1.392486810684204
+      },
+      {
+        "parameter": "instance_head.4.bias",
+        "max_abs": 0.45771661400794983
+      },
+      {
+        "parameter": "quality_gate.2.bias",
+        "max_abs": 0.364609032869339
+      },
+      {
+        "parameter": "image_projection.1.weight",
+        "max_abs": 0.32027578353881836
+      },
+      {
+        "parameter": "vibration_head.weight",
+        "max_abs": 0.2968563735485077
+      },
+      {
+        "parameter": "wave_encoder.sensor_fusion.0.weight",
+        "max_abs": 0.29482731223106384
+      },
+      {
+        "parameter": "quality_gate.2.weight",
+        "max_abs": 0.26522234082221985
+      },
+      {
+        "parameter": "wave_encoder.frequency.1.weight",
+        "max_abs": 0.26223987340927124
+      },
+      {
+        "parameter": "wave_encoder.branches.0.net.4.body.0.weight",
+        "max_abs": 0.20487189292907715
+      },
+      {
+        "parameter": "wave_encoder.branches.2.net.6.weight",
+        "max_abs": 0.18664595484733582
+      }
+    ]
+  },
+  "peak_cuda_allocated_bytes": 509340160,
+  "passed": true
+}

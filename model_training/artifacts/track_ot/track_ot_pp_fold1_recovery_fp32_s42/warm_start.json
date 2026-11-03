@@ -1,0 +1,8 @@
+{
+  "source_experiment": "63c58329ee32166dc58c92d289e91979ae0a08f0e637ba33657a86670a7cf764",
+  "checkpoint_sha256": "9cc65d62d0dfc83275b25c1c89759b17f348661366b9921f2955baf0954d997c",
+  "source_epoch": 1,
+  "weights_only": true,
+  "optimizer_state_reused": false,
+  "interpretation": "New recovery experiment; not a bitwise resume or independent replication"
+}

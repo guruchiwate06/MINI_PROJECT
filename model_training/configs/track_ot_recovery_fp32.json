@@ -1,0 +1,10 @@
+{
+  "base_config": "full_scale.json",
+  "base_overrides": ["split.test_sites=[1,2,3]", "split.validation_sites=[4]"],
+  "training": {"amp": false, "epochs": 5, "patience": 3},
+  "experiment": {
+    "name": "track_ot_pp_fold1_recovery_fp32_s42",
+    "output": "../artifacts/track_ot",
+    "notes": "NEW FP32 recovery experiment after the nonfinite-gradient pilot. Same Rail-VIVID, split, candidates and architecture. Optional weights-only warm start must be disclosed. No test evaluation during development."
+  }
+}

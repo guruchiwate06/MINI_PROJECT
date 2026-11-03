@@ -1,5 +1,9 @@
 # Rail-VIVID model training
 
+GPU pilot recovery: [numerical fixes, profiling and a five-epoch FP32 handoff](RECOVERY.md). The first GPU run failed after one epoch. Preserve its evidence; diagnose and use a new experiment rather than resuming across changed code.
+
+[Recovery verification](reports/track_ot_recovery_validation.json): 100 passing tests, full-model FP32/BF16 synthetic gradient checks without parameter updates, and a passing frontend production build. Actual RTX recovery remains unverified.
+
 New: [TRACK-OT++ implementation and training-device handoff](TRACK_OT_PLUS_PLUS.md) adds unbalanced sequence matching, bounded drift correction, weak-label learning, cross-run cycles and withheld-marker evaluation on the same Rail-VIVID dataset. No TRACK-OT++ training result is claimed yet.
 
 Verification: [TRACK-OT++ fitting-free checks](reports/track_ot_validation.json): 89 passing checks, including 18 TRACK-OT tests; zero local optimizer steps.

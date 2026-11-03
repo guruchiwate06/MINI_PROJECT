@@ -85,11 +85,24 @@ class PatchStore:
         self.path = state["path"]; self.array = np.load(self.path, mmap_mode="r")
 
 
+def selected_patches(cache, ids, count):
+    chosen = np.linspace(0, cache.shape[1] - 1, count, dtype=int)
+    if len(set(chosen)) != len(chosen): raise DataIntegrityError("patch_tokens exceeds cache's patch count")
+    return np.asarray(cache[np.asarray(ids)[:, None], chosen[None, :], :], dtype="float32")
+
+
 class SequenceDataset(Dataset):
     def __init__(self, root, source, records, normalizer, cfg, vision, augment=False, corruption=None):
         self.root = Path(root); self.source = source; self.cfg = cfg; self.vision = vision
         self.augment = augment; self.epoch = 0; self.corruption = corruption or {}; self._arrays = OrderedDict()
         self.records = records
+        self.run_ids = source.run_id.to_numpy(copy=True)
+        self.starts = source.start_idx.to_numpy(dtype="int64", copy=True)
+        self.ends = source.end_idx.to_numpy(dtype="int64", copy=True)
+        self.positions = source.chainage_m.to_numpy(dtype="float64", copy=True)
+        self.labels = source.label.to_numpy(dtype="float32", copy=True)
+        self.eligible = source.eligible_supervised.to_numpy(dtype=bool, copy=True)
+        self.window_ids = source.window_id.to_numpy(copy=True)
         self.frame = source.iloc[[r["anchor_index"] for r in records]].reset_index(drop=True).copy()
         if self.frame.partition.nunique() != 1: raise LeakageError("A dataset view must contain exactly one partition")
         self.mean = np.asarray(normalizer["mean"], dtype="float32")[:, None]
@@ -132,21 +145,21 @@ class SequenceDataset(Dataset):
         return self._arrays[run]
 
     def item(self, index, augment=True):
-        cfg = self.cfg; rec = self.records[index]; anchor = self.source.iloc[rec["anchor_index"]]
+        cfg = self.cfg; rec = self.records[index]; anchor = rec["anchor_index"]
         n, m = cfg["sequence"]["windows"], cfg["sequence"]["max_frames"]
         t, d = cfg["_base"]["data"]["window_samples"], cfg["_base"]["model"]["vision_dim"]
         wave = np.zeros((n, 6, t), dtype="float32"); mask = np.zeros(n, dtype=bool)
         wp = np.zeros(n, dtype="float32"); labels = np.full(n, -1, dtype="float32")
-        raw = self.array(anchor.run_id)
+        raw = self.array(self.run_ids[anchor])
         for slot, k in enumerate(rec["context_indices"]):
-            row = self.source.iloc[k]
-            if row.start_idx < 0 or row.end_idx > len(raw) or row.end_idx - row.start_idx != t:
-                raise DataIntegrityError(f"Out-of-bounds sequence waveform: {row.window_id}")
-            x = np.asarray(raw[int(row.start_idx):int(row.end_idx), :6], dtype="float32").T
-            finite(x, row.window_id)
+            start, end = self.starts[k], self.ends[k]
+            if start < 0 or end > len(raw) or end - start != t:
+                raise DataIntegrityError(f"Out-of-bounds sequence waveform: {self.window_ids[k]}")
+            x = np.asarray(raw[start:end, :6], dtype="float32").T
+            finite(x, self.window_ids[k])
             wave[slot] = (x - self.mean) / self.std; mask[slot] = True
-            wp[slot] = row.chainage_m - anchor.chainage_m
-            labels[slot] = row.label if row.eligible_supervised else -1
+            wp[slot] = self.positions[k] - self.positions[anchor]
+            labels[slot] = self.labels[k] if self.eligible[k] else -1
         ids = [self.vision.lookup[fid] for fid in rec["frame_ids"]]
         vision = np.zeros((m, d), dtype="float32"); quality = np.zeros((m, 2), dtype="float32")
         patches = np.zeros((m, cfg["encoder"]["patch_tokens"], d), dtype="float32")
@@ -154,12 +167,10 @@ class SequenceDataset(Dataset):
         if ids:
             values = self.vision.features[ids]
             if self.patch_store:
-                pp = np.asarray(self.patch_store.array[ids], dtype="float32")
-                chosen = np.linspace(0, pp.shape[1] - 1, cfg["encoder"]["patch_tokens"], dtype=int)
-                if len(set(chosen)) != len(chosen): raise DataIntegrityError("patch_tokens exceeds cache's patch count")
-                patches[:len(ids)] = pp[:, chosen]
+                # Advanced indexing selects patches BEFORE materializing cache pages.
+                patches[:len(ids)] = selected_patches(self.patch_store.array, ids, cfg["encoder"]["patch_tokens"])
             vision[:len(ids)] = values; quality[:len(ids)] = self.vision.quality[ids]
-            imask[:len(ids)] = True; ip[:len(ids)] = np.asarray(rec["frame_positions"]) - anchor.chainage_m
+            imask[:len(ids)] = True; ip[:len(ids)] = np.asarray(rec["frame_positions"]) - self.positions[anchor]
         key = f"{cfg['training']['seed']}:{self.epoch}:{rec['window_id']}"
         rng = np.random.default_rng(int.from_bytes(hashlib.sha256(key.encode()).digest()[:8], "little"))
         vibration_present = True
@@ -178,7 +189,7 @@ class SequenceDataset(Dataset):
         values = {"waveform": wave, "wave_mask": mask, "wave_positions": wp, "instance_labels": labels,
                   "vision": vision, "vision_patches": patches, "vision_mask": imask, "image_positions": ip, "quality": quality,
                   "vibration_present": vibration_present, "anchor_slot": rec["anchor_slot"], "index": index,
-                  "label": float(anchor.label), "bag_label": float(rec["bag_label"]), "anchor_chainage": float(anchor.chainage_m),
+                  "label": float(self.labels[anchor]), "bag_label": float(rec["bag_label"]), "anchor_chainage": float(self.positions[anchor]),
                   "bag_support_low": rec["source_support_min_m"], "bag_support_high": rec["source_support_max_m"]}
         for k in ["waveform", "vision", "vision_patches", "quality", "wave_positions", "image_positions"]: finite(values[k], k)
         return {k: torch.as_tensor(v) for k, v in values.items()}

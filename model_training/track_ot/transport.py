@@ -46,7 +46,7 @@ def crossing_penalty(plan):
 
 def transport_summary(plan):
     row_mass = plan.sum(-1)
-    normalized = plan / row_mass[:, None].clamp_min(1e-8)
+    normalized = torch.where(row_mass[:, None] > 1e-6, plan / row_mass[:, None].clamp_min(1e-6), torch.zeros_like(plan))
     entropy = -(normalized * normalized.clamp_min(1e-8).log()).sum(-1)
     return row_mass, normalized, entropy
 
@@ -61,30 +61,48 @@ def unbalanced_transport(cost, allowed, epsilon=0.25, iterations=160, tolerance=
         raise DataIntegrityError("UOT needs nonempty matrix and boolean mask")
     if not torch.isfinite(cost).all(): raise DataIntegrityError("Nonfinite UOT cost")
     if min(epsilon, tolerance, marginal_penalty) <= 0 or iterations < 1: raise DataIntegrityError("Invalid UOT settings")
+    plan, residual, _ = unbalanced_transport_batch(cost[None], allowed[None], epsilon=epsilon, iterations=iterations,
+                                                  tolerance=tolerance, marginal_penalty=marginal_penalty)
+    return plan[0], residual[0]
+
+
+def unbalanced_transport_batch(cost, allowed, row_mask=None, col_mask=None, epsilon=0.25,
+                               iterations=160, tolerance=0.005, marginal_penalty=2.0):
+    """Batched log-domain UOT with early stopping and safe empty support.
+
+    No all-negative-infinity logsumexp is differentiated: empty rows/columns
+    use finite dummy reductions and remain unmatched in the returned plan.
+    """
+    if cost.ndim != 3 or cost.shape != allowed.shape or allowed.dtype != torch.bool or not cost.numel():
+        raise DataIntegrityError("Batched UOT needs B x N x M costs and boolean mask")
+    if not torch.isfinite(cost).all(): raise DataIntegrityError("Nonfinite batched UOT cost")
+    if min(epsilon, tolerance, marginal_penalty) <= 0 or iterations < 1: raise DataIntegrityError("Invalid UOT settings")
     with torch.autocast(device_type=cost.device.type, enabled=False):
         cost = cost.float()
-        keep_rows, keep_cols = allowed.any(1), allowed.any(0)
-        plan = cost * 0
-        if not keep_rows.any(): return plan, cost.sum() * 0
-        reduced = cost[keep_rows][:, keep_cols]
-        feasible = allowed[keep_rows][:, keep_cols]
-        kernel = (-reduced / epsilon).masked_fill(~feasible, float("-inf"))
-        loga = reduced.new_full((len(reduced),), -math.log(cost.shape[0]))
-        logb = reduced.new_full((reduced.shape[1],), -math.log(cost.shape[1]))
-        u, v = torch.zeros_like(loga), torch.zeros_like(logb)
+        rows = torch.ones(cost.shape[:2], dtype=torch.bool, device=cost.device) if row_mask is None else row_mask
+        cols = torch.ones((cost.shape[0], cost.shape[2]), dtype=torch.bool, device=cost.device) if col_mask is None else col_mask
+        feasible = allowed & rows[:, :, None] & cols[:, None, :]
+        active_r, active_c = feasible.any(-1), feasible.any(-2)
+        kernel = (-cost / epsilon).masked_fill(~feasible, float("-inf"))
+        loga = -rows.sum(-1).clamp_min(1).float().log()[:, None]
+        logb = -cols.sum(-1).clamp_min(1).float().log()[:, None]
+        u = torch.zeros_like(cost[:, :, 0]); v = torch.zeros_like(cost[:, 0, :])
         exponent = marginal_penalty / (marginal_penalty + epsilon)
-        residual = reduced.new_tensor(float("inf"))
-        for _ in range(iterations):
-            next_u = exponent * (loga - torch.logsumexp(kernel + v[None], 1))
-            next_v = exponent * (logb - torch.logsumexp(kernel + next_u[:, None], 0))
-            residual = torch.maximum((next_u - u).abs().max(), (next_v - v).abs().max())
+        for step in range(iterations):
+            row_inputs = torch.where(active_r[:, :, None], kernel + v[:, None, :], torch.zeros_like(kernel))
+            next_u = torch.where(active_r, exponent * (loga - torch.logsumexp(row_inputs, -1)), torch.zeros_like(u))
+            col_inputs = torch.where(active_c[:, None, :], kernel + next_u[:, :, None], torch.zeros_like(kernel))
+            next_v = torch.where(active_c, exponent * (logb - torch.logsumexp(col_inputs, -2)), torch.zeros_like(v))
+            if (step + 1) % 8 == 0 or step + 1 == iterations:
+                residual = torch.maximum((next_u - u).abs().amax(-1), (next_v - v).abs().amax(-1))
+                converged = step + 1 >= min(32, iterations) and bool((residual.detach() <= tolerance * 0.1).all())
+            else: converged = False
             u, v = next_u, next_v
-        matched = (kernel + u[:, None] + v[None]).exp()
-        if not torch.isfinite(matched).all() or float(residual.detach()) > tolerance:
-            raise TrainingError(f"UOT did not converge ({float(residual.detach()):.6g} > {tolerance})")
-        rows = torch.where(keep_rows)[0]; cols = torch.where(keep_cols)[0]
-        plan = plan.index_put((rows[:, None].expand(-1, len(cols)), cols[None].expand(len(rows), -1)), matched)
-        return plan, residual
+            if converged: break
+        plan = (kernel + u[:, :, None] + v[:, None, :]).exp()
+        if not torch.isfinite(plan).all() or (residual.detach() > tolerance).any():
+            raise TrainingError(f"Batched UOT did not converge (max residual {float(residual.detach().max()):.6g})")
+        return plan, residual, step + 1
 
 
 def unbalanced_objective(plan, cost, epsilon, marginal_penalty):

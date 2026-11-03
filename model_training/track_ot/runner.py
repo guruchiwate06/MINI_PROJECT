@@ -24,6 +24,7 @@ from .config import identity, public_config, source_fingerprint
 from .data import SequenceDataset, split_datasets
 from .losses import objective
 from .model import TrackOTPlus
+from .numerics import gradient_report, strict_clip_gradients, precision
 
 LOG = logging.getLogger("track_ot")
 STRESSES = {"missing_vision": {"missing_vision": True}, "missing_vibration": {"missing_vibration": True},
@@ -34,6 +35,15 @@ STRESSES = {"missing_vision": {"missing_vision": True}, "missing_vibration": {"m
 
 
 def run_path(c): return Path(c["experiment"]["output"]) / c["experiment"]["name"]
+
+
+def training_view(r, c):
+    full = r["datasets"]["train"]
+    permitted = [x for x in full.records if x["bag_label"] >= 0]
+    dataset = SequenceDataset(r["root"], full.source, permitted, r["normalizer"], c, r["vision"], augment=True)
+    labels = np.asarray([x["bag_label"] for x in permitted]) if c["loss"]["supervision"] == "mil" else full.frame.loc[full.frame.eligible_supervised, "label"].to_numpy()
+    if set(labels.tolist()) != {0, 1}: raise DataIntegrityError("Both training classes are required")
+    return dataset, float((labels == 0).sum() / (labels == 1).sum())
 
 
 def validate_corruption(corruption):
@@ -148,8 +158,27 @@ def calibrate(c, folder, validation, sites, ident):
     return calibration
 
 
-def train(c, on_training_device=False, resume=False):
+def warm_start_weights(model, previous, current):
+    previous = Path(previous).resolve()
+    run = read_json(previous / "run.json")
+    if run.get("data_fingerprint") != current["data"]["data_fingerprint"] or run["split"]["split_fingerprint"] != current["split"]["split_fingerprint"]:
+        raise ArtifactError("Warm-start source used different data/split")
+    if read_json(previous / "bags.json").get("fingerprint") != current["bag_fingerprint"]:
+        raise ArtifactError("Warm-start source used different sequence bags")
+    if fingerprint(read_json(previous / "normalizer.json")) != fingerprint(current["normalizer"]):
+        raise ArtifactError("Warm-start normalization differs")
+    checkpoint = previous / "best.pt"
+    state = load_checkpoint(checkpoint)
+    if state.get("experiment_fingerprint") != run["experiment_fingerprint"]: raise ArtifactError("Warm-start checkpoint identity does not match its run")
+    model.load_state_dict(state["model"], strict=True)
+    return {"source_experiment": run["experiment_fingerprint"], "checkpoint_sha256": file_hash(checkpoint),
+            "source_epoch": state["epoch"] + 1, "weights_only": True, "optimizer_state_reused": False,
+            "interpretation": "New recovery experiment; not a bitwise resume or independent replication"}
+
+
+def train(c, on_training_device=False, resume=False, warm_start=None):
     if not on_training_device: raise ConfigurationError("Training requires --on-training-device on the RTX machine; planning/smoke never fit")
+    if resume and warm_start: raise ConfigurationError("Choose strict resume or a NEW warm-start experiment")
     device = select_device(c["training"]["device"], require_cuda=True)
     seed_everything(c["training"]["seed"], deterministic=True)
     r = resources(c, verify=True, augment=True)
@@ -169,17 +198,17 @@ def train(c, on_training_device=False, resume=False):
                                          "evaluation_cohort": fingerprint(sorted(r["datasets"]["test"].frame.window_id.tolist()))})
     with experiment_lock(folder):
         try:
-            full = r["datasets"]["train"]
-            permitted = [x for x in full.records if x["bag_label"] >= 0]
-            training = SequenceDataset(r["root"], full.source, permitted, r["normalizer"], c, r["vision"], augment=True)
-            labels = np.asarray([x["bag_label"] for x in permitted]) if c["loss"]["supervision"] == "mil" else full.frame.loc[full.frame.eligible_supervised, "label"].to_numpy()
-            if set(labels.tolist()) != {0, 1}: raise DataIntegrityError("Both training bag classes are required")
-            pos_weight = torch.tensor(float((labels == 0).sum() / (labels == 1).sum()), device=device)
+            training, ratio = training_view(r, c)
+            pos_weight = torch.tensor(ratio, device=device)
             model = TrackOTPlus(c).to(device)
             optimizer = torch.optim.AdamW(model.parameters(), lr=c["training"]["learning_rate"], weight_decay=c["training"]["weight_decay"])
             scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=c["training"]["epochs"])
-            amp = c["training"]["amp"]
-            scaler = torch.amp.GradScaler("cuda", enabled=amp)
+            amp, amp_dtype = precision(c, device)
+            scaler = torch.amp.GradScaler("cuda", enabled=amp and amp_dtype == torch.float16, init_scale=c["training"]["initial_loss_scale"])
+            if warm_start:
+                parent = warm_start_weights(model, warm_start, r)
+                write_json(folder / "warm_start.json", parent)
+            write_json(folder / "precision.json", {"autocast": amp, "dtype": str(amp_dtype) if amp else "torch.float32", "loss_scaling": scaler.is_enabled()})
             first, best, bad = 0, -float("inf"), 0
             if resume:
                 state = load_checkpoint(folder / "last.pt")
@@ -193,17 +222,24 @@ def train(c, on_training_device=False, resume=False):
                 if not len(batches): raise DataIntegrityError("Empty training loader")
                 optimizer.zero_grad(set_to_none=True); seen, total, updates = 0, 0.0, 0; components = {}
                 torch.cuda.synchronize(device); torch.cuda.reset_peak_memory_stats(device); begin = time.perf_counter()
+                last_batch_indices = []; component_snapshot = {}; last_gradient_norm = None
                 for step, batch in enumerate(batches):
+                    last_batch_indices = batch["index"].tolist()
                     batch = to_device(batch, device); size = len(batch["index"])
                     group_start = (step // c["training"]["accumulation_steps"]) * c["training"]["accumulation_steps"]
                     denominator = min(c["training"]["batch_size"] * c["training"]["accumulation_steps"], len(training) - group_start * c["training"]["batch_size"])
-                    with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=amp):
-                        out = model.details(batch); loss, terms = objective(model, out, batch, c, pos_weight)
+                    with torch.autocast(device_type="cuda", dtype=amp_dtype, enabled=amp):
+                        with torch.profiler.record_function("track_ot/main_forward"):
+                            out = model.details(batch)
+                        with torch.profiler.record_function("track_ot/objective"):
+                            loss, terms = objective(model, out, batch, c, pos_weight)
+                    component_snapshot = terms
                     if not torch.isfinite(loss): raise TrainingError(f"Nonfinite loss at epoch {epoch + 1}, batch {step + 1}")
-                    scaler.scale(loss * size / denominator).backward()
+                    with torch.profiler.record_function("track_ot/backward"):
+                        scaler.scale(loss * size / denominator).backward()
                     if (step + 1) % c["training"]["accumulation_steps"] == 0 or step + 1 == len(batches):
                         scaler.unscale_(optimizer)
-                        torch.nn.utils.clip_grad_norm_(model.parameters(), c["training"]["gradient_clip"], error_if_nonfinite=True)
+                        last_gradient_norm = float(strict_clip_gradients(model, c["training"]["gradient_clip"]))
                         scaler.step(optimizer); scaler.update(); optimizer.zero_grad(set_to_none=True); updates += 1
                     total += float(loss.detach()) * size; seen += size
                     for k, v in terms.items(): components[k] = components.get(k, 0.0) + v * size
@@ -211,7 +247,11 @@ def train(c, on_training_device=False, resume=False):
                         LOG.info("Epoch %d batch %d/%d loss %.4f", epoch + 1, step + 1, len(batches), float(loss.detach()))
                 scheduler.step(); torch.cuda.synchronize(device)
                 train_seconds = time.perf_counter() - begin
+                training_peak_bytes = torch.cuda.max_memory_allocated(device)
+                validation_begin = time.perf_counter()
                 validation, _ = predict(model, r["datasets"]["validation"], c, device)
+                validation_seconds = time.perf_counter() - validation_begin
+                write_csv(folder / f"epochs/{epoch + 1:04d}_validation_predictions.csv", validation.drop(columns=["candidate_frame_ids", "candidate_offsets_m"], errors="ignore"))
                 score = classification_metrics(validation.label, expit(validation.logit))["average_precision"]
                 if score is None: raise DataIntegrityError("Validation AP undefined")
                 improved = score > best + c["training"]["min_delta"]
@@ -225,9 +265,12 @@ def train(c, on_training_device=False, resume=False):
                 seconds = time.perf_counter() - begin; durations.append(seconds)
                 progress = {"epoch": epoch + 1, "training_loss": total / seen, "validation_ap": score, "best_ap": best,
                             "components": {k: v / seen for k, v in components.items()}, "training_seconds": train_seconds,
+                            "validation_seconds": validation_seconds, "training_bags": seen, "training_bags_per_second": seen / max(train_seconds, 1e-9),
+                            "last_gradient_norm_before_clip": last_gradient_norm, "validation_inference": validation.attrs.get("inference", {}),
                             "epoch_seconds": seconds, "elapsed_seconds": time.perf_counter() - started,
                             "estimated_remaining_seconds": np.mean(durations) * (c["training"]["epochs"] - epoch - 1),
-                            "optimizer_updates": updates, "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated(device)}
+                            "optimizer_updates": updates, "peak_cuda_allocated_bytes": training_peak_bytes,
+                            "validation_peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated(device)}
                 write_json(folder / f"epochs/{epoch + 1:04d}.json", progress); write_json(folder / "progress.json", progress)
                 LOG.info("Epoch %d AP %.4f best %.4f ETA %.1f min", epoch + 1, score, best, progress["estimated_remaining_seconds"] / 60)
                 if bad >= c["training"]["patience"]: break
@@ -236,13 +279,22 @@ def train(c, on_training_device=False, resume=False):
             calibrate(c, folder, validation, pd.read_csv(r["root"] / "sites.csv"), ident)
             write_json(folder / "DONE.json", {"completed": utc_now(), "experiment_fingerprint": ident,
                                             "checkpoint_sha256": file_hash(folder / "best.pt"), "test_evaluated": False,
-                                            "artifacts": {name: file_hash(folder / name) for name in ["best.pt", "normalizer.json", "calibration.json", "config.json", "base_config.json", "bags.json", "run.json"]}})
+                                            "artifacts": {name: file_hash(folder / name) for name in ["best.pt", "normalizer.json", "calibration.json", "config.json", "base_config.json", "bags.json", "run.json", "precision.json", "warm_start.json"] if (folder / name).exists()}})
             return {"run": str(folder), "complete": True, "test_evaluated": False}
         except BaseException as e:
             message = str(e)
             if isinstance(e, torch.cuda.OutOfMemoryError): message += " Reduce explicit sequence/batch budgets in a NEW experiment; no samples or modules were silently removed."
             write_json(folder / "FAILURE.json", {"time": utc_now(), "type": type(e).__name__, "error": message,
                                                "last_completed_checkpoint": str(folder / "last.pt") if (folder / "last.pt").exists() else None})
+            if "model" in locals():
+                try:
+                    write_json(folder / "gradient_failure.json", {"epoch": epoch + 1 if "epoch" in locals() else None,
+                        "batch_indices": locals().get("last_batch_indices", []), "loss_components": locals().get("component_snapshot", {}),
+                        "source_window_ids": [training.records[i]["window_id"] for i in locals().get("last_batch_indices", [])] if "training" in locals() else [],
+                        "gradients": gradient_report(model), "precision": str(locals().get("amp_dtype")),
+                        "note": "No nonfinite gradients were clipped or used for an optimizer update"})
+                except (RuntimeError, OSError) as diagnostic_error:
+                    LOG.error("Gradient diagnostic failed after original %s: %s", type(e).__name__, diagnostic_error)
             if isinstance(e, (KeyboardInterrupt, SystemExit, ArtifactError, ConfigurationError, DataIntegrityError, TrainingError)): raise
             raise TrainingError(message) from e
 

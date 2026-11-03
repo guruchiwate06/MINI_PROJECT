@@ -66,7 +66,7 @@ export const ExperimentRegistryView: React.FC<ExperimentRegistryViewProps> = ({
             <option value="ALL">All Statuses ({experiments.length})</option>
             <option value="TEST_CLEAN">Test Evaluated (37)</option>
             <option value="BASELINE">Phase 1 Baselines (12)</option>
-            <option value="TRAINING_IN_PROGRESS">GPU Training (1)</option>
+            <option value="FAILED">Failed runs ({experiments.filter(e => e.status.includes('FAILED')).length})</option>
           </select>
         </div>
       </div>

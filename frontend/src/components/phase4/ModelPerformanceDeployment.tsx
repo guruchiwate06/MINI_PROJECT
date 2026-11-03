@@ -10,66 +10,19 @@ interface ModelPerformanceDeploymentProps {
   experiments: EvaluatedExperiment[];
 }
 
-export const ModelPerformanceDeployment: React.FC<ModelPerformanceDeploymentProps> = ({ experiments: _experiments }) => {
-  // Representative models for deployment comparison
-  const deploymentProfiles = [
-    {
-      id: 'fold1_cnn_s42',
-      name: '1D Dilated Vibration CNN',
-      tier: 'Ultra-Lightweight Edge Model',
-      size: '262 kB',
-      paramCount: '65.5K',
-      latency: '0.225 ms',
-      throughput: '4,451.9 win/s',
-      memory: '22 MB RAM',
-      device: 'CPU / Edge Micro-controller',
-      suitability: 'Onboard Real-Time Class 230 Bogie Monitor (<=1 ms budget)',
-      status: 'PRODUCTION_READY',
-      color: '#06b6d4'
-    },
-    {
-      id: 'fold1_tcn_s42',
-      name: 'Residual Dilated TCN',
-      tier: 'Balanced High-Capacity Neural Model',
-      size: '3.00 MB',
-      paramCount: '751K',
-      latency: '0.434 ms',
-      throughput: '2,304.7 win/s',
-      memory: '48 MB RAM',
-      device: 'CPU / Edge SBC',
-      suitability: 'Onboard Train Cab Server / Telemetry Gateway',
-      status: 'PRODUCTION_READY',
-      color: '#10b981'
-    },
-    {
-      id: 'fold1_rf_s42',
-      name: 'Random Forest (100 Trees)',
-      tier: 'Classical Statistical Baseline',
-      size: '35.2 MB',
-      paramCount: '100 Decision Trees',
-      latency: '0.263 ms',
-      throughput: '3,800.0 win/s',
-      memory: '120 MB RAM',
-      device: 'CPU Only',
-      suitability: 'Offline Quality Assurance & Historical Verification',
-      status: 'VERIFIED_BASELINE',
-      color: '#f59e0b'
-    },
-    {
-      id: 'track_ot_pp_fold1_full_s42',
-      name: 'TRACK-OT++ Multimodal Transformer',
-      tier: 'Heavyweight Research Architecture',
-      size: '39.8 MB',
-      paramCount: '4.8M',
-      latency: '2.083 ms',
-      throughput: '480.0 win/s',
-      memory: '4.95 GB VRAM (RTX 5070)',
-      device: 'NVIDIA RTX 5070 Laptop GPU',
-      suitability: 'Depot-Level Multimodal Vision-Vibration Offline Diagnostics',
-      status: 'TRAINING_IN_PROGRESS',
-      color: '#8b5cf6'
-    }
-  ];
+export const ModelPerformanceDeployment: React.FC<ModelPerformanceDeploymentProps> = ({ experiments }) => {
+  const ids = ['fold1_cnn_s42', 'fold1_tcn_s42', 'fold1_rf_s42', 'track_ot_pp_fold1_full_s42'];
+  const deploymentProfiles = ids.map(id => experiments.find(e => e.id === id))
+    .filter((e): e is EvaluatedExperiment => e !== undefined)
+    .map(e => ({
+      id: e.id, name: e.model_name, tier: 'Uploaded experiment record',
+      size: e.checkpoint_size_kb == null ? 'Unreported' : `${(e.checkpoint_size_kb / 1024).toFixed(2)} MB`,
+      latency: e.latency_ms == null ? 'Unmeasured' : `${e.latency_ms.toFixed(3)} ms`,
+      throughput: e.throughput_windows_sec == null ? 'Unmeasured' : `${e.throughput_windows_sec.toFixed(1)} win/s`,
+      memory: 'Training peak unverified', device: e.device,
+      suitability: 'Research evaluation; deployment readiness has not been established',
+      status: e.status, color: e.method === 'track_ot_pp' ? '#8b5cf6' : '#06b6d4'
+    }));
 
   return (
     <div className="space-y-4 font-mono text-xs">
@@ -81,16 +34,15 @@ export const ModelPerformanceDeployment: React.FC<ModelPerformanceDeploymentProp
             <h2 className="text-sm font-bold text-white uppercase tracking-wider">
               Model Performance, Latency & Edge Deployment Feasibility
             </h2>
-            <DataIntegrityBadge type="MEASURED" size="sm" />
+            <DataIntegrityBadge type="ML_PREDICTION" size="sm" />
           </div>
           <span className="text-[11px] text-railway-muted bg-railway-darkest/80 px-2.5 py-1 rounded border border-railway-border/60">
-            Hardware: NVIDIA RTX 5070 Laptop GPU + Intel Core Ultra
+            Hardware: per-run uploaded metadata
           </span>
         </div>
         <p className="text-[11px] text-railway-muted font-sans max-w-4xl">
-          Empirical hardware profiling on the actual deployment environment. At a 2,000 Hz vibration sampling rate with 1.0-second
-          windows and 500 ms stride, the rolling stock inference budget is <b>&le; 500 ms per window</b>. All evaluated neural and
-          classical vibration models operate well under <b>0.5 ms</b>, executing 1,000&times; faster than real-time data arrival.
+          Values below come from the uploaded experiment registry. Missing values remain unmeasured.
+          Validation scores and failed training attempts do not establish test performance or production readiness.
         </p>
       </div>
 
@@ -154,34 +106,12 @@ export const ModelPerformanceDeployment: React.FC<ModelPerformanceDeploymentProp
         ))}
       </div>
 
-      {/* Hardware Environment Specifications */}
-      <div className="p-4 rounded-xl bg-railway-surface/40 border border-railway-border/80 backdrop-blur space-y-3">
-        <div className="flex items-center gap-2">
-          <Server className="h-4 w-4 text-hud-amber" />
-          <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-            Audited Experimental Compute Hardware Specifications
-          </h3>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div className="p-3 rounded-lg bg-railway-darkest/70 border border-railway-border/50 space-y-1">
-            <span className="text-[10px] text-railway-muted font-bold block">GPU ACCELERATOR</span>
-            <span className="text-sm font-bold text-white">NVIDIA RTX 5070 Laptop GPU</span>
-            <span className="text-[10px] text-railway-muted block">12 GB VRAM • CUDA 12.8 • PyTorch 2.12 nightly</span>
-          </div>
-
-          <div className="p-3 rounded-lg bg-railway-darkest/70 border border-railway-border/50 space-y-1">
-            <span className="text-[10px] text-railway-muted font-bold block">CPU HOST</span>
-            <span className="text-sm font-bold text-white">Intel Core Ultra Architecture</span>
-            <span className="text-[10px] text-railway-muted block">16 Threads • AVX-512 / MKL Vector Acceleration</span>
-          </div>
-
-          <div className="p-3 rounded-lg bg-railway-darkest/70 border border-railway-border/50 space-y-1">
-            <span className="text-[10px] text-railway-muted font-bold block">SYSTEM MEMORY</span>
-            <span className="text-sm font-bold text-white">32.0 GB LPDDR5X RAM</span>
-            <span className="text-[10px] text-railway-muted block">Zero swapping observed during 2 kHz batch streaming</span>
-          </div>
-        </div>
+      <div className="p-4 rounded-xl bg-railway-surface/40 border border-railway-border/80">
+        <Server className="h-4 w-4 text-hud-amber" />
+        <p className="text-[11px] text-railway-muted mt-2">
+          GPU allocation is not GPU utilization. Use the recovery profiler to measure loader, forward,
+          auxiliary-loss and backward costs on the training device.
+        </p>
       </div>
     </div>
   );

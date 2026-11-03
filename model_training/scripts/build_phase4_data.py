@@ -8,6 +8,48 @@ import csv
 from pathlib import Path
 import numpy as np
 
+def track_ot_registry_entry(project_root):
+    """Separate validation logs from test measurements; never supply defaults as scores."""
+    folder = Path(project_root) / 'model_training/artifacts/track_ot/track_ot_pp_fold1_full_s42'
+    def read(name):
+        file = folder / name
+        return json.loads(file.read_text(encoding='utf-8')) if file.exists() else {}
+    run, environment = read('run.json'), read('environment.json')
+    logs = sorted((folder / 'epochs').glob('[0-9][0-9][0-9][0-9].json'))
+    epoch = json.loads(logs[-1].read_text(encoding='utf-8')) if logs else {}
+    complete = bool(read('DONE.json'))
+    tested = complete and (folder / 'evaluations/test_clean/READY.json').exists()
+    metrics = read('evaluations/test_clean/metrics.json') if tested else {}
+    failure = read('FAILURE.json') if not complete else {}
+    validation = next((row for row in run.get('split', {}).get('summary', []) if row['partition'] == 'validation'), {})
+    test = next((row for row in run.get('split', {}).get('summary', []) if row['partition'] == 'test'), {})
+    calibration = read('calibration.json') if complete else {}
+    status = 'TEST_EVALUATED' if tested else ('FAILED_NUMERICAL_GRADIENT' if failure else ('VALIDATION_ONLY_TRAINING_COMPLETE' if complete else 'INCOMPLETE_VALIDATION_ONLY'))
+    entry = {
+        'id': 'track_ot_pp_fold1_full_s42', 'model_name': 'TRACK-OT++ Multimodal', 'method': 'track_ot_pp',
+        'architecture': 'Multimodal Optimal Transport Transformer (192-dim, 6-head, 3-layer, Patch-Pooling)',
+        'fold': 'fold1', 'seed': 42, 'split_strategy': 'Spatial_Holdout + Run_Holdout (Sites [1,2,3] Test; Site [4] Val)',
+        'test_sites': [1,2,3], 'val_sites': [4], 'train_sites': [5,6,7,8,9], 'dataset_version': 'Rail-VIVID',
+        'observations': metrics.get('observations', validation.get('supervised', 0)),
+        'positives': metrics.get('positive', validation.get('positives', 0)),
+        'planned_test_observations': test.get('rows'), 'metric_partition': 'test' if tested else 'validation',
+        'validation_ap': epoch.get('validation_ap'), 'validation_epoch': epoch.get('epoch'),
+        'test_ap': str(metrics['average_precision']) if tested else 'UNAVAILABLE',
+        'calibrated_threshold': calibration.get('threshold'), 'test_threshold_used': calibration.get('threshold') if tested else None,
+        'threshold_source': 'validation calibration' if complete else 'not calibrated',
+        'checkpoint_size_kb': None, 'throughput_windows_sec': metrics.get('inference', {}).get('windows_per_second'),
+        'latency_ms': None, 'device': environment.get('gpu', 'not reported'), 'status': status, 'provenance': 'ML_PREDICTION',
+        'training_notes': f"Last completed epoch: {epoch.get('epoch', 0)}. " + (failure.get('error', '') if failure else 'Test results require a separate frozen evaluation.')
+    }
+    for key in ['accuracy','precision','recall','specificity','f1','roc_auc','average_precision','balanced_accuracy','mcc','ece']:
+        entry[key] = metrics.get(key)
+    entry['brier_score'] = metrics.get('brier')
+    for key in ['event_recall','false_alarms_per_km','localization_mae_m']: entry[key] = metrics.get('events', {}).get(key)
+    confusion = metrics.get('confusion_matrix')
+    entry.update(dict(zip(['tn','fp','fn','tp'], [confusion[0][0],confusion[0][1],confusion[1][0],confusion[1][1]] if confusion else ['PENDING_TEST_RUN']*4)))
+    return entry
+
+
 def compute_metrics_at_threshold(y_true, y_prob, threshold):
     y_pred = (y_prob >= threshold).astype(int)
     tp = int(np.sum((y_true == 1) & (y_pred == 1)))
@@ -230,64 +272,12 @@ def main():
             }
             all_experiments.append(entry)
             
-    # 3. Add TRACK-OT++ entry (Ongoing Training / Validation Checkpoint)
-    track_ot_epoch1 = project_root / "model_training" / "artifacts" / "track_ot" / "track_ot_pp_fold1_full_s42" / "epochs" / "0001.json"
-    track_ot_val_ap = 0.7916
-    if track_ot_epoch1.exists():
-        with open(track_ot_epoch1, "r") as f:
-            tdata = json.load(f)
-            track_ot_val_ap = round(tdata.get("validation_ap", 0.7916), 4)
-            
-    track_ot_entry = {
-        "id": "track_ot_pp_fold1_full_s42",
-        "model_name": "TRACK-OT++ Multimodal",
-        "method": "track_ot_pp",
-        "architecture": "Multimodal Optimal Transport Transformer (192-dim, 6-head, 3-layer, Patch-Pooling)",
-        "fold": "fold1",
-        "seed": 42,
-        "split_strategy": "Spatial_Holdout (Sites [1,2,3] Test, Site [4] Val, Sites [5,6,7,8,9] Train)",
-        "test_sites": [1, 2, 3],
-        "val_sites": [4],
-        "train_sites": [5, 6, 7, 8, 9],
-        "dataset_version": "Rail-VIVID v1.0",
-        "observations": 680,
-        "positives": 57,
-        "tp": "PENDING_TEST_RUN",
-        "fp": "PENDING_TEST_RUN",
-        "tn": "PENDING_TEST_RUN",
-        "fn": "PENDING_TEST_RUN",
-        "accuracy": None,
-        "precision": None,
-        "recall": None,
-        "specificity": None,
-        "f1": None,
-        "roc_auc": None,
-        "average_precision": track_ot_val_ap, # Note: Clearly flagged as validation AP
-        "validation_ap": track_ot_val_ap,
-        "test_ap": "UNAVAILABLE (Training Epoch 2 in progress on RTX 5070 GPU)",
-        "balanced_accuracy": None,
-        "mcc": None,
-        "calibrated_threshold": 0.50,
-        "test_threshold_used": None,
-        "threshold_source": "Validation Calibration In Progress",
-        "brier_score": 0.1458,
-        "ece": None,
-        "event_recall": None,
-        "false_alarms_per_km": None,
-        "localization_mae_m": None,
-        "checkpoint_size_kb": 39770,
-        "throughput_windows_sec": 480.0,
-        "latency_ms": 2.083,
-        "device": "cuda:0 (NVIDIA RTX 5070 Laptop GPU)",
-        "status": "TRAINING_IN_PROGRESS_VALIDATION_ONLY",
-        "provenance": "MEASURED_MODEL_EVALUATION",
-        "training_notes": "Epoch 1 completed with Validation AP 0.7916. Epoch 2 actively training on local RTX 5070 GPU. Test partition strictly held out and untouched."
-    }
-    all_experiments.append(track_ot_entry)
+    # Validation logs never enter the generic test AP/calibration fields.
+    all_experiments.append(track_ot_registry_entry(project_root))
     
     # Write complete experiment registry
     reg_path = output_dir / "experiment_registry.json"
-    with open(reg_path, "w") as f:
+    with open(reg_path, "w", newline="\n") as f:
         json.dump(all_experiments, f, indent=2)
     print(f"Wrote {len(all_experiments)} experiments to {reg_path}")
     

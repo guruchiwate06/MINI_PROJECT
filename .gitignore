@@ -30,6 +30,9 @@ data/cached_window_features.csv
 model_training/artifacts/railvivid_v1/runs/
 model_training/artifacts/railvivid_v1/vision/
 model_training/artifacts/track_ot/**/bags.json
+model_training/artifacts/recovery_code_validation_*/
+model_training/artifacts/recovery_preflight_*/
+model_training/artifacts/**/*_trace.json
 *.lock
 *.npy
 *.pt

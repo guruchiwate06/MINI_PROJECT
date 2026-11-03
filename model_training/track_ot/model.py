@@ -7,7 +7,7 @@ from torch.nn import functional as F
 
 from railvivid.errors import DataIntegrityError
 from railvivid.models import TemporalEncoder
-from .transport import crossing_penalty, reject_transport, transport_summary, unbalanced_transport, unbalanced_objective
+from .transport import crossing_penalty, reject_transport, transport_summary, unbalanced_transport_batch, unbalanced_objective
 
 
 class SensorSpectrumEncoder(nn.Module):
@@ -97,6 +97,28 @@ class TrackOTPlus(nn.Module):
     def forward(self, batch):
         return self.details(batch)["anchor_logit"]
 
+    def contextual_images(self, base, positions, image_mask, quality):
+        safe = image_mask.clone(); safe[~image_mask.any(1), 0] = True
+        z = base
+        if self.cfg["encoder"]["position_features"]:
+            z = z + self.position(positions[:, :, None] / self.cfg["sequence"]["position_scale_m"])
+        return self.image_context(z, src_key_padding_mask=~safe) * self.quality_gate(quality)
+
+    def drift_from_cached(self, batch, output, positions):
+        """Only image context + warp; never recompute waveform/FFT/OT/heads."""
+        z = self.contextual_images(output["image_base"], positions, batch["vision_mask"], batch["quality"])
+        curves = []
+        with torch.autocast(device_type=z.device.type, enabled=False):
+            for i in range(len(z)):
+                mask = batch["vision_mask"][i]
+                curve = positions[i].float() * 0
+                if mask.any() and batch["vibration_present"][i]:
+                    ip = positions[i, mask].float()
+                    vi = output["wave_features"][i, batch["wave_mask"][i]].float().mean(0)
+                    curve = curve.masked_scatter(mask, self.warp(ip, z[i, mask].float(), vi) - ip)
+                curves.append(curve)
+        return torch.stack(curves)
+
     def details(self, batch):
         waveform, mask = batch["waveform"], batch["wave_mask"]
         images, image_mask = batch["vision"], batch["vision_mask"]
@@ -112,26 +134,45 @@ class TrackOTPlus(nn.Module):
         v = self.wave_encoder(waveform)
         if self.cfg["encoder"]["position_features"]: v = v + self.position(batch["wave_positions"][:, :, None] / scale)
         v = self.wave_context(v, src_key_padding_mask=~mask)
-        safe_image_mask = image_mask.clone(); safe_image_mask[~image_mask.any(1), 0] = True
         z = self.image_projection(images)
         if self.cfg["encoder"]["patch_pooling"]:
             patch = self.image_projection(batch["vision_patches"])
             weights = self.patch_attention(patch).float().softmax(-2).to(patch.dtype)
             z = z + (weights * patch).sum(-2)
-        if self.cfg["encoder"]["position_features"]: z = z + self.position(batch["image_positions"][:, :, None] / scale)
-        z = self.image_context(z, src_key_padding_mask=~safe_image_mask)
-        quality = self.quality_gate(batch["quality"])
-        z = z * quality
+        image_base = z
+        z = self.contextual_images(image_base, batch["image_positions"], image_mask, batch["quality"])
         b, n, d = v.shape
         aligned, masses, entropies, drift_curves, penalties, residuals, locations, variances, plans, objectives = [], [], [], [], [], [], [], [], [], []
         settings = self.cfg["transport"]
+        specs, cost_batch, feasible_batch = [], [], []
+        with torch.autocast(device_type=v.device.type, enabled=False):
+            for i in range(b):
+                vi, zi = v[i, mask[i]].float(), z[i, image_mask[i]].float()
+                wp, ip = batch["wave_positions"][i, mask[i]].float(), batch["image_positions"][i, image_mask[i]].float()
+                if (wp[1:] < wp[:-1]).any(): raise DataIntegrityError("Waveform positions are not in canonical track order")
+                available = bool(batch["vibration_present"][i]) and len(zi) > 0
+                corrected = self.warp(ip, zi, vi.mean(0)) if available and settings["learn_drift"] else ip
+                position_cost = 0.5 * ((wp[:, None] - corrected[None]) / settings["position_sigma_m"]).square()
+                cost = settings["feature_weight"] * (1 - F.normalize(vi, dim=-1, eps=1e-6) @ F.normalize(zi, dim=-1, eps=1e-6).T)
+                if settings["geometry"]: cost = cost + settings["position_weight"] * position_cost
+                allowed = (wp[:, None] - ip[None]).abs() <= settings["physical_band_m"]
+                if not settings["physical_mask"]: allowed = torch.ones_like(allowed)
+                if not available: allowed = torch.zeros_like(allowed)
+                specs.append((corrected, cost, position_cost, allowed, available))
+                wi, ii = torch.where(mask[i])[0], torch.where(image_mask[i])[0]
+                indices = (wi[:, None].expand(-1, len(ii)), ii[None].expand(len(wi), -1))
+                cost_batch.append(cost.new_zeros((n, images.shape[1])).index_put(indices, cost))
+                feasible_batch.append(torch.zeros((n, images.shape[1]), dtype=torch.bool, device=cost.device).index_put(indices, allowed))
+        batched_plan = batched_residual = None; solver_steps = 0
+        if settings["matching"] == "transport" and settings["solver"] == "unbalanced":
+            with torch.profiler.record_function("track_ot/batched_transport"):
+                batched_plan, batched_residual, solver_steps = unbalanced_transport_batch(torch.stack(cost_batch), torch.stack(feasible_batch), mask, image_mask,
+                    settings["epsilon"], settings["iterations"], settings["tolerance"], settings["marginal_penalty"])
         for i in range(b):
             wvalid, ivalid = mask[i], image_mask[i]
             vi, zi = v[i, wvalid], z[i, ivalid]
             wp, ip = batch["wave_positions"][i, wvalid].float(), batch["image_positions"][i, ivalid].float()
-            if (wp[1:] < wp[:-1]).any(): raise DataIntegrityError("Waveform positions are not in canonical track order")
-            available = bool(batch["vibration_present"][i]) and len(zi) > 0
-            corrected = self.warp(ip, zi, vi.mean(0)) if available and settings["learn_drift"] else ip
+            corrected, cost, position_cost, allowed, available = specs[i]
             drift = corrected - ip
             aligned_i = v.new_zeros((n, d)); mass_i = v.new_zeros(n, dtype=torch.float32); entropy_i = mass_i.clone()
             loc_i, var_i = mass_i.clone(), mass_i.clone()
@@ -140,17 +181,10 @@ class TrackOTPlus(nn.Module):
             padded_plan = mass_i.new_zeros((n, images.shape[1])); ot_objective = zero
             if len(zi) and settings["matching"] != "vibration":
                 with torch.autocast(device_type=v.device.type, enabled=False):
-                    difference = wp[:, None] - corrected[None]
-                    feature_cost = 1 - F.normalize(vi.float(), dim=-1) @ F.normalize(zi.float(), dim=-1).T
-                    position_cost = 0.5 * (difference / settings["position_sigma_m"]).square()
-                    cost = settings["feature_weight"] * feature_cost
-                    if settings["geometry"]: cost = cost + settings["position_weight"] * position_cost
                     if settings["matching"] == "transport" and available:
                         # The nominal band preserves the original source envelope even as drift is learned.
-                        allowed = (wp[:, None] - ip[None]).abs() <= settings["physical_band_m"]
-                        if not settings["physical_mask"]: allowed = torch.ones_like(allowed)
                         if settings["solver"] == "unbalanced":
-                            plan, residual = unbalanced_transport(cost, allowed, settings["epsilon"], settings["iterations"], settings["tolerance"], settings["marginal_penalty"])
+                            plan = batched_plan[i, wvalid][:, ivalid]; residual = batched_residual[i]
                             ot_objective = unbalanced_objective(plan, cost, settings["epsilon"], settings["marginal_penalty"])
                         else:
                             plan, residual = reject_transport(cost, allowed, settings["epsilon"], settings["iterations"], settings["tolerance"], settings["reject_cost"])
@@ -191,8 +225,9 @@ class TrackOTPlus(nn.Module):
         return {"anchor_logit": instance.gather(1, idx).squeeze(1), "instance_logits": instance,
                 "bag_logit": mil_pool(instance, mask, self.cfg["loss"]["top_fraction"]),
                 "vibration_logits": vib_logits, "vision_logits": vis_logits,
-                "embedding": F.normalize(self.recurrence_projection(pooled), dim=-1),
+                "embedding": F.normalize(self.recurrence_projection(pooled).float(), dim=-1, eps=1e-6),
                 "drift_m": torch.stack(drift_curves), "crossing": torch.stack(penalties),
                 "solver_residual": torch.stack(residuals), "match_mass": mass, "plans": torch.stack(plans),
                 "transport_objective": torch.stack(objectives), "image_features": z,
+                "image_base": image_base, "wave_features": v, "solver_iterations": solver_steps,
                 "correspondence_position_m": torch.stack(locations), "correspondence_variance_m2": torch.stack(variances)}

@@ -1,5 +1,7 @@
 # TRACK-OT++: complete experimental pipeline on Rail-VIVID
 
+Update after the first GPU pilot: read [RECOVERY.md](RECOVERY.md) before another full run. The uploaded attempt failed after epoch one. Recovery adds batched/early-stopped UOT, selected-patch I/O, cached-feature equivariance, explicit precision and training-free profiling. Test evaluation remains a separate decision.
+
 This implementation keeps **Rail-VIVID as the only dataset**. It does not modify raw files, add another railway dataset, invent annotations, or replace the original evaluation labels. Training is explicit, CUDA-only, and has not been run on the development laptop. Publication quality and benchmark improvements remain experimental questions.
 
 Start from `model_training`, using Python 3.11 or newer and a CUDA-enabled PyTorch build suitable for the training GPU. Install the project and its vision/alignment extras in that environment. Do not install a CPU-only Torch wheel over the GPU environment.

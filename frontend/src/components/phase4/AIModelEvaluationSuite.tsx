@@ -38,6 +38,7 @@ export const AIModelEvaluationSuite: React.FC<AIModelEvaluationSuiteProps> = ({
   const [siteMetrics, setSiteMetrics] = useState<SiteHoldoutMetric[]>([]);
   const [explorerData, setExplorerData] = useState<Record<string, ThresholdExplorerModel>>({});
   const [selectedExperimentId, setSelectedExperimentId] = useState<string>('fold1_cnn_s42');
+  const trackPilot = experiments.find(e => e.id === 'track_ot_pp_fold1_full_s42');
 
   // Fetch compiled Phase 4 experiment datasets
   useEffect(() => {
@@ -112,13 +113,13 @@ export const AIModelEvaluationSuite: React.FC<AIModelEvaluationSuiteProps> = ({
         <div className="p-3.5 rounded-xl bg-railway-surface/60 border border-railway-border/80 backdrop-blur space-y-1 col-span-2 sm:col-span-4 md:col-span-1">
           <span className="text-[10px] text-railway-muted uppercase block">TRACK-OT++ Status</span>
           <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold text-amber-400">0.7916 AP</span>
+            <span className="text-lg font-bold text-amber-400">{trackPilot?.validation_ap?.toFixed(4) ?? 'Unreported'} AP</span>
             <span className="text-[9px] px-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
               VAL ONLY
             </span>
           </div>
           <span className="text-[10px] text-railway-muted block truncate" title="Epoch 1 Completed on RTX 5070 GPU">
-            Epoch 1 Val • Epoch 2 Halted
+            {trackPilot?.status.replace(/_/g, ' ') ?? 'Awaiting uploaded status'}
           </span>
         </div>
       </div>

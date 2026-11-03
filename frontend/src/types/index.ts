@@ -239,11 +239,12 @@ export interface EvaluatedExperiment {
   f1: number | null;
   roc_auc: number | null;
   average_precision: number | null;
-  validation_ap?: number;
+  validation_ap?: number | null;
+  validation_epoch?: number;
   test_ap?: string;
   balanced_accuracy: number | null;
   mcc: number | null;
-  calibrated_threshold: number;
+  calibrated_threshold: number | null;
   test_threshold_used: number | null;
   threshold_source: string;
   brier_score: number | null;
@@ -251,9 +252,9 @@ export interface EvaluatedExperiment {
   event_recall: number | null;
   false_alarms_per_km: number | null;
   localization_mae_m: number | null;
-  checkpoint_size_kb: number;
-  throughput_windows_sec: number;
-  latency_ms: number;
+  checkpoint_size_kb: number | null;
+  throughput_windows_sec: number | null;
+  latency_ms: number | null;
   device: string;
   status: string;
   provenance: DataIntegrityClassification;

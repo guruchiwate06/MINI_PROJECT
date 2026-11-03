@@ -1,58 +1,57 @@
-"""Automated training pipeline: seamlessly waits for vision extraction and executes full GPU training."""
+"""Explicit recovery launcher. Never evaluates the held-out test partition."""
 from __future__ import annotations
+import argparse
+import subprocess
 import sys
 import time
-import subprocess
 from pathlib import Path
 
-def log(msg: str):
-    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {msg}", flush=True)
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--config', default='configs/track_ot_recovery_fp32.json')
+    parser.add_argument('--on-training-device', action='store_true')
+    parser.add_argument('--warm-start')
+    parser.add_argument('--wait-minutes', type=float, default=30)
+    args = parser.parse_args(argv)
+    if not args.on_training_device:
+        print('Recovery requires --on-training-device on the GPU computer. Nothing was started.', file=sys.stderr)
+        return 2
+    if args.wait_minutes < 0:
+        parser.error('--wait-minutes cannot be negative')
     root = Path(__file__).resolve().parent.parent
-    python_exe = sys.executable
-    vision_cache_dir = root / "artifacts" / "railvivid_v1" / "vision" / "278cf8c9dd03df3b88ae"
-    ready_file = vision_cache_dir / "READY.json"
+    sys.path.insert(0, str(root))
+    from track_ot.config import load_config
+    from railvivid.common import read_json
+    from railvivid.vision import vision_path
+    config = (root / args.config).resolve()
+    c = load_config(config)
+    cache = vision_path(c['_base'])
+    deadline = time.monotonic() + args.wait_minutes * 60
+    while not (cache / 'READY.json').exists():
+        if (cache / 'FAILURE.json').exists():
+            raise RuntimeError('Vision extraction failed; recovery training was not started')
+        if time.monotonic() >= deadline:
+            raise RuntimeError('Timed out waiting for the verified vision cache')
+        time.sleep(min(20, max(deadline - time.monotonic(), 0.01)))
+    output = root / 'artifacts' / ('recovery_preflight_' + time.strftime('%Y%m%d_%H%M%S'))
+    command = [sys.executable, '-m', 'track_ot', 'diagnose', '--config', str(config), '--device', 'cuda',
+               '--precisions', 'float32', '--batches', '4', '--component-gradients', '--output', str(output)]
+    if args.warm_start:
+        command += ['--from-run', str((root / args.warm_start).resolve())]
+    check = subprocess.run(command, cwd=root)
+    if check.returncode:
+        return check.returncode
+    report = read_json(output / 'diagnostics.json')
+    if not report['precision_runs'] or not all(r.get('all_finite', False) for r in report['precision_runs']):
+        raise RuntimeError('Preflight gradients were not finite; no optimizer was started')
+    command = [sys.executable, '-m', 'track_ot', 'train', '--config', str(config), '--on-training-device']
+    if args.warm_start:
+        command += ['--warm-start', str((root / args.warm_start).resolve())]
+    result = subprocess.run(command, cwd=root)
+    print('Training stage ended. Test evaluation remains a separate, explicit command after model selection is frozen.')
+    return result.returncode
 
-    log(f"Auto-train orchestrator started. Python: {python_exe}")
-    log(f"Monitoring vision cache READY at: {ready_file}")
 
-    while not ready_file.exists():
-        # Check if INCOMPLETE or failure happened
-        fail_file = vision_cache_dir / "FAILURE.json"
-        if fail_file.exists():
-            log(f"FATAL: Vision cache failure detected: {fail_file.read_text()}")
-            sys.exit(1)
-        time.sleep(20)
-
-    log("SUCCESS: Vision cache READY.json confirmed!")
-    time.sleep(3)
-
-    # 1. Doctor check
-    log("STAGE 1/5: Running track_ot doctor...")
-    subprocess.run([python_exe, "-m", "track_ot", "doctor", "--config", "configs/track_ot_plus_plus.json"], cwd=root, check=True)
-
-    # 2. Main TRACK-OT++ training (Pilot)
-    log("STAGE 2/3: Launching TRACK-OT++ Model Training on RTX 5070 GPU (--on-training-device)...")
-    res = subprocess.run([python_exe, "-m", "track_ot", "train", "--config", "configs/track_ot_plus_plus.json", "--on-training-device"], cwd=root)
-    if res.returncode != 0:
-        log(f"Training failed with code {res.returncode}")
-        sys.exit(res.returncode)
-    log("STAGE 2/3: TRACK-OT++ model training finished successfully!")
-
-    # 3. Model Evaluation on Test Partition
-    log("STAGE 3/3: Running Test Evaluation on GPU...")
-    res_eval = subprocess.run([python_exe, "-m", "track_ot", "evaluate", "--config", "configs/track_ot_plus_plus.json", "--partition", "test", "--device", "cuda"], cwd=root)
-    if res_eval.returncode != 0:
-        log(f"Evaluation failed with code {res_eval.returncode}")
-        sys.exit(res_eval.returncode)
-
-    log("ALL DONE! TRACK-OT++ is fully trained, evaluated, and checkpointed on GPU.")
-
-    # 4. Results ready for user review (Auto-publish disabled per audit protocol)
-    log("STAGE 4: Milestone 1 training and evaluation complete. Results preserved in model_training/artifacts/track_ot/.")
-    log("Awaiting user review. Automatic remote publishing is disabled.")
-
-if __name__ == "__main__":
-    main()
-
+if __name__ == '__main__':
+    raise SystemExit(main())

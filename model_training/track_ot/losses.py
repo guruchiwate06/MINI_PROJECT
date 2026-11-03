@@ -31,11 +31,17 @@ def recurrence_loss(output, partner, batch, cfg):
     allowed = negatives | torch.eye(len(a), dtype=torch.bool, device=a.device)
     usable = negatives.any(1)
     if not usable.any(): return a.sum() * 0
-    similarity = (a.float() @ b.float().T) / cfg["loss"]["recurrence_temperature"]
-    return F.cross_entropy(similarity.masked_fill(~allowed, float("-inf"))[usable], torch.arange(len(a), device=a.device)[usable])
+    with torch.autocast(device_type=a.device.type, enabled=False):
+        similarity = (a.float() @ b.float().T) / cfg["loss"]["recurrence_temperature"]
+        return F.cross_entropy(similarity.masked_fill(~allowed, float("-inf"))[usable], torch.arange(len(a), device=a.device)[usable])
 
 
 def cross_run_cycle(output, partner, batch, cfg):
+    with torch.autocast(device_type=output["embedding"].device.type, enabled=False):
+        return _cross_run_cycle(output, partner, batch, cfg)
+
+
+def _cross_run_cycle(output, partner, batch, cfg):
     """A-wave -> A-image -> B-image -> B-wave, compared with spatial support.
 
     Geometry here uses only training-run metadata. No held-out targets or IDs
@@ -51,8 +57,8 @@ def cross_run_cycle(output, partner, batch, cfg):
         pa = output["plans"][i][wa][:, va].float()
         pb = partner["plans"][i][wb][:, vb].float()
         if pa.sum() < 1e-6 or pb.sum() < 1e-6: continue
-        za = F.normalize(output["image_features"][i, va].float(), dim=-1)
-        zb = F.normalize(partner["image_features"][i, vb].float(), dim=-1)
+        za = F.normalize(output["image_features"][i, va].float(), dim=-1, eps=1e-6)
+        zb = F.normalize(partner["image_features"][i, vb].float(), dim=-1, eps=1e-6)
         offset = (batch["partner_anchor_chainage"][i] - batch["anchor_chainage"][i]).float()
         xa = batch["image_positions"][i, va].float() + output["drift_m"][i, va]
         xb = batch["partner_image_positions"][i, vb].float() + partner["drift_m"][i, vb] + offset
@@ -74,7 +80,7 @@ def cross_run_cycle(output, partner, batch, cfg):
     return torch.stack(terms).mean() if terms else output["embedding"].sum() * 0
 
 
-def objective(model, output, batch, cfg, pos_weight):
+def objective(model, output, batch, cfg, pos_weight, tensor_terms=False):
     settings = cfg["loss"]
     terms = {"supervised": supervised(output["instance_logits"], batch, cfg, pos_weight)}
     vmask = batch["vibration_present"]
@@ -90,13 +96,15 @@ def objective(model, output, batch, cfg, pos_weight):
     terms["equivariance"] = zero
     if settings["equivariance_weight"] and cfg["transport"]["learn_drift"] and image_mask.any():
         shifts = torch.empty(len(image_mask), 1, device=image_mask.device).uniform_(-settings["synthetic_shift_m"], settings["synthetic_shift_m"])
-        altered = dict(batch); altered["image_positions"] = batch["image_positions"] + shifts * image_mask
+        altered_positions = batch["image_positions"] + shifts * image_mask
         # Same dropout masks isolate the effect of the synthetic metadata shift.
         rng = torch.get_rng_state(); cuda_rng = torch.cuda.get_rng_state_all() if image_mask.is_cuda else None
-        reference = model.details(batch)["drift_m"].detach()
+        with torch.no_grad(), torch.profiler.record_function("track_ot/equivariance_reference"):
+            reference = model.drift_from_cached(batch, output, batch["image_positions"])
         torch.set_rng_state(rng)
         if cuda_rng is not None: torch.cuda.set_rng_state_all(cuda_rng)
-        changed = model.details(altered)["drift_m"]
+        with torch.profiler.record_function("track_ot/equivariance_shifted"):
+            changed = model.drift_from_cached(batch, output, altered_positions)
         valid = image_mask & batch["vibration_present"][:, None]
         if valid.any():
             residual = changed - reference + shifts
@@ -104,9 +112,11 @@ def objective(model, output, batch, cfg, pos_weight):
     terms["recurrence"] = zero; terms["cycle"] = zero
     if (settings["recurrence_weight"] or settings["cycle_weight"]) and batch.get("partner_available", torch.tensor(False)).any():
         partner_batch = {k[len("partner_"):]: v for k, v in batch.items() if k.startswith("partner_") and k != "partner_available"}
-        partner = model.details(partner_batch)
+        with torch.profiler.record_function("track_ot/partner_forward"):
+            partner = model.details(partner_batch)
         terms["recurrence"] = recurrence_loss(output, partner, batch, cfg)
-        terms["cycle"] = cross_run_cycle(output, partner, batch, cfg) if settings["cycle_weight"] else zero
+        with torch.profiler.record_function("track_ot/cross_run_cycle"):
+            terms["cycle"] = cross_run_cycle(output, partner, batch, cfg) if settings["cycle_weight"] else zero
     terms["brier"] = zero
     known = batch["bag_label"] >= 0
     if known.any(): terms["brier"] = (output["bag_logit"][known].float().sigmoid() - batch["bag_label"][known]).square().mean()
@@ -116,4 +126,4 @@ def objective(model, output, batch, cfg, pos_weight):
                "cycle": settings["cycle_weight"], "brier": settings["brier_weight"]}
     total = sum(weights[k] * value for k, value in terms.items())
     if not torch.isfinite(total): raise DataIntegrityError("Nonfinite TRACK-OT objective")
-    return total, {k: float(v.detach()) for k, v in terms.items()}
+    return total, ({k: weights[k] * v for k, v in terms.items()} if tensor_terms else {k: float(v.detach()) for k, v in terms.items()})

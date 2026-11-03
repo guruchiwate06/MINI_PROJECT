@@ -198,7 +198,7 @@ export const ModelLeaderboard: React.FC<ModelLeaderboardProps> = ({
             <tbody className="divide-y divide-railway-border/40">
               {sortedExperiments.map((exp, idx) => {
                 const isSelected = exp.id === selectedExperimentId;
-                const isOngoingTrackOT = exp.id.includes('track_ot');
+                const isOngoingTrackOT = exp.id.includes('track_ot') && exp.average_precision == null;
                 const isBaseline = exp.status.includes('BASELINE');
 
                 return (
@@ -235,7 +235,7 @@ export const ModelLeaderboard: React.FC<ModelLeaderboardProps> = ({
                         {exp.architecture}
                       </span>
                       <span className="text-[9px] text-railway-muted">
-                        Size: {exp.checkpoint_size_kb > 1024 ? `${(exp.checkpoint_size_kb / 1024).toFixed(1)} MB` : `${exp.checkpoint_size_kb} kB`}
+                        Size: {exp.checkpoint_size_kb == null ? 'unreported' : exp.checkpoint_size_kb > 1024 ? `${(exp.checkpoint_size_kb / 1024).toFixed(1)} MB` : `${exp.checkpoint_size_kb} kB`}
                       </span>
                     </td>
 
@@ -261,8 +261,8 @@ export const ModelLeaderboard: React.FC<ModelLeaderboardProps> = ({
                     <td className="py-2.5 px-3 text-right">
                       {isOngoingTrackOT ? (
                         <div className="flex flex-col items-end">
-                          <span className="text-amber-400 font-bold text-xs">{exp.average_precision?.toFixed(4)}</span>
-                          <span className="text-[9px] text-amber-300/80 font-sans">Val AP (Ep 1)</span>
+                          <span className="text-amber-400 font-bold text-xs">{exp.validation_ap?.toFixed(4) ?? 'unreported'}</span>
+                          <span className="text-[9px] text-amber-300/80 font-sans">Validation AP (epoch {exp.validation_epoch ?? '?'})</span>
                         </div>
                       ) : exp.average_precision !== null ? (
                         <span
@@ -328,7 +328,7 @@ export const ModelLeaderboard: React.FC<ModelLeaderboardProps> = ({
                     <td className="py-2.5 px-3.5 text-right whitespace-nowrap">
                       {isOngoingTrackOT ? (
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                          VALIDATION ONLY
+                          {exp.status.startsWith('FAILED') ? 'FAILED · VALIDATION ONLY' : exp.status.replace(/_/g, ' ')}
                         </span>
                       ) : isBaseline ? (
                         <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/40">

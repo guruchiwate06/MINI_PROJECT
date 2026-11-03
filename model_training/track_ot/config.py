@@ -29,7 +29,8 @@ DEFAULTS = {
     "training": {"device": "cuda", "seed": 42, "epochs": 100, "batch_size": 4,
                  "accumulation_steps": 8, "workers": 0, "learning_rate": 0.0002,
                  "weight_decay": 0.01, "gradient_clip": 1.0, "patience": 15,
-                 "min_delta": 0.0001, "amp": True, "modality_dropout": 0.15},
+                 "min_delta": 0.0001, "amp": True, "amp_dtype": "bfloat16", "initial_loss_scale": 512.0,
+                 "modality_dropout": 0.15},
     "evaluation": {"abstention_target_error": 0.1, "abstention_min_samples": 20},
     "experiment": {"name": "track_ot_plus_fold1_s42", "output": "../artifacts/track_ot",
                    "notes": "Experimental Rail-VIVID only. Historical outer-test inspection disclosed. Learned drift is not physically validated."}
@@ -84,6 +85,8 @@ def validate(c):
     if not 0 <= c["evaluation"]["abstention_target_error"] < 1: raise ConfigurationError("Invalid abstention error target")
     positive("evaluation", "abstention_min_samples", True)
     if not str(c["training"]["device"]).startswith("cuda"): raise ConfigurationError("TRACK-OT training requires CUDA; no CPU fitting mode")
+    if c["training"]["amp_dtype"] not in ["bfloat16", "float16"]: raise ConfigurationError("Unknown AMP dtype")
+    positive("training", "initial_loss_scale")
     name = c["experiment"]["name"]
     if not name or Path(name).name != name or name in [".", ".."]: raise ConfigurationError("Unsafe experiment name")
 

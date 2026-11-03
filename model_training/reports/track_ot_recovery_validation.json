@@ -1,0 +1,56 @@
+{
+  "checked_at_utc": "2026-11-03T04:09:37.621583+00:00",
+  "parent_gpu_push": "0846be200a78b46dedcb9131d63a5234cbb6e6ac",
+  "source_hash": "b3277563c76e6e305b912097c2bf2f19628e8d511c5d06761de17734974f7834",
+  "tests": {
+    "passed": 100,
+    "recovery_regressions": 11,
+    "optimizer_updates_forbidden": true
+  },
+  "frontend_build": "TypeScript and Vite production build passed",
+  "full_model_synthetic_checks": [
+    {
+      "precision": "float32",
+      "batches_checked": 1,
+      "all_finite": true,
+      "weights_unchanged": true
+    },
+    {
+      "precision": "bfloat16",
+      "batches_checked": 1,
+      "all_finite": true,
+      "weights_unchanged": true
+    }
+  ],
+  "optimizer_steps": 0,
+  "gpu_failure_reproduced_locally": false,
+  "actual_gpu_speedup_measured": false,
+  "failed_run_artifacts_modified": false,
+  "legacy_frontend_benchmark_rows_unchanged": true,
+  "dataset": "unchanged Rail-VIVID",
+  "recovery_pilot": {
+    "epochs": 5,
+    "precision": "float32",
+    "new_experiment_name": "track_ot_pp_fold1_recovery_fp32_s42",
+    "warm_start": "optional weights only; data/split/bags/normalization verified"
+  },
+  "repairs": [
+    "batched early-convergent transport with independent scalar-reference checks",
+    "selected patch I/O before materialization",
+    "cached-feature equivariance; only main/partner full forwards",
+    "explicit FP32 contrast/cycle products",
+    "FP64 norm and retained nonfinite-gradient rejection",
+    "named per-component diagnostics and CPU/CUDA traces",
+    "separate training and validation memory peaks",
+    "saved epoch validation predictions",
+    "no automatic test evaluation",
+    "removed hardcoded TRACK-OT scoreboard/calibration/performance fields"
+  ],
+  "limitations": [
+    "No local model training",
+    "Actual failed GPU checkpoint not available in Git",
+    "Specific epoch-2 NaN/Inf source remains to be isolated on training host",
+    "No new accuracy/generalization/physical-alignment claim"
+  ],
+  "synthetic_diagnostic_source_hash": "b3277563c76e6e305b912097c2bf2f19628e8d511c5d06761de17734974f7834"
+}

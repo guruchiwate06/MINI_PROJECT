@@ -17,12 +17,18 @@ def parser():
     p.add_argument("--verbose", action="store_true")
     sub = p.add_subparsers(dest="command", required=True)
     default = str(Path(__file__).parents[1] / "configs/track_ot_plus_plus.json")
-    for name in ["doctor", "smoke", "prepare", "split", "extract-vision", "train", "evaluate", "robustness", "plan", "annotation-template", "contact-sheet", "align", "align-calibrate", "alignment-predict", "repeated"]:
+    for name in ["doctor", "smoke", "diagnose", "prepare", "split", "extract-vision", "train", "evaluate", "robustness", "plan", "annotation-template", "contact-sheet", "align", "align-calibrate", "alignment-predict", "repeated"]:
         q = sub.add_parser(name); q.add_argument("--config", default=default)
-        if name in ["smoke", "evaluate", "robustness", "alignment-predict"]: q.add_argument("--device", default="cpu" if name == "smoke" else "cuda")
+        if name in ["smoke", "diagnose", "evaluate", "robustness", "alignment-predict"]: q.add_argument("--device", default="cpu" if name in ["smoke", "diagnose"] else "cuda")
         if name == "smoke": q.add_argument("--synthetic", action="store_true")
         if name == "extract-vision": q.add_argument("--allow-download", action="store_true")
-        if name == "train": q.add_argument("--on-training-device", action="store_true"); q.add_argument("--resume", action="store_true")
+        if name == "train":
+            q.add_argument("--on-training-device", action="store_true"); q.add_argument("--resume", action="store_true"); q.add_argument("--warm-start")
+        if name == "diagnose":
+            q.add_argument("--synthetic", action="store_true"); q.add_argument("--output", required=True)
+            q.add_argument("--batches", type=int, default=2); q.add_argument("--precisions", default="float32")
+            q.add_argument("--from-run"); q.add_argument("--component-gradients", action="store_true")
+            q.add_argument("--anomaly", action="store_true"); q.add_argument("--profile", action="store_true")
         if name == "evaluate":
             q.add_argument("--partition", choices=["validation", "test"], default="test"); q.add_argument("--tag", default="clean"); q.add_argument("--corruption", default="{}")
             from .runner import STRESSES
@@ -110,7 +116,11 @@ def dispatch(args):
                 "output_shape": list(output["anchor_logit"].shape), "max_solver_residual": float(output["solver_residual"].max()), "device": str(device)}
     if args.command == "train":
         from .runner import train
-        return train(c, args.on_training_device, args.resume)
+        return train(c, args.on_training_device, args.resume, args.warm_start)
+    if args.command == "diagnose":
+        from .diagnostics import diagnose
+        return diagnose(c, args.output, args.device, args.batches, tuple(args.precisions.split(",")), args.synthetic,
+                        args.from_run, args.component_gradients, args.anomaly, args.profile)
     if args.command == "evaluate":
         from .runner import evaluate, STRESSES, validate_corruption
         try: corruption = json.loads(args.corruption)
@@ -156,7 +166,11 @@ def main(argv=None):
     args = parser().parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     try:
-        print(json.dumps(jsonable(dispatch(args)), indent=2, allow_nan=False)); return 0
+        result = dispatch(args)
+        print(json.dumps(jsonable(result), indent=2, allow_nan=False))
+        if args.command == "diagnose" and not all(r.get("all_finite", False) and r.get("weights_unchanged", False) for r in result["precision_summary"]):
+            return 2
+        return 0
     except (PipelineError, OSError, ValueError, KeyError) as e:
         logging.error("%s: %s", type(e).__name__, e, exc_info=args.verbose)
         return 2

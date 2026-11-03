@@ -26,8 +26,14 @@ extracted_details.txt
 *.pdf
 data/cached_window_features.csv
 
-# Large raw sensor array copies (regenerated from D:/Rail-VIVID via railvivid prepare)
+# Large raw sensor array copies and pre-extracted vision features (regenerated via pipeline)
 model_training/artifacts/railvivid_v1/runs/
+model_training/artifacts/railvivid_v1/vision/
+model_training/artifacts/track_ot/**/bags.json
+*.lock
+*.npy
+*.pt
+*.pth
 
 # Output logs
 outputs/*.pt

@@ -1,0 +1,6 @@
+{
+  "time": "2026-11-02T21:33:24.731408+00:00",
+  "type": "RuntimeError",
+  "error": "The total norm of order 2.0 for gradients from `parameters` is non-finite, so it cannot be clipped. To disable this error and scale the gradients by the non-finite norm anyway, set `error_if_nonfinite=False`",
+  "last_completed_checkpoint": "C:\\Users\\Thrill3r\\Downloads\\MINI_PROJECT\\model_training\\artifacts\\track_ot\\track_ot_pp_fold1_full_s42\\last.pt"
+}

@@ -1,0 +1,23 @@
+{
+  "epoch": 1,
+  "training_loss": 1.2617817922990622,
+  "validation_ap": 0.7916339472386471,
+  "best_ap": 0.7916339472386471,
+  "components": {
+    "supervised": 0.717750769892918,
+    "auxiliary": 1.6796219079267412,
+    "crossing": 0.0459096167900194,
+    "transport": -0.38482256326450404,
+    "drift": 0.2043312355913858,
+    "equivariance": 0.01028762943853061,
+    "recurrence": 1.075951197732302,
+    "cycle": 0.004851252758188619,
+    "brier": 0.14583851255421407
+  },
+  "training_seconds": 3931.9401232999953,
+  "epoch_seconds": 3944.4647259999983,
+  "elapsed_seconds": 3944.4685105000026,
+  "estimated_remaining_seconds": 390502.0078739998,
+  "optimizer_updates": 218,
+  "peak_cuda_allocated_bytes": 139554816
+}

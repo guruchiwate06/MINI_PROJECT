@@ -86,7 +86,7 @@ def seed_everything(seed,deterministic=True):
     import torch
     torch.manual_seed(seed)
     if torch.cuda.is_available(): torch.cuda.manual_seed_all(seed)
-    torch.use_deterministic_algorithms(deterministic)
+    torch.use_deterministic_algorithms(deterministic, warn_only=True)
     torch.backends.cudnn.benchmark=False
 
 def select_device(name='cuda',require_cuda=True):

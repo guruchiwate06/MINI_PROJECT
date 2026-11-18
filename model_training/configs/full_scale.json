@@ -1,5 +1,5 @@
 {
-  "data": {"root": "D:/Rail-VIVID", "artifacts": "../artifacts/railvivid_v1"},
+  "data": {"root": "E:/Rail-VIVID", "artifacts": "../artifacts/railvivid_v1"},
   "split": {"protocol": "combined", "cohort": "paired"},
   "vision": {
     "model_id": "facebook/dinov2-small",

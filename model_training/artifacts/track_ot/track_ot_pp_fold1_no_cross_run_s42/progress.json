@@ -1,0 +1,35 @@
+{
+  "epoch": 6,
+  "training_loss": 0.3807380432512144,
+  "validation_ap": 0.6928072063805761,
+  "best_ap": 0.9865350877192984,
+  "components": {
+    "supervised": 0.20990777562971627,
+    "auxiliary": 0.6633239673569209,
+    "crossing": 0.043763502300046365,
+    "transport": -0.38351263948173886,
+    "drift": 0.5902299114806996,
+    "equivariance": 0.01138762529991597,
+    "recurrence": 0.0,
+    "cycle": 0.0,
+    "brier": 0.03298443253400543
+  },
+  "training_seconds": 305.376305999991,
+  "validation_seconds": 1.7890761999879032,
+  "training_bags": 6972,
+  "training_bags_per_second": 22.830847917847972,
+  "last_gradient_norm_before_clip": 10.28857185259094,
+  "validation_inference": {
+    "seconds_including_loader": 1.7871097999741323,
+    "windows": 127,
+    "windows_per_second": 71.06446397520638,
+    "device": "cuda",
+    "peak_cuda_allocated_bytes": 139370496
+  },
+  "epoch_seconds": 307.2658839999931,
+  "elapsed_seconds": 1825.6994492000085,
+  "estimated_remaining_seconds": 5781.26111900009,
+  "optimizer_updates": 218,
+  "peak_cuda_allocated_bytes": 329893376,
+  "validation_peak_cuda_allocated_bytes": 139370496
+}

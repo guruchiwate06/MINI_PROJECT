@@ -1,0 +1,76 @@
+{
+  "observations": 85,
+  "ignored_ambiguous": 42,
+  "positive": 20,
+  "prevalence": 0.23529411764705882,
+  "precision": 1.0,
+  "recall": 0.45,
+  "f1": 0.6206896551724138,
+  "roc_auc": 0.9984615384615385,
+  "average_precision": 0.9951190476190479,
+  "threshold": 0.9995483001740245,
+  "confusion_matrix": [
+    [
+      65,
+      0
+    ],
+    [
+      11,
+      9
+    ]
+  ],
+  "brier": 0.02068515352751322,
+  "negative_log_likelihood": 0.06068720874451666,
+  "ece": 0.03535838118828772,
+  "reliability_bins": [
+    {
+      "bin": 0,
+      "count": 63,
+      "mean_probability": 0.0012514024223866994,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 1,
+      "count": 2,
+      "mean_probability": 0.18651974442625358,
+      "positive_fraction": 0.5
+    },
+    {
+      "bin": 2,
+      "count": 1,
+      "mean_probability": 0.27156549186513185,
+      "positive_fraction": 1.0
+    },
+    {
+      "bin": 4,
+      "count": 1,
+      "mean_probability": 0.45541886557190675,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 5,
+      "count": 1,
+      "mean_probability": 0.5471838422353605,
+      "positive_fraction": 1.0
+    },
+    {
+      "bin": 7,
+      "count": 2,
+      "mean_probability": 0.7568528182571339,
+      "positive_fraction": 1.0
+    },
+    {
+      "bin": 8,
+      "count": 1,
+      "mean_probability": 0.8610809534187703,
+      "positive_fraction": 1.0
+    },
+    {
+      "bin": 9,
+      "count": 14,
+      "mean_probability": 0.9973013860208411,
+      "positive_fraction": 1.0
+    }
+  ],
+  "aurc_classification_error": 0.018439350686869086
+}

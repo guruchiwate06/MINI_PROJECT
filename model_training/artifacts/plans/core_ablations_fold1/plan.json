@@ -1,0 +1,60 @@
+{
+  "created": "2026-11-19T04:27:39.995892+00:00",
+  "source_hash": "66d82081da6fd05ff685cacd6852116a047b44e2c454c8bfb77f5204b8595491",
+  "jobs": [
+    {
+      "id": "track_ot_pp_fold1_full_s42",
+      "fold": 1,
+      "seed": 42,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold1_full_s42.json",
+      "config_sha256": "f3bf8a455983810ec071908cf8ee361d2d4ee42fa8e2f75f486675918bb6926b",
+      "base_config": "configs/base_fold1_s42.json",
+      "base_sha256": "dad96c289672811009abd0eeb3dbb1865ccf1e808b4164a61ad3b666bc2bb543"
+    },
+    {
+      "id": "track_ot_pp_fold1_vibration_s42",
+      "fold": 1,
+      "seed": 42,
+      "variant": "vibration",
+      "config": "configs/track_ot_pp_fold1_vibration_s42.json",
+      "config_sha256": "3c5a6c2f296908f080509cbedd7d7df2c6dde96381d1a43014c89324fdc22151",
+      "base_config": "configs/base_fold1_s42.json",
+      "base_sha256": "dad96c289672811009abd0eeb3dbb1865ccf1e808b4164a61ad3b666bc2bb543"
+    },
+    {
+      "id": "track_ot_pp_fold1_generic_ot_s42",
+      "fold": 1,
+      "seed": 42,
+      "variant": "generic_ot",
+      "config": "configs/track_ot_pp_fold1_generic_ot_s42.json",
+      "config_sha256": "74b2e44ab960adfb07dbde86918476f7093b1f7b23dc02735c5a105897336c07",
+      "base_config": "configs/base_fold1_s42.json",
+      "base_sha256": "dad96c289672811009abd0eeb3dbb1865ccf1e808b4164a61ad3b666bc2bb543"
+    },
+    {
+      "id": "track_ot_pp_fold1_no_drift_s42",
+      "fold": 1,
+      "seed": 42,
+      "variant": "no_drift",
+      "config": "configs/track_ot_pp_fold1_no_drift_s42.json",
+      "config_sha256": "ba83328e0394b5e109b2abe1422b1a6f6cccc026a922b091fcdea77b558ddb03",
+      "base_config": "configs/base_fold1_s42.json",
+      "base_sha256": "dad96c289672811009abd0eeb3dbb1865ccf1e808b4164a61ad3b666bc2bb543"
+    },
+    {
+      "id": "track_ot_pp_fold1_no_cross_run_s42",
+      "fold": 1,
+      "seed": 42,
+      "variant": "no_cross_run",
+      "config": "configs/track_ot_pp_fold1_no_cross_run_s42.json",
+      "config_sha256": "78d7713bebf7830b6bc890b5b5dfeee1e7d7c0ad7e0bad6234e1bb87d26a4ca6",
+      "base_config": "configs/base_fold1_s42.json",
+      "base_sha256": "dad96c289672811009abd0eeb3dbb1865ccf1e808b4164a61ad3b666bc2bb543"
+    }
+  ],
+  "training_started": false,
+  "dataset": "Rail-VIVID only",
+  "test_execution_separate": true,
+  "protocol": "same guarded anchors and evaluation labels; sequence context must be matched across controls"
+}

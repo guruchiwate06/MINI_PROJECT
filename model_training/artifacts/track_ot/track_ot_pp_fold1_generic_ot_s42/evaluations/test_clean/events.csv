@@ -1,0 +1,13 @@
+run_id,status,site_id,position_m,error_m
+AtoB_20_4,false_negative,1.0,177.26505710962405,
+AtoB_20_4,false_negative,2.0,295.2299902266546,
+AtoB_20_4,false_negative,3.0,349.64722364718875,
+BtoA_25_4,true_positive,2.0,300.0311181594428,4.8011279327882335
+BtoA_25_4,true_positive,3.0,350.2403275676394,0.5931039204506305
+BtoA_25_4,false_positive,,310.01064630656776,
+BtoA_25_4,false_positive,,326.0896324825584,
+BtoA_25_4,false_positive,,368.3892624632968,
+BtoA_25_4,false_negative,1.0,177.26505710962405,
+BtoA_27.5_4,false_negative,1.0,177.26505710962405,
+BtoA_27.5_4,false_negative,2.0,295.2299902266546,
+BtoA_27.5_4,false_negative,3.0,349.64722364718875,

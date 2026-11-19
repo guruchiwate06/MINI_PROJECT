@@ -1,0 +1,15 @@
+{
+  "experiment_fingerprint": "2408f26817b92cbb791a43bef800ed3869224263bf4742c79e344647c6b8ad6a",
+  "temperature": 3.314490409979707,
+  "threshold": 0.9112812525988663,
+  "threshold_policy": "false_alarm_budget",
+  "source": "validation only",
+  "abstention": {
+    "confidence_cutoff": 0.3988703409187334,
+    "validation_coverage": 0.35294117647058826,
+    "validation_error": 0.1,
+    "accepted": 30,
+    "target_error": 0.1,
+    "source": "validation only; empirical selective classification, no population risk guarantee"
+  }
+}

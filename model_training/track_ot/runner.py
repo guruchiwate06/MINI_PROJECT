@@ -356,7 +356,13 @@ def evaluate(c, partition="test", device="cuda", corruption=None, tag="clean"):
                                                "split_fingerprint": r["split"]["split_fingerprint"], "test_access_disclosed": partition == "test",
                                                "alignment_predictions_are_not_ground_truth": True})
     write_json(destination / "READY.json", {"completed": utc_now(), "artifacts": {p.name: file_hash(p) for p in destination.iterdir() if p.is_file()}})
-    os.replace(destination, final_destination)
+    try:
+        os.replace(destination, final_destination)
+    except OSError:
+        import shutil
+        if final_destination.exists():
+            shutil.rmtree(final_destination)
+        shutil.move(str(destination), str(final_destination))
     return {"evaluation": str(final_destination), "metrics": metrics}
 
 

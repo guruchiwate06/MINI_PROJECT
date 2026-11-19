@@ -1,0 +1,11 @@
+{
+  "completed": "2026-11-19T12:24:44.187118+00:00",
+  "artifacts": {
+    "events.csv": "b5df253922a218a8cdccdec7e2e9ab01cf75c606a1dc85680ee1c56adac84011",
+    "frame_alignment.csv": "42843f20f9a03beba651c2377a255d5055cab7f455f0aeca916ad9f217724299",
+    "metrics.json": "11b5de086096ba402c44c549be3413ddfb88d01ef672dcc794e4028b3decdff4",
+    "predictions.csv": "f2be6c3cf8ad030c14548e9decd1d5db57b8c573a824631b69d1e36b051ee6f1",
+    "provenance.json": "1df8f3155b8e8a6921e03966100256b18f52d7612e5d5c970fb2b6c176516c05",
+    "subgroups.csv": "8a136c10e8ac4589f10f52d68494da22cf1d2331584a198e2b374f24377f53dc"
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "observations": 567,
+  "ignored_ambiguous": 113,
+  "positive": 57,
+  "prevalence": 0.10052910052910052,
+  "precision": 0.06666666666666667,
+  "recall": 0.017543859649122806,
+  "f1": 0.027777777777777776,
+  "roc_auc": 0.8605435156518748,
+  "average_precision": 0.3031871331560699,
+  "threshold": 0.9970072014493991,
+  "confusion_matrix": [
+    [
+      496,
+      14
+    ],
+    [
+      56,
+      1
+    ]
+  ],
+  "brier": 0.12132879853825097,
+  "negative_log_likelihood": 0.6623424521029102,
+  "ece": 0.12007635340513698,
+  "reliability_bins": [
+    {
+      "bin": 0,
+      "count": 505,
+      "mean_probability": 0.0023452087496774075,
+      "positive_fraction": 0.06732673267326733
+    },
+    {
+      "bin": 1,
+      "count": 7,
+      "mean_probability": 0.13273921443125986,
+      "positive_fraction": 0.5714285714285714
+    },
+    {
+      "bin": 2,
+      "count": 1,
+      "mean_probability": 0.24555441076846224,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 3,
+      "count": 3,
+      "mean_probability": 0.34806540959027993,
+      "positive_fraction": 0.3333333333333333
+    },
+    {
+      "bin": 4,
+      "count": 3,
+      "mean_probability": 0.4320211171278592,
+      "positive_fraction": 0.6666666666666666
+    },
+    {
+      "bin": 6,
+      "count": 2,
+      "mean_probability": 0.6797534969506941,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 7,
+      "count": 2,
+      "mean_probability": 0.7871679843452126,
+      "positive_fraction": 1.0
+    },
+    {
+      "bin": 8,
+      "count": 1,
+      "mean_probability": 0.8862873328516218,
+      "positive_fraction": 1.0
+    },
+    {
+      "bin": 9,
+      "count": 43,
+      "mean_probability": 0.9838192167396167,
+      "positive_fraction": 0.3023255813953488
+    }
+  ],
+  "aurc_classification_error": 0.030700069583817765,
+  "events": {
+    "true_positive_events": 1,
+    "false_positive_events": 3,
+    "false_negative_events": 8,
+    "covered_site_traversals": 9,
+    "evaluated_distance_km": 1.1428445607736528,
+    "event_recall": 0.1111111111111111,
+    "event_precision": 0.25,
+    "false_alarms_per_km": 2.6250288997911833,
+    "localization_mae_m": 2.743519260032997,
+    "localization_p95_m": 2.743519260032997,
+    "target_semantics": "nominal documented site proximity, not independently adjudicated frame defects"
+  },
+  "ap_interval": {
+    "lower": 0.1829675609711867,
+    "upper": 0.7059036954632337,
+    "valid_draws": 1000,
+    "run_clusters": 3,
+    "spatial_clusters": 3,
+    "method": "two-way pigeonhole resampling; small-cluster exploratory interval, not independent-defect certainty"
+  },
+  "selective": {
+    "coverage": 1.0,
+    "accepted": 567,
+    "error": 0.12345679012345678,
+    "rule_source": "frozen validation calibration; abstained windows remain in primary event/FA metrics"
+  },
+  "inference": {
+    "seconds_including_loader": 11.574754900066182,
+    "windows": 680,
+    "windows_per_second": 58.74854421289836,
+    "device": "cuda",
+    "peak_cuda_allocated_bytes": 99153408
+  },
+  "physical_alignment_validated": false,
+  "stress": {}
+}

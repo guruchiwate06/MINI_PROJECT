@@ -1,0 +1,16 @@
+{
+  "completed": "2026-11-19T12:24:02.512434+00:00",
+  "experiment_fingerprint": "3b8a2cb50180d49a690490c5da6239d1ff52ca8f9bdcf20f95e312864d5ee04a",
+  "checkpoint_sha256": "ce4d7b28f82f67446d2e6f97960d5d0f9aacd499520b92322763869352639dca",
+  "test_evaluated": false,
+  "artifacts": {
+    "best.pt": "ce4d7b28f82f67446d2e6f97960d5d0f9aacd499520b92322763869352639dca",
+    "normalizer.json": "1824ba5f71a3790cff3b3d1040d94e711fa83600d8a087f8cab24bc269576966",
+    "calibration.json": "e82b097e0e0171732d2bd2ccd95be5a95d45ad059259afa1841e05821a7f7d57",
+    "config.json": "06164c345d5b53dda9c08418cd7d7b84e640c981eac77ac7da236e57cec12575",
+    "base_config.json": "b5d37895bc4376c390e34e8e49091e1425c2cfbdcd88d9d6d48ccaff174ac179",
+    "bags.json": "43bcac62668e94e5c74a91b42cdb733894709f2a9e9ceb46304563d06198a105",
+    "run.json": "cdba23c4c12abe25a7f6c958568d7d612e8263b121f24e5e10bc70773fefac07",
+    "precision.json": "092861566c491ca2886d5f63966f057592202ef61ab19347cfdfe6cf5dc55125"
+  }
+}

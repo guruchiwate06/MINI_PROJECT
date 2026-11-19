@@ -1,0 +1,10 @@
+run_id,status,site_id,position_m,error_m
+AtoB_20_4,false_negative,7,1177.718300059974,
+AtoB_20_4,false_negative,8,1307.3836804313303,
+AtoB_20_4,false_negative,9,1429.5103548392035,
+BtoA_25_4,false_negative,7,1177.718300059974,
+BtoA_25_4,false_negative,8,1307.3836804313303,
+BtoA_25_4,false_negative,9,1429.5103548392035,
+BtoA_27.5_4,false_negative,7,1177.718300059974,
+BtoA_27.5_4,false_negative,8,1307.3836804313303,
+BtoA_27.5_4,false_negative,9,1429.5103548392035,

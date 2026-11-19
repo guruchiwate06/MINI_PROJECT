@@ -1,0 +1,76 @@
+{
+  "observations": 687,
+  "ignored_ambiguous": 113,
+  "positive": 56,
+  "prevalence": 0.08151382823871907,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "roc_auc": 0.8253056373103917,
+  "average_precision": 0.36123308417499644,
+  "threshold": 0.6012372391422595,
+  "confusion_matrix": [
+    [
+      631,
+      0
+    ],
+    [
+      56,
+      0
+    ]
+  ],
+  "brier": 0.26325420621713563,
+  "negative_log_likelihood": 0.7198210000054303,
+  "ece": 0.439759457750159,
+  "reliability_bins": [
+    {
+      "bin": 4,
+      "count": 229,
+      "mean_probability": 0.4792156952320905,
+      "positive_fraction": 0.0
+    },
+    {
+      "bin": 5,
+      "count": 458,
+      "mean_probability": 0.5423020813672719,
+      "positive_fraction": 0.1222707423580786
+    }
+  ],
+  "aurc_classification_error": 0.1713707690378489,
+  "events": {
+    "true_positive_events": 0,
+    "false_positive_events": 0,
+    "false_negative_events": 9,
+    "covered_site_traversals": 9,
+    "evaluated_distance_km": 1.5510805166310173,
+    "event_recall": 0.0,
+    "event_precision": 0.0,
+    "false_alarms_per_km": 0.0,
+    "localization_mae_m": null,
+    "localization_p95_m": null,
+    "target_semantics": "nominal documented site proximity, not independently adjudicated frame defects"
+  },
+  "ap_interval": {
+    "lower": 0.21066648771369426,
+    "upper": 0.882012821098387,
+    "valid_draws": 1000,
+    "run_clusters": 3,
+    "spatial_clusters": 3,
+    "method": "two-way pigeonhole resampling; small-cluster exploratory interval, not independent-defect certainty"
+  },
+  "selective": {
+    "coverage": 1.0,
+    "accepted": 687,
+    "error": 0.08151382823871907,
+    "rule_source": "frozen validation calibration; abstained windows remain in primary event/FA metrics"
+  },
+  "inference": {
+    "seconds_including_loader": 12.230216099997051,
+    "windows": 800,
+    "windows_per_second": 65.41176324760058,
+    "device": "cuda",
+    "peak_cuda_allocated_bytes": 99153408
+  },
+  "physical_alignment_validated": false,
+  "stress": {}
+}

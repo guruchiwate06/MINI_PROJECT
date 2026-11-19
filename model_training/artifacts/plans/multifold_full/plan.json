@@ -1,0 +1,100 @@
+{
+  "created": "2026-11-19T09:44:08.454744+00:00",
+  "source_hash": "66d82081da6fd05ff685cacd6852116a047b44e2c454c8bfb77f5204b8595491",
+  "jobs": [
+    {
+      "id": "track_ot_pp_fold1_full_s42",
+      "fold": 1,
+      "seed": 42,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold1_full_s42.json",
+      "config_sha256": "6119717ac146fa869357ebf7847ec9ecb8853db64abcec8b797052b3c7a59c2e",
+      "base_config": "configs/base_fold1_s42.json",
+      "base_sha256": "dad96c289672811009abd0eeb3dbb1865ccf1e808b4164a61ad3b666bc2bb543"
+    },
+    {
+      "id": "track_ot_pp_fold1_full_s43",
+      "fold": 1,
+      "seed": 43,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold1_full_s43.json",
+      "config_sha256": "06164c345d5b53dda9c08418cd7d7b84e640c981eac77ac7da236e57cec12575",
+      "base_config": "configs/base_fold1_s43.json",
+      "base_sha256": "cb77fa3d96a3673c8b152fb153b3cce0aa6745d2086b26af0bbeb8acdcf20722"
+    },
+    {
+      "id": "track_ot_pp_fold1_full_s44",
+      "fold": 1,
+      "seed": 44,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold1_full_s44.json",
+      "config_sha256": "fc4127843a31e0ae4ef0d4e42c80b092a459c07aa175019b278995a1025941d2",
+      "base_config": "configs/base_fold1_s44.json",
+      "base_sha256": "07f88acb0aed9b126de026544434633ef1ab68c8197562e94a72188b9f05ad71"
+    },
+    {
+      "id": "track_ot_pp_fold2_full_s42",
+      "fold": 2,
+      "seed": 42,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold2_full_s42.json",
+      "config_sha256": "56bd6c0830f2ca0b45b11f935bbfa90d528f6e70459c676c91933b6892257af7",
+      "base_config": "configs/base_fold2_s42.json",
+      "base_sha256": "667ab5790a29f399d070b7a48b5bc6ddb089a66e8521c6a1ca2659ec13d4ca94"
+    },
+    {
+      "id": "track_ot_pp_fold2_full_s43",
+      "fold": 2,
+      "seed": 43,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold2_full_s43.json",
+      "config_sha256": "fa30c9e0e85241caf0561ce973ea33e6f8eefc32609916d889e167cf5f0665b7",
+      "base_config": "configs/base_fold2_s43.json",
+      "base_sha256": "24d0f1c31bdac6520a3775c908b462cac293b6100c39ee1333a678e1e4dc242f"
+    },
+    {
+      "id": "track_ot_pp_fold2_full_s44",
+      "fold": 2,
+      "seed": 44,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold2_full_s44.json",
+      "config_sha256": "1245d59b0c3de8e54abaa9c72294a968600b5bbb07a86201f1e1d04174da5a35",
+      "base_config": "configs/base_fold2_s44.json",
+      "base_sha256": "30a1ec94b43d18bc01e0bccfcdb3a18cf257126cc95b8437c550e28a25e40891"
+    },
+    {
+      "id": "track_ot_pp_fold3_full_s42",
+      "fold": 3,
+      "seed": 42,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold3_full_s42.json",
+      "config_sha256": "ac3ee989594cada2f39dd9ec7ffcedcced691b3769d2807c38ea7f22a9e82d5c",
+      "base_config": "configs/base_fold3_s42.json",
+      "base_sha256": "f9b0bcef73d2b62fd8fd59416f947ff050df9c47483f559e670cf56bbcaebb35"
+    },
+    {
+      "id": "track_ot_pp_fold3_full_s43",
+      "fold": 3,
+      "seed": 43,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold3_full_s43.json",
+      "config_sha256": "db9009ad35ba05d185ccd173520a80e100e77a78bb22f39eb9c9f149c3379c7f",
+      "base_config": "configs/base_fold3_s43.json",
+      "base_sha256": "86943f5f732fcc34634063522b73f13866286fbe7f4cbf87b6f6c76075279ce2"
+    },
+    {
+      "id": "track_ot_pp_fold3_full_s44",
+      "fold": 3,
+      "seed": 44,
+      "variant": "full",
+      "config": "configs/track_ot_pp_fold3_full_s44.json",
+      "config_sha256": "0f719a744e718bc2b3bf3eb7898aa6fc762b65de8f15e41b2e3fd5b33df597a0",
+      "base_config": "configs/base_fold3_s44.json",
+      "base_sha256": "f6bc79c38e9001ad504e591815dc1aa2d3f20bcdc75b26743a29bea6457ef6f0"
+    }
+  ],
+  "training_started": false,
+  "dataset": "Rail-VIVID only",
+  "test_execution_separate": true,
+  "protocol": "same guarded anchors and evaluation labels; sequence context must be matched across controls"
+}

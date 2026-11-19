@@ -1,0 +1,9 @@
+{
+  "experiment_fingerprint": "44f2d5c4d762dfe3a4a922e713b547179531ec45d08a2dd46d6537428357c2f2",
+  "partition": "test",
+  "cohort_fingerprint": "2707228ca4c4f1fab714f65ad7ce3e8f607abfdd932cece985035241836ded52",
+  "checkpoint_sha256": "b662edc749bf2e283cbc482cb35e1dd8178e41f96559a47f8c1eec1c30d73866",
+  "split_fingerprint": "0753246cb9b162e1b58e83ea510a2042289bec5dacfebd01690761d7e191d4ec",
+  "test_access_disclosed": true,
+  "alignment_predictions_are_not_ground_truth": true
+}
